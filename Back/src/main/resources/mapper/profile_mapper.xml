@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.profile.ProfileDAO">
+
+	<insert id="insertCenterProfile" parameterType="map">
+		insert center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, address, latitude, longitude, exercise_level, exercise)
+		values (#{center_id}, #{center_name}, #{introduction}, #{account_number}, #{operation_hours}, #{phone}, #{address}, #{latitude}, #{longitude}, #{exercise_level}, #{exercise})
+	</insert>
+
+	<insert id="insertTrainerProfile" parameterType="map">
+		insert trainer_profile (trainer_id , center_idx, career)
+		values (#{user_id},#{center_idx},#{career})
+	</insert>
+
+	<update id="updateUserProfile" parameterType="map">
+		update user set password =#{password},
+		name = #{name},
+		email = #{email},
+		address = #{address},
+		phone = #{phone},
+		age = #{age},
+		gender = #{gender}
+		where user_id = #{user_id}
+	</update>
+	
+	<update id="updateTrainerProfile" parameterType="map">
+		update trainer_profile set center_idx = #{center_idx}, career = #{career} where trainer_id=#{user_id}
+	</update>
+	
+	<update id="updateCenterProfile" parameterType="map">
+		update center_profile set center_name = #{center_name}, 
+		introduction = #{introduction}, 
+		account_number = #{account_number},
+		operation_hours = #{operation_hours},
+		phone = #{phone},
+		address = #{address},
+		latitude = #{latitude},
+		longitude = #{longitude}
+		where center_id = #{center_id}
+	</update>
+
+	<insert id="profileSave">
+		insert into profile_file (user_id,file_name)
+		values(#{param1},#{param2})
+	</insert>
+
+	<select id="userProfile" resultType="map" parameterType="map">
+		select * from user where user_id = #{user_id}
+	</select>
+	
+	<select id="getFileNames" resultType="map">
+		select file_name from profile_file where user_id = #{param1}
+	</select>
+
+	<select id="getFileName" resultType="map">
+		select file_name from profile_file where user_id = #{param1}
+	</select>
+
+</mapper>
