@@ -36,7 +36,7 @@
 	</select>
 	
 	<select id="overlayId" resultType="int">
-		SELECT COUNT(user_id) FROM User WHERE user_id=#{param1}
+		SELECT COUNT(user_id) FROM User WHERE user_id=#{user_id}
 	</select>
 	
 	<select id="overlayEmail" resultType="int">
