@@ -15,7 +15,20 @@ public class MemberService {
 
 	public boolean join(Map<String, String> params) {
 		int row = mapper.join(params);
-		return row>0;
+		boolean success = false;
+		String level = params.get("user_level");
+		switch (level) {
+		case "2":
+			success = makeProfile(params.get("user_id"), level);
+			break;
+		case "3":
+			success = makeProfile(params.get("user_id"), level);
+			break;
+		default:
+			success = true;
+			break;
+		}
+		return row>0 && success;
 	}
 
 	public boolean login(Map<String, String> params) {
@@ -50,4 +63,19 @@ public class MemberService {
 		return mapper.findPw(param);
 	}
 
+	public boolean makeProfile(String id, String level) {
+		int row = 0;
+		switch (level) {
+		case "2" : 
+			row = mapper.makeTrainer(id);
+			break;
+		case "3" :
+			row = mapper.makeCenter(id);
+			break;
+		default:
+			break;
+		}
+		return row > 0 ? true : false;
+	}
+	
 }

@@ -22,4 +22,8 @@ public interface MemberMapper {
 	String findId(String email);
 
 	String findPw(Map<String, Object> param);
+	
+	int makeTrainer(String id);
+
+	int makeCenter(String id);
 }

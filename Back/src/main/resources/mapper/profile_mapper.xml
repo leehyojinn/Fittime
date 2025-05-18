@@ -3,7 +3,7 @@
 
 <mapper namespace="com.fitime.profile.ProfileDAO">
 
-	<insert id="insertCenterProfile" parameterType="map">
+	<!-- <insert id="insertCenterProfile" parameterType="map">
 		insert center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, address, latitude, longitude, exercise_level, exercise)
 		values (#{center_id}, #{center_name}, #{introduction}, #{account_number}, #{operation_hours}, #{phone}, #{address}, #{latitude}, #{longitude}, #{exercise_level}, #{exercise})
 	</insert>
@@ -38,16 +38,12 @@
 		latitude = #{latitude},
 		longitude = #{longitude}
 		where center_id = #{center_id}
-	</update>
+	</update> -->
 
 	<insert id="profileSave">
 		insert into profile_file (user_id,file_name)
 		values(#{param1},#{param2})
 	</insert>
-
-	<select id="userProfile" resultType="map" parameterType="map">
-		select * from user where user_id = #{user_id}
-	</select>
 	
 	<select id="getFileNames" resultType="map">
 		select file_name from profile_file where user_id = #{param1}
@@ -55,6 +51,12 @@
 
 	<select id="getFileName" resultType="map">
 		select file_name from profile_file where user_id = #{param1}
+	</select>
+	
+	
+	
+	<select id="userProfile" resultType="map" parameterType="map">
+		select * from user where user_id = #{user_id}
 	</select>
 
 </mapper>
