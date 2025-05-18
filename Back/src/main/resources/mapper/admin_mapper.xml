@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.admin.AdminDAO">
+
+    <insert id="popup_write">
+        insert into popup (
+            user_id, title, start_date, end_date,
+            position_top, position_left, position_right, position_bottom,
+            popup_width, popup_height, use_toggle, file_name
+        )
+        values (
+            #{user_id}, #{title}, #{start_date}, #{end_date},
+            #{position_top}, #{position_left}, #{position_right}, #{position_bottom},
+            #{popup_width}, #{popup_height}, #{use_toggle}, #{file_name}
+        )
+    </insert>
+    
+    <select id="getPopupList" resultType="com.fitime.dto.PopupDTO">
+        SELECT
+            popup_idx,
+            user_id,
+            title,
+            start_date,
+            end_date,
+            position_top,
+            position_left,
+            position_right,
+            position_bottom,
+            popup_width,
+            popup_height,
+            use_toggle,
+            file_name
+        FROM popup
+        ORDER BY popup_idx DESC
+    </select>
+    
+	<update id="toggle">
+	    UPDATE popup
+	    SET use_toggle = NOT use_toggle
+	    WHERE popup_idx = #{popup_idx}
+	</update>
+	
+	<!-- 파일명 조회 -->
+	<select id="getFileNameById" resultType="String">
+	    SELECT file_name FROM popup WHERE popup_idx = #{popup_idx}
+	</select>
+	
+	<!-- 팝업 수정 -->
+	<update id="popupUpdate">
+	    UPDATE popup
+	    SET
+	        title = #{title},
+	        start_date = #{start_date},
+	        end_date = #{end_date},
+	        position_top = #{position_top},
+	        position_right = #{position_right},
+	        position_bottom = #{position_bottom},
+	        position_left = #{position_left},
+	        popup_width = #{popup_width},
+	        popup_height = #{popup_height},
+	        use_toggle = #{use_toggle},
+	        file_name = #{file_name}
+	    WHERE popup_idx = #{popup_idx}
+	</update>
+	
+	<!-- 팝업 삭제 -->
+	<delete id="popupDelete">
+	    DELETE FROM popup WHERE popup_idx = #{popup_idx}
+	</delete>
+
+</mapper>
