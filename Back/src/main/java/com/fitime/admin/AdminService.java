@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
 
 @Service
@@ -131,6 +132,25 @@ public class AdminService {
 
 		public boolean revoke(String user_id) {
 			int row = dao.revoke(user_id);
+			return row > 0;
+		}
+
+		public boolean tag(TagDTO dto) {
+			int row = dao.tag(dto);
+			return row > 0;
+		}
+
+		public List<TagDTO> tag_list(TagDTO dto) {
+			return dao.tag_list(dto);
+		}
+
+		public boolean tag_update(TagDTO dto) {
+			int row = dao.tag_update(dto);
+			return row > 0;
+		}
+
+		public boolean tag_del(TagDTO dto) {
+			int row = dao.tag_del(dto);
 			return row > 0;
 		}
 

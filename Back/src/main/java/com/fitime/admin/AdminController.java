@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
 
 @RestController
@@ -118,6 +120,7 @@ public class AdminController {
     	return result;
     }
     
+    // 권한 해제
     @PostMapping("/revoke/{user_id}")
     public Map<String, Object> revoke(@PathVariable String user_id){
     	
@@ -128,6 +131,59 @@ public class AdminController {
     	result.put("success", success);
     	
     	return result;
+    }
+    
+    //태그 등록
+    @PostMapping("/tag")
+    public Map<String, Object> tag(@RequestBody TagDTO dto){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.tag(dto);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    }
+    
+    //태그 리스트
+    @PostMapping("/tag_list")
+    public Map<String, Object> tag_list(@RequestBody TagDTO dto){
+    	result = new HashMap<String, Object>();
+    	
+    	List<TagDTO> list = service.tag_list(dto);
+    	
+    	result.put("list", list);
+    	
+    	return result;
+    }
+    
+    //태그 업데이트
+    @PostMapping("/tag_update")
+    public Map<String, Object> tag_update(@RequestBody TagDTO dto){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.tag_update(dto);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    	
+    }
+    
+	/* 태그삭제 */
+    @PostMapping("/tag_del")
+    public Map<String, Object> tag_del(@RequestBody TagDTO dto){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.tag_del(dto);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    	
     }
     
 }

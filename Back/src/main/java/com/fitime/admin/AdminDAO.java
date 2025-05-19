@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
 
 @Mapper
@@ -27,5 +28,13 @@ public interface AdminDAO {
 	int grant(String user_id);
 
 	int revoke(String user_id);
+
+	int tag(TagDTO dto);
+
+	List<TagDTO> tag_list(TagDTO dto);
+
+	int tag_update(TagDTO dto);
+
+	int tag_del(TagDTO dto);
 
 }

@@ -69,6 +69,7 @@
 	    DELETE FROM popup WHERE popup_idx = #{popup_idx}
 	</delete>
 	
+	<!-- 권한 아이디 검색 -->
 	<select id="grant_search" resultType="com.fitime.dto.UserDTO" parameterType="List">
 		SELECT *
 		FROM user
@@ -76,16 +77,41 @@
 		  AND user_id LIKE CONCAT(#{param1}, '%')
 	</select>
 	
+	<!-- 권한부여 -->
 	<update id="grant">
 		UPDATE user 
 		SET user_level = 4
 		where user_id = #{param1}
 	</update>
 	
+	<!-- 권한해제 -->
 	<update id="revoke">
 		UPDATE user 
 		SET user_level = 1
 		where user_id = #{param1}
 	</update>
+	
+	<!-- 태그등록 -->
+	<insert id="tag">
+		insert into tag(tag_name,category) 
+		values(#{tag_name},#{category})
+	</insert>
+	
+	<!-- 태그리스트 출력 -->
+	<select id="tag_list" resultType="com.fitime.dto.TagDTO">
+		select * from tag where category = #{category}
+	</select>
+	
+	<!-- 태그 업데이트 -->
+	<update id="tag_update">
+		UPDATE tag 
+		SET tag_name = #{tag_name}, category = #{category}
+		where tag_idx = #{tag_idx}
+	</update>
+	
+	<!-- 태그삭제 -->
+	<delete id="tag_del">
+		DELETE FROM tag WHERE tag_idx = #{tag_idx}
+	</delete>
 
 </mapper>
