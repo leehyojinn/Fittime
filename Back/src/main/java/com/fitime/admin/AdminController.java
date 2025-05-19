@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.UserDTO;
 
 @RestController
 @CrossOrigin
@@ -90,6 +91,43 @@ public class AdminController {
         boolean success = service.popupDelete(popup_idx);
         result.put("success", success);
         return result;
+    }
+    
+    // 관리자권한 부여 아이디 검색
+    @PostMapping("/grant_search/{user_id}")
+    public Map<String, Object> grant_search(@PathVariable String user_id){
+    	result = new HashMap<String, Object>();
+    	
+    	List<UserDTO> list = service.grant_search(user_id);
+    	
+    	result.put("list", list);
+    	
+    	return result;
+    }
+    
+    // 권한 부여
+    @PostMapping("/grant/{user_id}")
+    public Map<String, Object> grant(@PathVariable String user_id){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.grant(user_id);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    }
+    
+    @PostMapping("/revoke/{user_id}")
+    public Map<String, Object> revoke(@PathVariable String user_id){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.revoke(user_id);
+    	
+    	result.put("success", success);
+    	
+    	return result;
     }
     
 }

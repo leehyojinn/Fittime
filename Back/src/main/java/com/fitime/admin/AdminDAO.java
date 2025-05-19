@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.UserDTO;
 
 @Mapper
 public interface AdminDAO {
@@ -20,5 +21,11 @@ public interface AdminDAO {
 	int popupUpdate(PopupDTO popupDTO);
 	
 	int popupDelete(Integer popup_idx);
+
+	List<UserDTO> grant_search(String user_id);
+
+	int grant(String user_id);
+
+	int revoke(String user_id);
 
 }

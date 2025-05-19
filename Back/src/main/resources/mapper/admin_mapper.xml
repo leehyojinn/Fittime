@@ -68,5 +68,24 @@
 	<delete id="popupDelete">
 	    DELETE FROM popup WHERE popup_idx = #{popup_idx}
 	</delete>
+	
+	<select id="grant_search" resultType="com.fitime.dto.UserDTO" parameterType="List">
+		SELECT *
+		FROM user
+		WHERE user_level = 1
+		  AND user_id LIKE CONCAT(#{param1}, '%')
+	</select>
+	
+	<update id="grant">
+		UPDATE user 
+		SET user_level = 4
+		where user_id = #{param1}
+	</update>
+	
+	<update id="revoke">
+		UPDATE user 
+		SET user_level = 1
+		where user_id = #{param1}
+	</update>
 
 </mapper>

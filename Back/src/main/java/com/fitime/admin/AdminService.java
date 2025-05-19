@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.PopupDTO;
+import com.fitime.dto.UserDTO;
 
 @Service
 public class AdminService {
@@ -118,6 +119,20 @@ public class AdminService {
 	        
 	        return saveFileName;
 	    }
+
+		public List<UserDTO> grant_search(String user_id) {
+			return dao.grant_search(user_id);
+		}
+
+		public boolean grant(String user_id) {
+			int row = dao.grant(user_id);
+			return row > 0;
+		}
+
+		public boolean revoke(String user_id) {
+			int row = dao.revoke(user_id);
+			return row > 0;
+		}
 
 	
 }
