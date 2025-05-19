@@ -36,5 +36,7 @@ public interface ProfileDAO {
 
 	Map<String, Object> detailCenterProfile(String id);
 
+	int delProfileImg(String id);
+
 
 }

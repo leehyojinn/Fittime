@@ -83,6 +83,10 @@
 		select * from user join center_profile cp ON user.user_id = cp.center_id 
 		where center_id = #{param1}
 	</select>
+	
+	<delete id="delProfileImg">
+		delete from profile_file where user_id = #{param1} and category = '프로필'
+	</delete>
 
 
 </mapper>

@@ -215,6 +215,11 @@ public class ProfileService {
 		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 	}
 
+	public boolean delProfileImg(String id) {
+		int row = dao.delProfileImg(id);
+		return row >0 ? true : false ;
+	}
+
 	
 
 	

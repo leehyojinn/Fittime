@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -86,7 +87,15 @@ public class ProfileController {
 	} 
 	
 	// 프로필 이미지 삭제 (기본 이미지로 변경)
-	
+	@DeleteMapping(value="del/profileImg")
+	public Map<String, Object> delProfileImg(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		String id = (String)param.get("user_id");
+		result = new HashMap<String, Object>();
+		boolean success = service.delProfileImg(id);
+		result.put("success", success);
+		return result;
+	}
 	
 }
 
