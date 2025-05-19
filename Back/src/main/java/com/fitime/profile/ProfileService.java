@@ -96,50 +96,36 @@ public class ProfileService {
 		return success;
 	}
 	
-	public ResponseEntity<Resource> getFile(Map<String, String> param) {
-		Resource res = null;
-		HttpHeaders headers = new HttpHeaders();
-		
-		int level =Integer.parseInt(param.get("user_level"));
-		String fileName = "";
-		
-		if(level == 3) { // Center 일 경우
-			List<Map<String, String>> fileNames = dao.getFileNames(param.get("center_id"));
-			// 대표이미지 + 프로필의 10장 이미지
-			String file_name = "";
-			for(Map<String, String>map : fileNames) {
-				file_name = map.get("file_name");
-				if(file_name.contains(param.get("center_id"))) { // 11개의 이미지 중 이름에 center_id 를 포함한 이미지(대표 이미지)
-					fileName=file_name;
-				}
-			}
-		} else { // User or Trainer 일 경우
-			Map<String, String> map = dao.getFileName(param.get("user_id"));
-			fileName = map.get("file_name");
-		}
-		
-		res = new FileSystemResource("C:/img/"+fileName);
-		
-		try {
-			String content_type = Files.probeContentType(Paths.get("C:/img/"+fileName));
-			headers.add("Content-Type", content_type);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
-	}
 	
-	public Map<String, Object> detailUserProfile(Map<String, String> param) {
-		Map<String, Object>map = new HashMap<String, Object>();
-		Map<String, Object>userProfile = dao.detailUserProfile(param);
-		map.put("userProfile", userProfile);
-		ResponseEntity<Resource> file = getFile(param);
-		map.put("image", userProfile);
-		logger.info("result : {}",map);
-		return map;
-	}
-
+	
+//	public ResponseEntity<Resource> getFile(String id) {
+//		Resource res = null;
+//		HttpHeaders headers = new HttpHeaders();
+//		
+//		String fileName = dao.getFileName(id);
+//			
+//		if(fileName != null) {
+//			res = new FileSystemResource("C:/img/profile/"+fileName);
+//			try {
+//				String content_type = Files.probeContentType(Paths.get("C:/img/profile/"+fileName));
+//				headers.add("Content-Type", content_type);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			res = new FileSystemResource("C:/img/profile/basic");
+//			try {
+//				String content_type = Files.probeContentType(Paths.get("C:/img/profile/basic"));
+//				headers.add("Content-Type", content_type);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
+//	}
+	
+	
 	public boolean updateUserProfile(MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateUserProfile(param);
 		boolean save_success = true;
@@ -171,6 +157,62 @@ public class ProfileService {
 			image_save = fileSave((String)param.get("center_id"),files);
 		}
 		return row > 0 && image_save && profile_save && image_delete;
+	}
+	
+	public Map<String, Object> detailUserProfile(String id) {
+		
+		Map<String, Object>map = new HashMap<String, Object>();
+		Map<String, Object>result = dao.detailUserProfile(id);
+		map.put("profile", result);
+		return map;
+	}
+
+	public Map<String, Object> detailProfile(Map<String, Object> param) {
+		String level = (String)param.get("user_level");
+		String id ="";
+		Map<String, Object>result = new HashMap<String, Object>();
+		switch (level) {
+		case "1":
+			id = (String)param.get("user_id");
+			result = dao.detailUserProfile(id);
+			break;
+		case "2":
+			id = (String)param.get("trainer_id");
+			result = dao.detailTrainerProfile(id);
+			break;
+		case "3":
+			id = (String)param.get("center_id");
+			result = dao.detailCenterProfile(id);
+			break;
+		default:
+			break;
+		}
+		return result;
+	}
+
+	public ResponseEntity<Resource> getFile(String id) {
+		Resource res = null;
+		HttpHeaders headers = new HttpHeaders();
+		
+		String filename = dao.getFileName(id);
+		if(filename == null) {
+			filename = "basic.png";
+		}
+		logger.info("filename = "+filename);
+		String path = "C:/img/profile/"+filename;
+		
+		res = new FileSystemResource(path);
+		
+		try {
+			String content_type = Files.probeContentType(Paths.get(path));
+			logger.info(content_type);
+			headers.add("Content-type", content_type);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 	}
 
 	

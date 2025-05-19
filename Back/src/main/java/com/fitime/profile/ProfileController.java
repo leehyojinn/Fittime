@@ -6,6 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,13 +55,35 @@ public class ProfileController {
 	
 	// 프로필 데이터 가져오기
 	// 프로필 이미지가 없을 경우 기본 이미지 가져오기(기본 이미지 : profile_file_idx = 0 or user_id = 사이관리자(5))
-	@PostMapping(value="detail/userProfile")
-	public Map<String, Object>detailUserProfile(@RequestBody Map<String, String>param){
+	@PostMapping(value="detail/profile")
+	public Map<String, Object>detailProfile(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
 		result = new HashMap<String, Object>();
-		return service.detailUserProfile(param);
+		result = service.detailProfile(param);
+		return result;
 	}
 	
+	@PostMapping(value="profileImg/profile")
+	public ResponseEntity<Resource> profileImg(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		String id = "";
+		String level = (String)param.get("user_level");
+		switch (level) {
+		case "1":
+			id = (String)param.get("user_id");
+			break;
+		case "2":
+			id = (String)param.get("trainer_id");		
+			break;
+		case "3":
+			id = (String)param.get("center_id");
+			break;
+		default:
+			break;
+		}
+		
+		return service.getFile(id);
+	} 
 	
 	// 프로필 이미지 삭제 (기본 이미지로 변경)
 	

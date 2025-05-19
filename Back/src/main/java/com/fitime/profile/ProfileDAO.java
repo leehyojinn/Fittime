@@ -26,11 +26,15 @@ public interface ProfileDAO {
 	
 	void ImgDel(String id);
 	
-	List<Map<String, String>> getFileNames(String id);
+	List<String> getFileNames(String id);
 
-	Map<String, String> getFileName(String id);
+	String getFileName(String id);
 	
-	Map<String, Object> detailUserProfile(Map<String, String> param);
+	Map<String, Object> detailUserProfile(String id);
+
+	Map<String, Object> detailTrainerProfile(String id);
+
+	Map<String, Object> detailCenterProfile(String id);
 
 
 }

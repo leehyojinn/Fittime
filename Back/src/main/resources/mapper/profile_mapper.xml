@@ -29,12 +29,12 @@
 		delete from profile_file where user_id =#{param1} and category = '이미지'
 	</delete>
 	
-	<select id="getFileNames" resultType="map">
-		select file_name from profile_file where user_id = #{param1}
+	<select id="getFileNames" resultType="String">
+		select file_name from profile_file where user_id = #{param1} and cetegory = '이미지'
 	</select>
 
-	<select id="getFileName" resultType="map">
-		select file_name from profile_file where user_id = #{param1}
+	<select id="getFileName" resultType="String">
+		select file_name from profile_file where user_id = #{param1} and category = '프로필'
 	</select>
 	
 	<update id="updateUserProfile" parameterType="map">
@@ -70,10 +70,19 @@
 		where center_id = #{center_id}
 	</update>
 	
-	<select id="detailUserProfile" resultType="map" parameterType="map">
-		select * from user where user_id = #{user_id}
+	<select id="detailUserProfile" resultType="map" parameterType="String">
+		select * from user where user_id = #{param1}
 	</select>
 
+	<select id="detailTrainerProfile" resultType="map" parameterType="String">
+		select * from user join trainer_profile tp ON user.user_id = tp.trainer_id 
+		where tp.trainer_id = #{param1}
+	</select>
+	
+	<select id="detailCenterProfile" resultType="map" parameterType="String">
+		select * from user join center_profile cp ON user.user_id = cp.center_id 
+		where center_id = #{param1}
+	</select>
 
 
 </mapper>
