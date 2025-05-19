@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.center.CenterDAO">
+
+	<!-- 상품등록 -->
+    <insert id="product_insert" parameterType="com.fitime.dto.ProductDTO">
+        insert into product (
+            center_id,product_name,price,discount_rate,max_people,count,expiration_period,status
+        )
+        values (
+            #{center_id},#{product_name}, #{price}, #{discount_rate}, #{max_people},
+            #{count}, #{expiration_period}, '비활성'
+        )
+    </insert>
+    
+    <!-- 상품리스트 -->
+    <select id="product_list" resultType="com.fitime.dto.ProductDTO">
+    	select * from product where center_id = #{user_id}
+    </select>
+    
+    <!-- 상품업데이트 -->
+    <update id="product_update">
+    UPDATE product SET 
+        product_name = #{dto.product_name},
+        price = #{dto.price},
+        discount_rate = #{dto.discount_rate},
+        max_people = #{dto.max_people},
+        count = #{dto.count},
+        expiration_period = #{dto.expiration_period}
+    WHERE center_id = #{user_id}
+      AND product_idx = #{product_idx}
+	</update>
+	
+	<!-- 상태 업데이트 -->
+	<update id="product_status">
+	    UPDATE product SET status = NOT status where center_id = #{user_id} and product_idx = #{product_idx}
+	</update>
+
+</mapper>
