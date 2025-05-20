@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.Profile_fileDTO;
+
 @Service
 public class ProfileService {
 
@@ -183,8 +185,14 @@ public class ProfileService {
 		case "3":
 			id = (String)param.get("center_id");
 			result = dao.detailCenterProfile(id);
+			List<Profile_fileDTO>list = dao.photoList(id);
+			if(!list.isEmpty()) {
+				result.put("photo", list);
+				logger.info("result : {}",result);
+			}
 			break;
 		default:
+			result.put("success", false);
 			break;
 		}
 		return result;
@@ -220,19 +228,31 @@ public class ProfileService {
 		return row >0 ? true : false ;
 	}
 
+	public ResponseEntity<Resource> getImg(int profile_file_idx) {
+		Resource res = null;
+		HttpHeaders headers = new HttpHeaders();
+		
+		Map<String, String> fileMap = dao.getImg(profile_file_idx);
+		logger.info("fileMap : {}",fileMap);
+		res = new FileSystemResource("C:/img/img/"+fileMap.get("file_name"));
+		logger.info("res : "+res);
+		
+		try {
+			String content_type = Files.probeContentType(Paths.get("C:/img/img"+fileMap.get("file_name")));
+			headers.add("Content-Type", content_type);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
+	}
+
 	
 
 	
 	
 	
-	
-	// 이미지 저장
-	
-	
-	// 이미지 수정
-	// 이미지 삭제
-	// 이미지 불러오기
-	//public ResponseEntity<Resource> getFile
 	
 	
 }

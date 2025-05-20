@@ -88,5 +88,12 @@
 		delete from profile_file where user_id = #{param1} and category = '프로필'
 	</delete>
 
+	<select id="photoList" parameterType="String" resultType="com.fitime.dto.Profile_fileDTO">
+		select * from profile_file where user_id = #{param1} and category = '이미지'
+	</select>
+	
+	<select id="getImg" resultType="map">
+		select * from profile_file where profile_file_idx = #{param1}
+	</select>
 
 </mapper>
