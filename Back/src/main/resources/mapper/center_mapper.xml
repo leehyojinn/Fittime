@@ -36,5 +36,26 @@
 	<update id="product_status">
 	    UPDATE product SET status = NOT status where center_id = #{user_id} and product_idx = #{product_idx}
 	</update>
+		
+	<insert id="complaint" parameterType="com.fitime.dto.ComplaintDTO" useGeneratedKeys="true" keyProperty="report_idx">
+	    insert into complaint(report_id, admin_id, review_idx, report_text, reason, status, reg_date)
+	    values(#{report_id}, #{admin_id}, #{review_idx}, #{report_text}, #{reason}, '미확인', #{reg_date})
+	</insert>
+	
+	<insert id="insertFileImages" parameterType="java.util.List">
+	    insert into file_image(report_idx, file_name, category)
+	    values
+	    <foreach collection="list" item="item" separator=",">
+	        (#{item.report_idx}, #{item.file_name}, '신고')
+	    </foreach>
+	</insert>
+	
+	<select id="complaint_list" resultType="com.fitime.dto.ComplaintDTO">
+		select * from complaint where admin_id = #{user_id}
+	</select>
+	
+	<select id="selectFileNamesByReportIdx" resultType="String">
+    	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
+	</select>
 
 </mapper>

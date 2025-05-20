@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.ProductDTO;
 
 @RestController
@@ -65,6 +68,7 @@ public class CenterController {
 		return result;
 	}
 	
+	// 상태 토글
 	@PostMapping("/product_status/{user_id}/{product_idx}")
 	public Map<String, Object> product_status(@PathVariable String user_id, @PathVariable Integer product_idx, @RequestBody ProductDTO dto){
 		
@@ -73,6 +77,33 @@ public class CenterController {
 		boolean success = service.product_status(user_id,product_idx,dto);
 		
 		result.put("success", success);
+		
+		return result;
+	}
+	
+	// 신고하기
+	@PostMapping("/complaint")
+	public Map<String, Object> complaint(
+	    @RequestPart("complaint") ComplaintDTO dto,
+	    @RequestPart("files") List<MultipartFile> files) {
+
+	    dto.setFiles(files);
+	    boolean success = service.complaint(dto);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("success", success);
+	    return result;
+	}
+	
+	// 신고하기 리스트
+	@PostMapping("/complaint_list/{user_id}")
+	public Map<String, Object> complaint_list(@PathVariable String user_id){
+		
+		result = new HashMap<String, Object>();
+		
+		List<ComplaintDTO> list = service.complaint_list(user_id);
+		
+		result.put("list", list);
 		
 		return result;
 	}

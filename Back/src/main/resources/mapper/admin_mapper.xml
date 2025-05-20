@@ -113,5 +113,33 @@
 	<delete id="tag_del">
 		DELETE FROM tag WHERE tag_idx = #{tag_idx}
 	</delete>
+	
+	
+	<!-- 블랙리스트 리스트 -->
+	<select id="blacklist_list" resultType="com.fitime.dto.ComplaintDTO">
+		select * from complaint
+	</select>
+	
+	<select id="selectFileNamesByReportIdx" resultType="String">
+    	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
+	</select>
+	
+	<update id="blacklist_level">
+		UPDATE user 
+		SET user_level = 0
+		where user_id = #{user_id}
+	</update>
+	
+	<update id="setComplaintStatusDone">
+	    UPDATE complaint 
+	    SET status = '처리완료'
+	    WHERE report_id = #{user_id}
+	</update>
+	
+	<update id="blacklist_status">
+		UPDATE complaint 
+		SET status = #{params.status}
+		where report_id = #{user_id}
+	</update>
 
 </mapper>

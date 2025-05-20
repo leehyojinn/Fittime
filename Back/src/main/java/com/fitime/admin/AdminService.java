@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
@@ -152,6 +154,30 @@ public class AdminService {
 		public boolean tag_del(TagDTO dto) {
 			int row = dao.tag_del(dto);
 			return row > 0;
+		}
+
+		public List<ComplaintDTO> blacklist_list() {
+		    List<ComplaintDTO> list = dao.blacklist_list();
+		    for (ComplaintDTO dto : list) {
+		        List<String> images = dao.selectFileNamesByReportIdx(dto.getReport_idx());
+		        dto.setImages(images);
+		    }
+			return list;
+		}
+
+		@Transactional
+		public boolean blacklist_level(String user_id) {
+		    int row1 = dao.blacklist_level(user_id);
+		    int row2 = dao.setComplaintStatusDone(user_id);
+		    return row1 > 0 && row2 > 0;
+		}
+
+		public boolean blacklist_status(String user_id, Map<String, String> params) {
+		    int row = dao.blacklist_status(user_id, params);
+		    if ("처리완료".equals(params.get("status"))) {
+		        dao.blacklist_level(user_id);
+		    }
+		    return row > 0;
 		}
 
 	

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
@@ -186,6 +187,44 @@ public class AdminController {
     	
     }
     
+    //블랙리스트_리스트
+    @PostMapping("/blacklist_list")
+    public Map<String, Object> blacklist_list(){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	List<ComplaintDTO> list = service.blacklist_list();
+    	
+    	result.put("list", list);
+    	
+    	return result;
+    }
+    
+    //블랙리스트 레벨 변경
+    @PostMapping("/blacklist_level/{user_id}")
+    public Map<String, Object> blacklist_level(@PathVariable String user_id){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.blacklist_level(user_id);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    }
+    
+    // 블랙리스트 상태변경
+    @PostMapping("/blacklist_status/{user_id}")
+    public Map<String, Object> blacklist_status(@PathVariable String user_id, @RequestBody Map<String, String> params){
+    	
+    	result = new HashMap<String, Object>();
+    	
+    	boolean success = service.blacklist_status(user_id,params);
+    	
+    	result.put("success", success);
+    	
+    	return result;
+    }
 }
 	
 

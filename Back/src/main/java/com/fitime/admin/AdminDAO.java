@@ -1,9 +1,12 @@
 package com.fitime.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
@@ -36,5 +39,15 @@ public interface AdminDAO {
 	int tag_update(TagDTO dto);
 
 	int tag_del(TagDTO dto);
+
+	List<String> selectFileNamesByReportIdx(int report_idx);
+
+	List<ComplaintDTO> blacklist_list();
+
+	int blacklist_level(String user_id);
+
+	int blacklist_status(String user_id, @Param("params") Map<String, String> params);
+
+	int setComplaintStatusDone(String user_id);
 
 }
