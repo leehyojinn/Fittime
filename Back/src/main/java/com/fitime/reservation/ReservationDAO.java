@@ -11,6 +11,10 @@ import com.fitime.dto.ReservationDTO;
 public interface ReservationDAO {
 
 	int booking(Map<String, Object> param);
+	
+	int countReservation(int product_idx);
+	
+	int maxPeople(int product_idx);
 
 	int pages(int pageSize);
 
