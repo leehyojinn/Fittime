@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.reservation.ReservationDAO">
+
+	<insert id="booking" parameterType="map">
+		INSERT INTO Reservation(
+			user_id
+			,trainer_id
+			,center_id
+			,product_idx
+			,date
+			,start_time
+			,end_time
+		)VALUES(
+			#{user_id}
+			,#{trainer_id}
+			,#{center_id}
+			,#{product_idx}
+			,#{date}
+			,#{start_time}
+			,#{end_time}
+		)
+	</insert>
+	
+	<select id="pages" resultType="int" parameterType="map">
+		SELECT CEIL(COUNT(reservation_idx)/#{pageSize}) AS pages FROM Reservation
+	</select>
+	
+	<select id="listUserBooking" resultType="com.fitime.dto.ReservationDTO" parameterType="map">
+		SELECT
+			reservation_idx
+			,user_id
+			,trainer_id
+			,center_id
+			,product_idx
+			,date
+			,start_time
+			,end_time
+			,status
+		FROM Reservation WHERE user_id=#{user_id} AND status='예약'
+		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<select id="listTrainerBooking" resultType="com.fitime.dto.ReservationDTO" parameterType="map">
+		SELECT
+			reservation_idx
+			,user_id
+			,trainer_id
+			,center_id
+			,product_idx
+			,date
+			,start_time
+			,end_time
+			,status
+		FROM Reservation WHERE trainer_id=#{trainer_id} AND status='예약'
+		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<select id="listCenterBooking" resultType="com.fitime.dto.ReservationDTO" parameterType="map">
+		SELECT
+			reservation_idx
+			,user_id
+			,trainer_id
+			,center_id
+			,product_idx
+			,date
+			,start_time
+			,end_time
+			,status
+		FROM Reservation WHERE center_id=#{center_id} AND status='예약'
+		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<select id="detailBooking" resultType="com.fitime.dto.ReservationDTO" parameterType="map">
+		SELECT
+			reservation_idx
+			,user_id
+			,trainer_id
+			,center_id
+			,product_idx
+			,date
+			,start_time
+			,end_time
+			,status
+		FROM Reservation WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
+	</select>
+	
+	<update id="updateBooking" parameterType="map">
+		UPDATE Reservation SET
+			trainer_id=#{trainer_id}
+			,product_idx=#{product_idx}
+			,date=#{date}
+			,start_time=#{start_time}
+			,end_time=#{end_time}
+		WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
+	</update>
+	
+	<update id="cancelBooking" parameterType="map">
+		UPDATE Reservation SET status='취소' WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
+	</update>
+	
+	
+
+</mapper>
