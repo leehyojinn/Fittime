@@ -6,9 +6,10 @@
 	<select id="searchLocation" resultType="com.fitime.dto.CenterProfileDTO" parameterType="map">
 		select
 		cp.center_name,
-		cp.sido,
-		cp.gugun,
-		cp.eupmyeondong,
+		concat(cp.sido,' ',
+		cp.gugun,' ',
+		cp.eupmyeondong,' ',
+		cp.detail_address) as address ,
 		(select min(p.price)
 		from product p
 		where p.center_id=cp.center_id)as price,
