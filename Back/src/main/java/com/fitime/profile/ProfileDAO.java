@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.fitime.dto.Profile_fileDTO;
+import com.fitime.dto.ProfileImgDTO;
 
 @Mapper
 public interface ProfileDAO {
@@ -40,7 +40,7 @@ public interface ProfileDAO {
 
 	int delProfileImg(String id);
 
-	List<Profile_fileDTO> photoList(String id);
+	List<ProfileImgDTO> photoList(String id);
 
 	Map<String, String> getImg(int profile_file_idx);
 

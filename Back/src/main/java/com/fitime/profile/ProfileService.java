@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fitime.dto.Profile_fileDTO;
+import com.fitime.dto.ProfileImgDTO;
 
 @Service
 public class ProfileService {
@@ -185,7 +185,7 @@ public class ProfileService {
 		case "3":
 			id = (String)param.get("center_id");
 			result = dao.detailCenterProfile(id);
-			List<Profile_fileDTO>list = dao.photoList(id);
+			List<ProfileImgDTO>list = dao.photoList(id);
 			if(!list.isEmpty()) {
 				result.put("photo", list);
 				logger.info("result : {}",result);
