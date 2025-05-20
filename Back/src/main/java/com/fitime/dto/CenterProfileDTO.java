@@ -9,11 +9,40 @@ public class CenterProfileDTO {
 	private String account_number;
 	private String operation_hours;
 	private String phone;
-	private String address;
+	private String sido;
+	private String gugun;
+	private String eupmyeondong;
+	private String detail_address;
 	private double latitude;
 	private double longitude;
 	private int exercise_level;
 	private String exercise;
+	
+	
+	public String getSido() {
+		return sido;
+	}
+	public void setSido(String sido) {
+		this.sido = sido;
+	}
+	public String getGugun() {
+		return gugun;
+	}
+	public void setGugun(String gugun) {
+		this.gugun = gugun;
+	}
+	public String getEupmyeondong() {
+		return eupmyeondong;
+	}
+	public void setEupmyeondong(String eupmyeondong) {
+		this.eupmyeondong = eupmyeondong;
+	}
+	public String getDetail_address() {
+		return detail_address;
+	}
+	public void setDetail_address(String detail_address) {
+		this.detail_address = detail_address;
+	}
 	public int getCenter_idx() {
 		return center_idx;
 	}
@@ -56,12 +85,7 @@ public class CenterProfileDTO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 	public double getLatitude() {
 		return latitude;
 	}

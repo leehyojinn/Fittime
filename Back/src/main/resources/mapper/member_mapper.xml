@@ -69,10 +69,13 @@
 	</insert>
 	
 	<insert id="makeCenter">
-		INSERT INTO Center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, address, latitude, longitude, exercise_level, exercise)
+		INSERT INTO Center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, sido, gugun, eupmyeondong, detail_address, latitude, longitude, exercise_level, exercise)
 		VALUES (
  			#{param1},
  		    '',
+		    '',
+		    '',
+		    '',
 		    '',
 		    '',
 		    '',
