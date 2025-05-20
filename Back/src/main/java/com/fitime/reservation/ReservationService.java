@@ -8,8 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.fitime.reservation.ReservationDAO;
 import com.fitime.dto.ReservationDTO;
 
 @Service
@@ -19,8 +20,15 @@ public class ReservationService {
 	@Autowired ReservationDAO dao;
 	int pageSize = 0;
 	
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public boolean booking(Map<String, Object> param) {
-		int row = dao.booking(param);
+		int product_idx = (Integer) param.get("product_idx");
+		int reservation_cnt = dao.countReservation(product_idx);
+		int max_people = dao.maxPeople(product_idx);
+		int row = 0;
+		if(reservation_cnt < max_people) {
+			row = dao.booking(param);
+		}		
 		return row>0;
 	}
 

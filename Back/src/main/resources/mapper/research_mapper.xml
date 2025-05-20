@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.research.ResearchDAO">
+
+	<select id="searchLocation" resultType="com.fitime.dto.CenterProfileDTO" parameterType="map">
+		select
+		cp.center_name,
+		cp.sido,
+		cp.gugun,
+		cp.eupmyeondong,
+		(select min(p.price)
+		from product p
+		where p.center_id=cp.center_id)as price,
+		(select avg(r.rating)
+		from review r
+		where r.target_id=cp.center_id)as rating,
+		(select group_concat(t.tag_name)
+		from user_tag ut join tag t on ut.tag_idx=t.tag_idx
+		where ut.user_id=cp.center_id)as tags,
+		(select file_name
+		from profile_file pf
+		where pf.user_id=cp.center_id) as file_name 
+		from center_profile cp
+		where cp.sido = #{sido}
+		and cp.gugun = #{gugun}
+		and cp.eupmyeondong = #{eupmyeondong}
+		<if test="exercise !=null and exercise !=''">
+			and cp.exercise = #{exercise}
+		</if>
+		<if test = "tags != null and tags.size() > 0">
+			and exists(
+				select 1
+				from user_tag ut
+				join tag t on ut.tag_idx = t.tag_idx
+				join user u on ut.user_id = u.user_id
+				where t.tag_name IN
+				<foreach 
+				item="tag" 
+				collection="tags" 
+				open="(" 
+				separator=","
+				close=")">
+				#{tag}
+				</foreach>
+			)
+		</if>
+		<choose>
+			<when test="orderBy == 'rating'">
+				order by rating desc
+			</when>
+			<when test="orderBy == 'price'">
+				order by price asc
+			</when>
+			<otherwise>
+				order by cp.center_id desc
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

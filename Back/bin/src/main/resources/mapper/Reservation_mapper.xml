@@ -23,16 +23,8 @@
 		)
 	</insert>
 	
-	<select id="countReservation" resultType="int">
-		SELECT COUNT(*) FROM reservation WHERE product_idx=#{param1} AND status='예약'
-	</select>
-	
-	<select id="maxPeople" resultType="int">
-		SELECT max_people FROM product WHERE product_idx=#{param1}
-	</select>
-	
 	<select id="pages" resultType="int" parameterType="map">
-		SELECT CEIL(COUNT(reservation_idx)/#{pageSize}) AS pages FROM reservation
+		SELECT CEIL(COUNT(reservation_idx)/#{pageSize}) AS pages FROM Reservation
 	</select>
 	
 	<select id="listUserBooking" resultType="com.fitime.dto.ReservationDTO" parameterType="map">
@@ -46,7 +38,7 @@
 			,start_time
 			,end_time
 			,status
-		FROM reservation WHERE user_id=#{user_id} AND status='예약'
+		FROM Reservation WHERE user_id=#{user_id} AND status='예약'
 		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
@@ -61,7 +53,7 @@
 			,start_time
 			,end_time
 			,status
-		FROM reservation WHERE trainer_id=#{trainer_id} AND status='예약'
+		FROM Reservation WHERE trainer_id=#{trainer_id} AND status='예약'
 		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
@@ -76,7 +68,7 @@
 			,start_time
 			,end_time
 			,status
-		FROM reservation WHERE center_id=#{center_id} AND status='예약'
+		FROM Reservation WHERE center_id=#{center_id} AND status='예약'
 		ORDER BY reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
@@ -86,19 +78,16 @@
 			,user_id
 			,trainer_id
 			,center_id
-			,(select center_name from center_profile where center_id=r.center_id)
-			,(select phone from center_profile where center_id=r.center_id)
-			,(select concat(sido,gugun,eupmyeondong,detail_address,latitude,longitude)as address from center_profile where center_id=r.center_id)
 			,product_idx
 			,date
 			,start_time
 			,end_time
 			,status
-		FROM reservation r WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
+		FROM Reservation WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
 	</select>
 	
 	<update id="updateBooking" parameterType="map">
-		UPDATE reservation SET
+		UPDATE Reservation SET
 			trainer_id=#{trainer_id}
 			,product_idx=#{product_idx}
 			,date=#{date}
@@ -108,7 +97,7 @@
 	</update>
 	
 	<update id="cancelBooking" parameterType="map">
-		UPDATE reservation SET status='취소' WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
+		UPDATE Reservation SET status='취소' WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
 	</update>
 	
 	
