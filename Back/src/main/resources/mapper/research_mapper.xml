@@ -3,7 +3,7 @@
 
 <mapper namespace="com.fitime.research.ResearchDAO">
 
-	<select id="searchLocation" resultType="com.fitime.dto.CenterProfileDTO" parameterType="map">
+	<select id="searchLocation" resultType="map" parameterType="map">
 		select
 		cp.center_name,
 		concat(cp.sido,' ',
@@ -55,6 +55,60 @@
 			</when>
 			<otherwise>
 				order by cp.center_id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="searchTrainer" resultType="map" parameterType="map">
+		select 
+		cp.center_name ,
+		cp.exercise ,
+		cp.latitude ,
+		cp.longitude ,
+		(select pf.file_name from profile_file pf where pf.user_id=tp.user_id) as file_name,
+		(select avg(r.rating) from review r where r.target_id = tp.user_id) as rating ,
+		(select min(p.price) from product p where p.trainer_id=tp.user_id) as price,
+		(select name from `user` u where u.user_id=tp.user_id) as name,
+		(select group_concat(t.tag_name) from user_tag ut
+		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.user_id) as tags
+		from trainer_profile tp 
+		join center_profile cp on cp.center_idx = tp.center_idx
+		join user u on tp.user_id = u.user_id
+		where cp.sido = #{sido}
+		and cp.gugun = #{gugun}
+		and cp.eupmyeondong = #{eupmyeondong}
+		<if test = "exercise != null and exercise != ''">
+			and cp.exercise = #{exercise}
+		</if>
+		<if test = "gender != null and gender != ''">
+			and u.gender = #{gender}
+		</if>
+		<if test = "minRating != null and minRating !=''">
+			and (select avg(r.rating) from review r where r.target_id = tp.user_id) >= #{minRating}
+		</if>
+		<if test = "tags != null and tags.size() > 0">
+			and exists(
+				select 1
+				from user_tag ut
+				join tag t on ut.tag_idx = t.tag_idx
+				join user u on ut.user_id = u.user_id
+				where t.tag_name IN
+				<foreach 
+				item="tag" 
+				collection="tags" 
+				open="(" 
+				separator=","
+				close=")">
+				#{tag}
+				</foreach>
+			)
+		</if>
+		<choose>
+			<when test = "orderBy == 'price'">
+				order by price asc
+			</when>
+			<otherwise>
+				order by rating desc
 			</otherwise>
 		</choose>
 	</select>

@@ -24,7 +24,16 @@ public class ResearchController {
 	public Map<String, Object>searchLocation(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
 		result = new HashMap<String, Object>();
-		List<CenterProfileDTO>list = service.searchLocation(param);
+		List<Map<String, Object>>list = service.searchLocation(param);
+		result.put("list", list);
+		return result;
+	}
+	
+	@PostMapping(value="/search/trainer")
+	public Map<String, Object>searchTrainer(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = service.searchTrainer(param);
 		result.put("list", list);
 		return result;
 	}

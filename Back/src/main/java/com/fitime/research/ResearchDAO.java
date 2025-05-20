@@ -10,6 +10,8 @@ import com.fitime.dto.CenterProfileDTO;
 @Mapper
 public interface ResearchDAO {
 
-	List<CenterProfileDTO> searchLocation(Map<String, Object> param);
+	List<Map<String, Object>> searchLocation(Map<String, Object> param);
+
+	List<Map<String, Object>> searchTrainer(Map<String, Object> param);
 
 }

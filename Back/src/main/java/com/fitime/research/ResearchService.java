@@ -15,8 +15,13 @@ public class ResearchService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ResearchDAO dao;
-	public List<CenterProfileDTO> searchLocation(Map<String, Object> param) {
+	
+	public List<Map<String, Object>> searchLocation(Map<String, Object> param) {
 		return dao.searchLocation(param);
+	}
+	
+	public List<Map<String, Object>> searchTrainer(Map<String, Object> param) {
+		return dao.searchTrainer(param);
 	}
 	
 }
