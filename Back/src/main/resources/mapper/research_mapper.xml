@@ -65,15 +65,15 @@
 		cp.exercise ,
 		cp.latitude ,
 		cp.longitude ,
-		(select pf.file_name from profile_file pf where pf.user_id=tp.user_id) as file_name,
-		(select avg(r.rating) from review r where r.target_id = tp.user_id) as rating ,
-		(select min(p.price) from product p where p.trainer_id=tp.user_id) as price,
-		(select name from `user` u where u.user_id=tp.user_id) as name,
+		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
+		(select avg(r.rating) from review r where r.target_id = tp.trainer_id) as rating ,
+		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
+		(select name from `user` u where u.user_id=tp.trainer_id) as name,
 		(select group_concat(t.tag_name) from user_tag ut
-		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.user_id) as tags
+		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags
 		from trainer_profile tp 
 		join center_profile cp on cp.center_idx = tp.center_idx
-		join user u on tp.user_id = u.user_id
+		join user u on tp.trainer_id = u.user_id
 		where cp.sido = #{sido}
 		and cp.gugun = #{gugun}
 		and cp.eupmyeondong = #{eupmyeondong}
@@ -84,7 +84,7 @@
 			and u.gender = #{gender}
 		</if>
 		<if test = "minRating != null and minRating !=''">
-			and (select avg(r.rating) from review r where r.target_id = tp.user_id) >= #{minRating}
+			and (select avg(r.rating) from review r where r.target_id = tp.trainer_id) >= #{minRating}
 		</if>
 		<if test = "tags != null and tags.size() > 0">
 			and exists(
