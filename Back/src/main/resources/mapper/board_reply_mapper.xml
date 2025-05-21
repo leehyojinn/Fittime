@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.reply.BoardReplyDAO">
+
+	<insert id="insertReply" parameterType="com.fitime.dto.BoardReplyDTO">
+		INSERT INTO board_reply (board_idx, user_id, content, reg_date, parent_reply_idx)
+		VALUES (#{boardIdx}, #{userId}, #{content}, NOW(), #{parentReplyIdx})
+	</insert>
+
+	<select id="selectReplyList" parameterType="int" resultType="com.fitime.dto.BoardReplyDTO">
+		SELECT * FROM board_reply
+		WHERE board_idx = #{boardIdx}
+		ORDER BY reply_idx ASC
+	</select>
+
+	<update id="updateReply" parameterType="com.fitime.dto.BoardReplyDTO">
+		UPDATE board_reply
+		SET content = #{content}
+		WHERE reply_idx = #{replyIdx}
+	</update>
+
+	<delete id="deleteReply" parameterType="int">
+		DELETE FROM board_reply
+		WHERE reply_idx = #{replyIdx}
+	</delete>
+
+	<select id="selectRepliesByParent" parameterType="int" resultType="com.fitime.dto.BoardReplyDTO">
+		SELECT * FROM board_reply
+		WHERE parent_reply_idx = #{parentReplyIdx}
+		ORDER BY reg_date ASC
+	</select>
+
+	<select id="selectRepliesByComment" parameterType="int" resultType="com.fitime.dto.BoardReplyDTO">
+		SELECT * FROM board_reply
+		WHERE (#{commentIdx} = 0 AND parent_reply_idx IS NULL)
+		OR (parent_reply_idx = #{commentIdx})
+		ORDER BY reply_idx ASC
+	</select>
+
+	<select id="selectRootComments" parameterType="int" resultType="com.fitime.dto.BoardReplyDTO">
+		SELECT * FROM board_reply
+		WHERE board_idx = #{boardIdx}
+		AND parent_reply_idx IS NULL
+		ORDER BY reply_idx ASC
+	</select>
+
+</mapper>

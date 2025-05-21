@@ -20,6 +20,7 @@
 		SELECT * FROM board WHERE board_idx = #{boardIdx}
 	</select>
 
+
 	<select id="selectBoardList" resultType="com.fitime.dto.BoardDTO">
 		SELECT * FROM board WHERE status = 'active' ORDER BY board_idx DESC
 	</select>
