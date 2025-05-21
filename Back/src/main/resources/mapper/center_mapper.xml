@@ -58,4 +58,45 @@
     	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
 	</select>
 
+	<select id="productList" resultType="com.fitime.dto.ProductDTO" parameterType="map">
+		select * from product p
+		join center_profile cp on p.center_id = cp.center_id
+		where cp.center_id = #{center_id}
+		<choose>
+			<when test="exercise_level==1">
+				and cp.exercise_level=1
+			</when>
+			<when test="exercise_level==2">
+				and cp.exercise_level=2
+			</when>
+			<when test="exercise_level==3">
+				and cp.exercise_level=3
+			</when>
+			<otherwise></otherwise>
+		</choose>
+	</select>
+
+	<update id="statusUpdate">
+		update product set status = !status
+		where product_idx = #{param1}
+	</update>
+	
+	<insert id="productInsert" parameterType="map">
+		insert into product (
+		center_id,trainer_id,product_name,price,discount_rate,
+		<choose>
+			<when test = "exercise_level==1">duration</when>
+			<when test = "exercise_level==2">max_people</when>
+			<when test = "exercise_level==3">count</when>
+		</choose>
+		) values(
+		#{center_id},#{trainer_id},#{product_name},#{price},#{discount_rate},
+		<choose>
+			<when test = "exercise_level==1">#{duration}</when>
+			<when test = "exercise_level==2">#{max_people}</when>
+			<when test = "exercise_level==3">#{count}</when>
+		</choose>
+		)
+	</insert>
+	
 </mapper>

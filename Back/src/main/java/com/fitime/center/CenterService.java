@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -90,6 +91,20 @@ public class CenterService {
 	        dto.setImages(images);
 	    }
 	    return list;
+	}
+
+	public List<ProductDTO> productList(Map<String, Object> param) {
+		return dao.productList(param);
+	}
+
+	public boolean statusUpdate(int idx) {
+		int row = dao.statusUpdate(idx);
+		return row >0 ;
+	}
+
+	public boolean productInsert(Map<String, Object> param) {
+		int row = dao.productInsert(param);
+		return row>0;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.fitime.center;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,5 +31,11 @@ public interface CenterDAO {
 	List<ComplaintDTO> complaint_list(String user_id);
 
 	List<String> selectFileNamesByReportIdx(int report_idx);
+
+	List<ProductDTO> productList(Map<String, Object> param);
+
+	int statusUpdate(int idx);
+
+	int productInsert(Map<String, Object> param);
 
 }
