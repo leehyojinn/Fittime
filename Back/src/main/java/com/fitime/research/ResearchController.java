@@ -36,4 +36,10 @@ public class ResearchController {
 		return result;
 	}
 	
+	@PostMapping(value = "/search/name")
+	public Map<String, Object>searchName(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		return service.searchName(param);
+	}
+	
 }
