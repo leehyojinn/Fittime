@@ -107,4 +107,14 @@ public class CenterService {
 		return row>0;
 	}
 
+	public boolean productUpdate(Map<String, Object> param) {
+		int row = dao.productUpdate(param);
+		return row>0;
+	}
+
+	public boolean productDel(int idx) {
+		int row = dao.productDel(idx);
+		return row>0;
+	}
+
 }

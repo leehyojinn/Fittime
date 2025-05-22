@@ -38,4 +38,8 @@ public interface CenterDAO {
 
 	int productInsert(Map<String, Object> param);
 
+	int productUpdate(Map<String, Object> param);
+
+	int productDel(int idx);
+
 }
