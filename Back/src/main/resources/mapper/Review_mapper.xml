@@ -3,7 +3,7 @@
 
 <mapper namespace="com.fitime.Review.ReviewDAO">
 
-	<select id="pages" resultType="int">
+	<select id="pages" resultType="int">	
 		SELECT CEIL(COUNT(review_idx) / 10) AS pages FROM review;
 	</select>
 
@@ -19,7 +19,10 @@
 	    SELECT * FROM review WHERE review_idx = #{review_idx}
 	</select>
 
-    <insert id="insertReview" parameterType="com.fitime.dto.ReviewDTO" >
+    <insert id="insertReview" parameterType="com.fitime.dto.ReviewDTO" 
+    useGeneratedKeys="true"
+    keyColumn="review_idx"
+    keyProperty="review_idx">
         INSERT INTO review (user_id, target_id,reservation_idx,rating, content)
         VALUES (#{dto.user_id},#{dto.target_id},#{dto.reservation_idx},#{dto.rating}, #{dto.content})
     </insert>
@@ -29,14 +32,25 @@
     </select>
     
     
-    <delete id="delReview" parameterType="com.fitime.dto.ReviewDTO">
-  		DELETE FROM review WHERE review_idx = #{review_idx};
+    <delete id="delReview" >
+  		DELETE FROM review WHERE review_idx = #{param1};
     </delete>
 	
 	<update id="updateReview" parameterType="com.fitime.dto.ReviewDTO">
-		UPDATE review SET rating = #{rating}, content = #{content} ,reg_date = #{reg_date}
+		UPDATE review SET rating = #{rating}, content = #{content}
 			WHERE review_idx = #{review_idx};
 	</update>
 	
+	<select id="reviewImgSave">
+		INSERT INTO file_image ( post_idx, file_name, category )
+			VALUES (#{param1}, #{param2}, "리뷰");
+	</select>
 	
+	<select id="reviewImgSearch" resultType="String">
+		SELECT file_name FROM file_image WHERE category = "리뷰" AND post_idx = #{param1};
+	</select>
+	
+	<delete id="fileDelReview">
+		 DELETE FROM file_image WHERE post_idx = #{param1} AND category = "리뷰" ;
+	</delete>
 </mapper>

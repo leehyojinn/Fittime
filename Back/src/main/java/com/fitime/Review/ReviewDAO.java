@@ -28,4 +28,10 @@ public interface ReviewDAO {
 
 	int overayReview(ReviewDTO dto);
 
+	void reviewImgSave(int idx, String filename);
+
+	List<String> reviewImgSearch(int idx);
+
+	int fileDelReview(int idx);
+
 }

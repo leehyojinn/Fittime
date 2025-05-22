@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.ReviewDTO;
 
@@ -40,11 +42,12 @@ public class ReviewController {
 
 	// detail
 	@PostMapping(value = "/detail/review/{idx}")
-	public Map<String, Object> detailReview(@RequestBody ReviewDTO dto) {
+	public Map<String, Object> detailReview(MultipartFile[] files, @RequestBody ReviewDTO dto) {
 		logger.info("detail dto : {} ", dto);
 		logger.info("review_idx : {}", dto.getReview_idx());
 		logger.info("Reservation_idx : {}", dto.getReservation_idx());
-
+		logger.info("files : {} ", files);
+		
 		result = new HashMap<String, Object>();
 
 		ReviewDTO ReviewDTO = service.detailReview(dto);
@@ -55,7 +58,7 @@ public class ReviewController {
 
 	// insert
 	@PostMapping(value = "/insert/review")
-	public Map<String, Object> insertReview(@RequestBody ReviewDTO dto) {
+	public Map<String, Object> insertReview(MultipartFile[] files , ReviewDTO dto) {
 		logger.info("insert dto : {}", dto);
 
 		int reviewCount = service.overayReview(dto);
@@ -66,7 +69,7 @@ public class ReviewController {
 		if (reviewCount > 0) {
 			result.put("success", success);
 		}else {
-			success = service.insertReview(dto);
+			success = service.insertReview(files,dto);
 			result.put("success", success);			
 		}
 		
@@ -75,15 +78,15 @@ public class ReviewController {
 	}
 
 	// delete
-	@PostMapping(value = "del/review/{idx}")
-	public Map<String, Object> delReview(@RequestBody ReviewDTO dto) {
-		logger.info("delete dto : {} ", dto);
+	@PostMapping(value = "/del/review/{review_idx}")
+	public Map<String, Object> delReview(@PathVariable int review_idx) {
+		logger.info("review_idx : "+ review_idx);
 
 		result = new HashMap<String, Object>();
 
-		boolean success = service.delReview(dto);
+		boolean success = service.delReview(review_idx);
 
-		result.put("idx", dto.getReview_idx());
+		result.put("idx",review_idx);
 		result.put("success", success);
 
 		return result;
@@ -91,17 +94,18 @@ public class ReviewController {
 
 	// update
 	@PostMapping(value = "/update/review/{review_idx}")
-	public Map<String, Object> updateReview(@RequestBody ReviewDTO dto) {
+	public Map<String, Object> updateReview(MultipartFile[] files, ReviewDTO dto) {
 		logger.info("update dto : {} ", dto);
 		logger.info("update list idx : ", dto.getReview_idx());
 
 		result = new HashMap<String, Object>();
 		
-			result.put("update idx", dto.getReview_idx());
-			result.put("update dto", dto);	
-
-
+		boolean success = service.updateReview(files, dto);
+		
+		result.put("success" , success);
+			
 		return result;
 	}
 
+	
 }
