@@ -14,14 +14,14 @@ public class BoardReplyDTO {
     private String userId;
     private String content;
     private String regDate;
-    
-    private Integer parentReplyIdx;
+    private int comment_idx;
+  
 
-    public Integer getParentReplyIdx() {
-		return parentReplyIdx;
+	public int getComment_idx() {
+		return comment_idx;
 	}
-	public void setParentReplyIdx(Integer parentReplyIdx) {
-		this.parentReplyIdx = parentReplyIdx;
+	public void setComment_idx(int comment_idx) {
+		this.comment_idx = comment_idx;
 	}
 	public int getReplyIdx() { return replyIdx; }
     public void setReplyIdx(int replyIdx) { this.replyIdx = replyIdx; }

@@ -4,74 +4,61 @@
 
 <mapper namespace="com.fitime.board.BoardDAO">
 
+	<!-- 게시글 등록 (PK 수동 지정 시) -->
 	<insert id="insertBoard" parameterType="com.fitime.dto.BoardDTO">
 		INSERT INTO board
-		(board_idx, user_id, title, content,
-		reg_date, category,
-		file_name)
-		VALUES (#{boardIdx}, #{userId}, #{title},
-		#{content}, NOW(),
-		#{category},
-		#{fileName})
+		(board_idx, user_id, title, content, category)
+		VALUES
+		(#{boardIdx}, #{userId}, #{title}, #{content}, #{category})
 	</insert>
 
+	<!-- 게시글 등록 (PK auto_increment) -->
+	<insert id="boardInsert" parameterType="com.fitime.dto.BoardDTO"
+		useGeneratedKeys="true" keyProperty="boardIdx">
+		INSERT INTO board (user_id, title, content, category)
+		VALUES (#{userId}, #{title}, #{content}, #{category})
+	</insert>
+
+	<!-- 게시글 상세 조회 -->
 	<select id="selectBoardById" parameterType="int"
 		resultType="com.fitime.dto.BoardDTO">
 		SELECT * FROM board WHERE board_idx = #{boardIdx}
 	</select>
 
-	<select id="selectBoardList" resultType="com.fitime.dto.BoardDTO">
-		SELECT * FROM board WHERE status = 'active' ORDER BY board_idx DESC
+	<!-- 게시글 리스트 조회 -->
+	<select id="selectBoardList"
+		resultType="com.fitime.dto.BoardDTO">
+		SELECT * FROM board WHERE state = '활성' ORDER BY
+		board_idx DESC
 	</select>
 
+	<!-- 게시글 수정 -->
 	<update id="updateBoard" parameterType="com.fitime.dto.BoardDTO">
 		UPDATE board
 		SET title =
-		#{title}, content = #{content},
-		category = #{category}
-		WHERE board_idx =
-		#{boardIdx}
+		#{title}, content = #{content}, category = #{category}
+		WHERE board_idx
+		= #{boardIdx}
 	</update>
 
+	<!-- 게시글 소프트 삭제 -->
 	<update id="softDeleteBoard" parameterType="int">
 		UPDATE board SET
-		status = 'deleted' WHERE board_idx = #{boardIdx}
+		state = '비활성' WHERE board_idx = #{boardIdx}
 	</update>
 
-	<insert id="boardInsert" parameterType="com.fitime.dto.BoardDTO"
-		useGeneratedKeys="true" keyProperty="boardIdx">
-		INSERT INTO board (user_id, title,
-		content, reg_date,
-		category, file_name)
-		VALUES (#{userId}, #{title},
-		#{content}, NOW(),
-		#{category},
-		#{fileName})
-	</insert>
-
+	<!-- 게시글 페이징 조회 -->
 	<select id="listWithPaging" resultType="com.fitime.dto.BoardDTO">
-		SELECT * FROM board
-		ORDER
-		BY board_idx DESC
-		LIMIT #{offset}, #{size}
+		SELECT * FROM board ORDER
+		BY board_idx DESC LIMIT #{offset}, #{size}
 	</select>
 
+	<!-- 전체 게시글 수 -->
 	<select id="getTotalCount" resultType="int">
 		SELECT COUNT(*) FROM board
 	</select>
 
-	<insert id="insertFile">
-		INSERT INTO board_file (board_idx, file_name)
-		VALUES
-		(#{boardIdx}, #{fileName})
-	</insert>
-
-	<select id="selectFileNames" parameterType="int"
-		resultType="String">
-		SELECT file_name FROM board_file WHERE board_idx =
-		#{boardIdx}
-	</select>
-
+	<!-- 게시글 검색 (제목 + 내용) -->
 	<select id="searchBoard" parameterType="String"
 		resultType="com.fitime.dto.BoardDTO">
 		SELECT * FROM board
@@ -81,5 +68,28 @@
 		ORDER BY board_idx
 		DESC
 	</select>
+
+	<!-- ✅ 이미지 파일명 저장 -->
+	<insert id="insertFile">
+		INSERT INTO file_Image (file_name, category,
+		post_idx)
+		VALUES (#{fileName}, '게시판', #{boardIdx})
+	</insert>
+
+
+	<!-- ✅ 이미지 파일명 조회 -->
+	<select id="selectFileNames" parameterType="int"
+		resultType="String">
+		SELECT file_name FROM file_Image WHERE category = '게시판'
+		AND post_idx =
+		#{boardIdx}
+	</select>
+
+
+	<!-- ✅ 이미지 파일명 삭제 -->
+	<delete id="deleteBoardImage" parameterType="int">
+		DELETE FROM
+		file_Image WHERE category = '게시판' AND post_idx = #{boardIdx}
+	</delete>
 
 </mapper>

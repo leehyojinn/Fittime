@@ -43,4 +43,6 @@ public interface BoardDAO {
     List<BoardDTO> searchBoard(String keyword);
 
 	void softDeleteBoard(int boardIdx);
+
+	void deleteBoardImage(int boardIdx);
 }

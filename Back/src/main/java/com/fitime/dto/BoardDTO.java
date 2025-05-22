@@ -1,28 +1,28 @@
 package com.fitime.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class BoardDTO {
 
-    private int boardIdx;
+    
     private String userId;
     private String title;
     private String content;
     private Timestamp regDate;
     private String category;
-    private String fileName;
+    private List<String> imageList;
+    private int boardIdx;
     
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	public int getBoardIdx() {
-		return boardIdx;
-	}
+    
 	public void setBoardIdx(int boardIdx) {
 		this.boardIdx = boardIdx;
+	}
+	public List<String> getImageList() {
+		return imageList;
+	}
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
 	}
 	public String getUserId() {
 		return userId;
@@ -53,6 +53,9 @@ public class BoardDTO {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public int getBoardIdx() {
+		return boardIdx;
 	}
 
 	

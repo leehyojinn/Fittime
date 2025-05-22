@@ -1,6 +1,7 @@
 package com.fitime.board;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,14 +33,14 @@ public class BoardController {
         return service.list();
     }
 
-    // ✅ 게시글 상세 조회
+    // ✅ 게시글 상세 조회 (이미지 포함)
     @PostMapping("/detail/board")
     public BoardDTO getBoardDetail(@RequestBody Map<String, Integer> param) {
         int id = param.get("id");
         return service.read(id);
     }
 
-    // ✅ 게시글 작성 (텍스트 전용)
+    // ✅ 게시글 등록 (텍스트 전용)
     @PostMapping("/insert/board")
     public String writeBoard(@RequestBody BoardDTO dto) {
         service.write(dto);
@@ -53,7 +54,7 @@ public class BoardController {
         return "수정 완료";
     }
 
-    // ✅ 게시글 삭제
+    // ✅ 게시글 삭제 (소프트 삭제 처리)
     @PostMapping("/delete/board")
     public String deleteBoard(@RequestBody(required = false) Map<String, Integer> param) {
         if (param == null || !param.containsKey("boardIdx")) {
@@ -70,7 +71,6 @@ public class BoardController {
         return "삭제 완료 (Soft Delete)";
     }
 
-
     // ✅ 파일 포함 게시글 작성 (다중 파일 가능)
     @PostMapping("/writeWithFiles/board")
     public String writeWithFiles(
@@ -80,7 +80,13 @@ public class BoardController {
             @RequestParam("category") String category,
             @RequestParam(value = "file", required = false) List<MultipartFile> files
     ) {
-        StringBuilder savedFileNames = new StringBuilder();
+        BoardDTO board = new BoardDTO();
+        board.setUserId(userId);
+        board.setTitle(title);
+        board.setContent(content);
+        board.setCategory(category);
+
+        List<String> savedFileNames = new ArrayList<>();
 
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
@@ -93,25 +99,16 @@ public class BoardController {
                         File saveFile = new File("C:/upload/", fileName);
                         file.transferTo(saveFile);
 
-                        savedFileNames.append(fileName).append(";");
+                        savedFileNames.add(fileName);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }    
+            }
         }
-       
 
-        BoardDTO dto = new BoardDTO();
-        dto.setUserId(userId);
-        dto.setTitle(title);
-        dto.setContent(content);
-        dto.setCategory(category);
-        dto.setFileName(savedFileNames.toString()); // 파일명 여러 개를 ; 로 구분
-
-        service.write(dto);
-
-        return "작성 완료 (다중 파일 포함)";
+        service.write(board, savedFileNames);
+        return "redirect:/somewhere"; // 또는 "ok"
     }
 
     // ✅ 게시글에 첨부된 파일 목록 조회

@@ -6,8 +6,8 @@
 <mapper namespace="com.fitime.reply.BoardReplyDAO">
 
 	<insert id="insertReply" parameterType="com.fitime.dto.BoardReplyDTO">
-		INSERT INTO board_reply (board_idx, user_id, content, reg_date, parent_reply_idx)
-		VALUES (#{boardIdx}, #{userId}, #{content}, NOW(), #{parentReplyIdx})
+		INSERT INTO board_reply (user_id, content, comment_idx)
+		VALUES (#{userId}, #{content}, #{comment_idx})
 	</insert>
 
 	<select id="selectReplyList" parameterType="int" resultType="com.fitime.dto.BoardReplyDTO">
