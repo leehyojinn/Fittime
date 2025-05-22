@@ -43,7 +43,7 @@
 	</insert>
 	
 	<insert id="insertFileImages" parameterType="java.util.List">
-	    insert into file_image(report_idx, file_name, category)
+	    insert into file_image(post_idx, file_name, category)
 	    values
 	    <foreach collection="list" item="item" separator=",">
 	        (#{item.report_idx}, #{item.file_name}, '신고')
@@ -58,4 +58,61 @@
     	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
 	</select>
 
+	<select id="productList" resultType="com.fitime.dto.ProductDTO" parameterType="map">
+		select * from product p
+		join center_profile cp on p.center_id = cp.center_id
+		where cp.center_id = #{center_id}
+		and `delete` = false
+		<choose>
+			<when test="exercise_level==1">
+				and cp.exercise_level=1
+			</when>
+			<when test="exercise_level==2">
+				and cp.exercise_level=2
+			</when>
+			<when test="exercise_level==3">
+				and cp.exercise_level=3
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		
+	</select>
+
+	<update id="statusUpdate">
+		update product set status = !status
+		where product_idx = #{param1}
+	</update>
+	
+	<insert id="productInsert" parameterType="map">
+		insert into product (
+		center_id,trainer_id,product_name,price,discount_rate,
+		<choose>
+			<when test = "exercise_level==1">duration</when>
+			<when test = "exercise_level==2">max_people</when>
+			<when test = "exercise_level==3">count</when>
+		</choose>
+		) values(
+		#{center_id},#{trainer_id},#{product_name},#{price},#{discount_rate},
+		<choose>
+			<when test = "exercise_level==1">#{duration}</when>
+			<when test = "exercise_level==2">#{max_people}</when>
+			<when test = "exercise_level==3">#{count}</when>
+		</choose>
+		)
+	</insert>
+	
+	<update id="productUpdate" parameterType="map">
+		update product set product_name = #{product_name}, price = #{price}, discount_rate = #{discount_rate},
+		<choose>
+			<when test="exercise_level==1">duration=#{duration}</when>
+			<when test="exercise_level==2">max_people=#{max_people}</when>
+			<when test="exercise_level==3">count=#{count}</when>
+		</choose>
+		where product_idx = #{product_idx}
+	</update>
+	
+	<update id="productDel">
+		update product set `delete` = !`delete` where product_idx = #{product_idx}
+	</update>
+	
 </mapper>
