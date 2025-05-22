@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.FileImageDTO;
 import com.fitime.dto.ProductDTO;
@@ -114,6 +115,25 @@ public class CenterService {
 
 	public boolean productDel(int idx) {
 		int row = dao.productDel(idx);
+		return row>0;
+	}
+
+	public List<ClassDTO> classList(Map<String, Object> param) {
+		return dao.classList(param);
+	}
+
+	public boolean classInsert(Map<String, Object> param) {
+		int row = dao.classInsert(param);
+		return row>0;
+	}
+
+	public boolean classDel(int idx) {
+		int row = dao.classDel(idx);
+		return row>0;
+	}
+
+	public boolean classUpdate(Map<String, Object> param) {
+		int row = dao.classUpdate(param);
 		return row>0;
 	}
 

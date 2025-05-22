@@ -115,4 +115,23 @@
 		update product set `delete` = !`delete` where product_idx = #{product_idx}
 	</update>
 	
+	<select id="classList" parameterType="String" resultType="com.fitime.dto.ClassDTO">
+		select c.* from class c join product p on c.product_idx = p.product_idx 
+		where c.center_id = #{center_id} and p.status = true and p.`delete` = false 
+	</select>
+	
+	<insert id="classInsert" parameterType="map">
+		insert into class (center_id,trainer_id,product_idx,start_time,end_time,week)
+		values (#{center_id},#{trainer_id},#{product_idx},#{start_time},#{end_time},#{week})
+	</insert>
+	
+	<update id="classUpdate" parameterType="map">
+		update class set trainer_id = #{trainer_id}, product_idx = #{product_idx}, start_time =#{start_time}, end_time=#{end_time}, week = #{week}
+		where class_idx = #{class_idx}
+	</update>
+	
+	<delete id="classDel">
+		delete from class where class_idx=#{class_idx}
+	</delete>
+	
 </mapper>

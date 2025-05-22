@@ -4,20 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.ProductDTO;
 
@@ -158,6 +158,45 @@ public class CenterController {
 		result = new HashMap<String, Object>();
 		boolean success = service.productDel(product_idx);
 		result.put("success",success );
+		return result;
+	}
+	
+	// class 등록
+	@PostMapping(value="/insert/class")
+	public Map<String, Object>classInsert(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.classInsert(param);
+		result.put("success",success);
+		return result;
+	}
+	// class 리스트
+	@PostMapping(value="/list/class")
+	public Map<String, Object>classList(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<ClassDTO>list = service.classList(param); 
+		result.put("list", list);
+		return result;
+	} 
+	
+	// class 수정
+	@PostMapping(value="/update/class")
+	public Map<String, Object>classUpdate(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.classUpdate(param);
+		result.put("success",success);
+		return result;
+	}
+	
+	// class 삭제
+	@DeleteMapping(value="/del/class/{class_idx}")
+	public Map<String, Object>classDel(@PathVariable int class_idx){
+		logger.info("class_idx : "+class_idx);
+		result = new HashMap<String, Object>();
+		boolean success = service.classDel(class_idx);
+		result.put("success",success);
 		return result;
 	}
 	

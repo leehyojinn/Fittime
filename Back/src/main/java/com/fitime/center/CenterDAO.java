@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.FileImageDTO;
 import com.fitime.dto.ProductDTO;
@@ -41,5 +42,13 @@ public interface CenterDAO {
 	int productUpdate(Map<String, Object> param);
 
 	int productDel(int idx);
+
+	List<ClassDTO> classList(Map<String, Object> param);
+
+	int classInsert(Map<String, Object> param);
+
+	int classDel(int idx);
+
+	int classUpdate(Map<String, Object> param);
 
 }
