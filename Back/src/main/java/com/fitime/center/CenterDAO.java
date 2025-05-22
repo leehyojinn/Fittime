@@ -1,10 +1,12 @@
 package com.fitime.center;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.FileImageDTO;
 import com.fitime.dto.ProductDTO;
@@ -30,5 +32,23 @@ public interface CenterDAO {
 	List<ComplaintDTO> complaint_list(String user_id);
 
 	List<String> selectFileNamesByReportIdx(int report_idx);
+
+	List<ProductDTO> productList(Map<String, Object> param);
+
+	int statusUpdate(int idx);
+
+	int productInsert(Map<String, Object> param);
+
+	int productUpdate(Map<String, Object> param);
+
+	int productDel(int idx);
+
+	List<ClassDTO> classList(Map<String, Object> param);
+
+	int classInsert(Map<String, Object> param);
+
+	int classDel(int idx);
+
+	int classUpdate(Map<String, Object> param);
 
 }

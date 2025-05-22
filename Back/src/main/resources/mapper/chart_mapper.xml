@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.chart.ChartDAO">
+
+	<!-- 누적 회원 수 -->
+	<select id="memberChart" resultType="map">
+		SELECT COUNT(DISTINCT user_id) as center_member FROM reservation
+		WHERE center_id=#{param1} AND status != '취소'
+	</select>
+	
+	<!-- 총 판매 상품 수 -->
+	<select id="productChart" resultType="map">
+		SELECT COUNT(product_idx) as product_cnt FROM product WHERE center_id=#{param1} AND status != 0
+	</select>
+	
+	<!-- 현재 트레이너 수 -->
+	<select id="currentTrainerChart" resultType="map">
+		SELECT COUNT(*) AS trainer_cnt FROM trainer_profile tp JOIN user u ON tp.trainer_id=u.user_id 
+		WHERE tp.center_idx=#{param1} AND u.user_level=2
+	</select>
+	
+	<!-- 해당 월 매출 -->
+	<select id="currentSalesChart" resultType="map">
+		SELECT DATE_FORMAT(py.payment_date, '%Y-%m') AS sale_month
+			,SUM(py.payment_price) AS total_sales
+		FROM payment py JOIN product pr ON py.product_idx=pr.product_idx
+		WHERE pr.center_id=#{param1}
+		AND py.status != '취소'
+		AND DATE_FORMAT(py.payment_date, '%Y-%m')=DATE_FORMAT(NOW(), '%Y-%m')
+		GROUP BY DATE_FORMAT(py.payment_date, '%Y-%m')
+	</select>
+
+	<!-- 월별 매출 -->
+	<select id="salesChart" resultType="map">
+		SELECT DATE_FORMAT(py.payment_date, '%Y-%m') AS sale_month
+			,SUM(py.payment_price) AS total_sales
+		FROM payment py JOIN product pr ON py.product_idx=pr.product_idx
+		WHERE pr.center_id=#{param1} AND py.status != '취소'
+		GROUP BY DATE_FORMAT(py.payment_date, '%Y-%m') ORDER BY sale_month
+	</select>
+	
+	<!-- 월별 예약 수 -->
+	<select id="bookChart" resultType="map">
+		SELECT DATE_FORMAT(`date`, '%Y-%m') AS reservation_month
+			,COUNT(*) AS reservation_cnt
+		FROM reservation WHERE center_id=#{param1} AND status != '취소'
+		GROUP BY DATE_FORMAT(`date`, '%Y-%m') ORDER BY reservation_month
+	</select>
+	
+	<!-- 월별 상품판매 수 -->
+	<select id="productSalesChart" resultType="map">
+		SELECT
+			DATE_FORMAT(py.payment_date, '%Y-%m') AS sale_month
+			,py.product_idx
+			,COUNT(*) AS product_sales_cnt
+		FROM payment py JOIN product pr ON py.product_idx=pr.product_idx
+		WHERE pr.center_id=#{param1} AND py.status != '취소'
+		GROUP BY
+			DATE_FORMAT(py.payment_date, '%Y-%m')
+			,py.product_idx
+		ORDER BY sale_month, py.product_idx
+	</select>
+	
+	<!-- 월별 트레이너 예약 수 -->
+	<select id="trainerBookChart" resultType="map">
+		SELECT
+			DATE_FORMAT(r.date, '%Y-%m') AS reservation_month
+			,pr.trainer_id
+			,COUNT(*) AS reservation_cnt
+		FROM reservation r JOIN product pr ON r.product_idx=pr.product_idx
+		WHERE pr.center_id=#{param1} AND r.status != '취소'
+		GROUP BY DATE_FORMAT(r.date, '%Y-%m')
+			,pr.trainer_id
+		ORDER BY reservation_month, reservation_cnt DESC
+	</select>
+	
+	<!-- 월별 인기 트레이너 (별점 기준) -->
+	<select id="trainerRatingChart" resultType="map">
+		SELECT
+			review_month
+			,sub.target_id
+			,ROUND(avg_rating, 1) as avg_rating
+			,review_cnt
+		FROM (
+			SELECT
+				DATE_FORMAT(r.reg_date, '%Y-%m') AS review_month
+				,r.target_id
+				,AVG(rating) AS avg_rating
+				,COUNT(*) AS review_cnt
+			FROM review r JOIN trainer_profile tp ON r.target_id=tp.trainer_id
+			WHERE tp.center_idx=#{param1}
+			GROUP BY DATE_FORMAT(r.reg_date, '%Y-%m')
+				,r.target_id) AS sub
+		ORDER BY review_month, avg_rating DESC				
+	</select>
+	
+	<!-- 인기 상품 순 -->
+	<select id="productPopularChart" resultType="map">
+		SELECT pr.product_name, COUNT(*) AS sales_cnt
+		FROM payment py JOIN product pr ON py.product_idx=pr.product_idx
+		WHERE pr.status=1 AND py.status != '취소'
+		GROUP BY pr.product_name ORDER BY sales_cnt DESC
+	</select>
+	
+	<!-- 트레이너 현황 -->
+	<select id="trainerChart" resultType="map">
+		SELECT
+			u.name AS trainer_name
+			,COUNT(rs.reservation_idx) AS reservation_cnt
+			,ROUND(AVG(rv.rating), 1) AS avg_rating
+		FROM trainer_profile tp
+		JOIN user u ON tp.trainer_id=u.user_id
+		LEFT JOIN reservation rs ON u.user_id=rs.trainer_id
+		LEFT JOIN review rv ON u.user_id=rv.target_id
+		WHERE u.user_level=2 AND tp.center_idx=#{param1} GROUP BY u.user_id, u.name
+	</select>	
+
+</mapper>

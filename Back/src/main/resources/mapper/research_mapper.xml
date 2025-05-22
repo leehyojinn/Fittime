@@ -16,9 +16,12 @@
 		(select avg(r.rating)
 		from review r
 		where r.target_id=cp.center_id)as rating,
-		(select group_concat(t.tag_name)
+		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']')
 		from user_tag ut join tag t on ut.tag_idx=t.tag_idx
 		where ut.user_id=cp.center_id)as tags,
+		(select count(r.review_idx)
+		from review r
+		where r.target_id=cp.center_id) as review_cnt,
 		(select file_name
 		from profile_file pf
 		where pf.user_id=cp.center_id) as file_name 
@@ -67,9 +70,10 @@
 		cp.longitude ,
 		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
 		(select avg(r.rating) from review r where r.target_id = tp.trainer_id) as rating ,
+		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as review_cnt,
 		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
 		(select name from `user` u where u.user_id=tp.trainer_id) as name,
-		(select group_concat(t.tag_name) from user_tag ut
+		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']') from user_tag ut
 		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags
 		from trainer_profile tp 
 		join center_profile cp on cp.center_idx = tp.center_idx
@@ -111,6 +115,43 @@
 				order by rating desc
 			</otherwise>
 		</choose>
+	</select>
+
+	<select id="trainerName" parameterType="map" resultType="map">
+		select 
+		u.name,
+		cp.center_name ,
+		cp.exercise,
+		(select avg(r.rating) from review r where r.target_id=tp.trainer_id) as rating,
+		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as cnt,
+		(select file_name from profile_file pf where pf.user_id = tp.trainer_id) as file_name,
+		(select min(price) from product p where p.trainer_id = tp.trainer_id) as min_price,
+		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']')
+		from user_tag ut join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags
+		from user u
+		join trainer_profile tp on tp.trainer_id = u.user_id
+		join center_profile cp on cp.center_idx = tp.center_idx 
+		where u.user_level = 2
+		and BINARY tp.trainer_id like concat('%',#{param1},'%')
+		limit 5 offset #{param2}
+	</select>
+
+	<select id="centerName" parameterType="map" resultType="map">
+		select 
+		cp.center_name,
+		concat(cp.sido,' ',cp.gugun,' ',cp.eupmyeondong,' ',cp.detail_address) as address,
+		(select avg(r.rating) from review r where r.target_id = cp.center_id)as rating,
+		(select count(r.review_idx) from review r where r.target_id = cp.center_id)as cnt, 
+		(select file_name from profile_file pf where pf.user_id=cp.center_id) as file_name,
+		(select min(price) from product p where p.center_id = cp.center_id)as price,
+		(select concat('[',group_concat(concat('"',t.tag_name,'"')) ,']') 
+		from user_tag ut join tag t on ut.tag_idx = t.tag_idx
+		where ut.user_id = cp.center_id)as tags
+		from user u
+		join center_profile cp on u.user_id = cp.center_id
+		where u.user_level = 3
+		and binary cp.center_id like concat('%',#{param1},'%')
+		limit 5 offset #{param2}
 	</select>
 
 </mapper>

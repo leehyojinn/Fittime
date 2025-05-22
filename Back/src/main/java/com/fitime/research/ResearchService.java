@@ -1,5 +1,6 @@
 package com.fitime.research;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,5 +22,18 @@ public class ResearchService {
 	public List<Map<String, Object>> searchTrainer(Map<String, Object> param) {
 		return dao.searchTrainer(param);
 	}
+
+	public Map<String, Object> searchName(Map<String, Object> param) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		int page = ((int)param.get("page")-1)*5;
+		String name = (String)param.get("name");
+		List<Map<String, Object>> result = dao.trainerName(name,page);
+		map.put("trainer_list", result);
+		result = dao.centerName(name,page);
+		map.put("center_list", result);
+		return map;
+	}
+
+
 	
 }
