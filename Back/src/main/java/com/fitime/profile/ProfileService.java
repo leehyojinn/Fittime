@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +140,13 @@ public class ProfileService {
 
 	public boolean updateTrainerProfile(MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateTrainerProfile(param);
+		logger.info("row : " + row);
+		List<Number> tags = (List<Number>) param.get("tags");
+		logger.info("tags" + tags);
+		if(tags != null && row > 0) {
+			dao.delTag((String)param.get("trainer_id"));
+			row = dao.insertTag((String)param.get("trainer_id"),tags);
+		}
 		boolean save_success = true;
 		if(file !=null) {
 			save_success = fileSave((String)param.get("trainer_id"),file);
@@ -148,13 +156,19 @@ public class ProfileService {
 
 	public boolean updateCenterProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateCenterProfile(param);
+		logger.info("tags : "+ param.get("tags"));
+		List<Number> tags = (List<Number>) param.get("tags");
+		if(tags != null && row > 0) {
+			dao.delTag((String)param.get("center_id"));
+			row = dao.insertTag((String)param.get("center_id"),tags);
+		}
 		boolean image_save = true;
 		boolean profile_save = true;
 		boolean image_delete = true;
 		if(file!=null) { //대표 이미지가 들어온 경우
 			profile_save = fileSave((String)param.get("center_id"),file);
 		}
-		if(files!=null) { // 센터 이미지가 들어온 경우
+		if(files!=null && files.length>0 &&!files[0].isEmpty()) { // 센터 이미지가 들어온 경우
 			image_delete = fileDel((String)param.get("center_id"));
 			image_save = fileSave((String)param.get("center_id"),files);
 		}
@@ -173,6 +187,7 @@ public class ProfileService {
 		String level = (String)param.get("user_level");
 		String id ="";
 		Map<String, Object>result = new HashMap<String, Object>();
+		List<String>tags = new ArrayList<String>();
 		switch (level) {
 		case "1":
 			id = (String)param.get("user_id");
@@ -181,20 +196,25 @@ public class ProfileService {
 		case "2":
 			id = (String)param.get("trainer_id");
 			result = dao.detailTrainerProfile(id);
+			tags = dao.getTags(id);
+			result.put("tags", tags);
 			break;
 		case "3":
 			id = (String)param.get("center_id");
 			result = dao.detailCenterProfile(id);
+			tags = dao.getTags(id);
 			List<Profile_fileDTO>list = dao.photoList(id);
 			if(!list.isEmpty()) {
-				result.put("photo", list);
+				result.put("photos", list);
 				logger.info("result : {}",result);
 			}
+			result.put("tags", tags);
 			break;
 		default:
 			result.put("success", false);
 			break;
 		}
+		
 		return result;
 	}
 

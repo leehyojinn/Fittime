@@ -28,15 +28,14 @@ public class ProfileController {
 	Map<String, Object>result = null;
 	
 	@PostMapping (value="/update/Profile")
-	public Map<String, Object>updateProfile(MultipartFile[] files,MultipartFile file ,@RequestPart Map<String, Object>param){
+	public Map<String, Object>updateProfile(@RequestPart(value = "files", required = false) MultipartFile[] files,@RequestPart(value = "file", required = false) MultipartFile file ,@RequestPart(value="param") Map<String, Object>param){
 		logger.info("param : {}",param);
 		logger.info("file : {}",file);
-		logger.info("files : {}",files);
 		result = new HashMap<String, Object>();
 		boolean success = false;
 		String level = (String) param.get("user_level");
 		
-		
+		logger.info("level = "+level);
 		switch (level) {
 		case "1": 
 			success = service.updateUserProfile(file,param);

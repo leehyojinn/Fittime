@@ -37,7 +37,7 @@
 		select file_name from profile_file where user_id = #{param1} and category = '프로필'
 	</select>
 	
-	<update id="updateUserProfile" parameterType="map">
+	<update id="updateUserProfile">
 		update user set password =#{password},
 		email = #{email},
 		address = #{address},
@@ -45,8 +45,20 @@
 		where user_id = #{user_id}
 	</update>
 	
+	<insert id="insertTag">
+		insert into user_tag (user_id,tag_idx)
+		values
+		<foreach collection="tags" item="tag" separator=",">
+		 (#{user_id},#{tag})
+		</foreach>
+	</insert>
+	
+	<delete id="delTag">
+		delete from user_tag where user_id = #{param1}
+	</delete>
+	
 	<update id="updateTrainerProfile">
-		update user join trainer_profile tp on user.user_id = tp.user_id
+		update user join trainer_profile tp on user.user_id = tp.trainer_id
 		set password = #{password}, 
 		email = #{email},
 		address = #{address},
@@ -94,6 +106,10 @@
 	
 	<select id="getImg" resultType="map">
 		select * from profile_file where profile_file_idx = #{param1}
+	</select>
+	
+	<select id="getTags" parameterType="String">
+		select tag_name from user_tag ut join tag t ON ut.tag_idx = t.tag_idx where ut.user_id = #{param1}
 	</select>
 
 </mapper>

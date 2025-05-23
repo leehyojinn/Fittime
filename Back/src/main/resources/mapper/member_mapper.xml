@@ -64,7 +64,7 @@
 	</select>
 	
 	<insert id="makeTrainer">
-		INSERT INTO Trainer_profile (user_id, center_idx, career)
+		INSERT INTO Trainer_profile (trainer_id, center_idx, career)
 		VALUES (#{param1},0,'')
 	</insert>
 	
@@ -81,8 +81,8 @@
 		    '',
 		    '',
 		    '',
-		    0,
-		    0,
+		    37.57188903608805,
+		    126.98722274939155,
 		    0,
 		    ''
 		)
