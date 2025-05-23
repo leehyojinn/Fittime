@@ -7,12 +7,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fitime.dto.Profile_fileDTO;
 import com.fitime.dto.ReservationDTO;
 
 @CrossOrigin
@@ -69,10 +72,12 @@ public class ReservationController {
 		logger.info("예약 상세 보기 : {}", param);
 		result = new HashMap<String, Object>();
 		ReservationDTO dto = service.detailBooking(param);
+		List<Profile_fileDTO> image = service.trainerImage(param);
 		result.put("post", dto);
+		result.put("image", image);
 		return result;
 	}
-
+	
 	// 예약 수정
 	@PostMapping(value = "/update/book")
 	public Map<String, Object> updateBooking(@RequestBody Map<String, Object> param) {
@@ -84,7 +89,7 @@ public class ReservationController {
 	}
 
 	// 예약 취소
-	@PostMapping(value = "/cancel")
+	@PostMapping(value = "/del/book")
 	public Map<String, Object> cancelBooking(@RequestBody Map<String, Object> param) {
 		logger.info("예약 취소 : {}", param);
 		result = new HashMap<String, Object>();

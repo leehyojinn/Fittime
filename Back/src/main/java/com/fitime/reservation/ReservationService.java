@@ -2,15 +2,20 @@ package com.fitime.reservation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fitime.dto.Profile_fileDTO;
 import com.fitime.dto.ReservationDTO;
 
 @Service
@@ -98,7 +103,11 @@ public class ReservationService {
 	public ReservationDTO detailBooking(Map<String, Object> param) {
 		return dao.detailBooking(param);
 	}
-
+	
+	public List<Profile_fileDTO> trainerImage(Map<String, Object> param) {
+		return dao.trainerImage(param);
+	}
+	
 	public boolean updateBooking(Map<String, Object> param) {
 		int row = dao.updateBooking(param);
 		return row>0;
