@@ -37,7 +37,8 @@ public class MemberService {
 	}
 
 	public int get_level(Map<String, String> params) {
-		return mapper.get_level(params);
+		Integer level =  mapper.get_level(params);
+		return (level != null) ? level : -1;
 	}
 
 	public boolean overlayId(Map<String, Object> param) {

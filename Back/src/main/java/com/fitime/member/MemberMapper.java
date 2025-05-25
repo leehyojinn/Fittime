@@ -11,7 +11,7 @@ public interface MemberMapper {
 
 	int login(Map<String, String> params);
 
-	int get_level(Map<String, String> params);
+	Integer get_level(Map<String, String> params);
 
 	int overlayId(Map<String, Object> param);
 
