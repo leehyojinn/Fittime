@@ -1,5 +1,6 @@
 package com.fitime.payment;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fitime.dto.BuyListDTO;
+import com.fitime.dto.KakaoDTO;
 import com.fitime.dto.PaymentDTO;
 
 @Service
@@ -22,6 +25,7 @@ public class PaymentService {
 		}
 		return row>0;
 	}
+	
 	public boolean paymentCancel(int idx) {
 		int row = dao.paymentCancel(idx);
 		if(row>0) {
@@ -57,6 +61,18 @@ public class PaymentService {
 		}
 		
 		return row>0;
+	}
+
+	public List<BuyListDTO> getBuyList(String id) {
+		return dao.getBuyList(id);
+	}
+
+	public List<PaymentDTO> getPayment(String id) {
+		return dao.getPayment(id);
+	}
+
+	public List<KakaoDTO> getKakaoByUser(String id) {
+		return dao.getKakaoByUser(id);
 	}
 	
 	

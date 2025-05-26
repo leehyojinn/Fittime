@@ -65,6 +65,7 @@ public class ProfileController {
 		return result;
 	}
 	
+	// 프로필 이미지 가져오기
 	@PostMapping(value="profileImg/profile")
 	public ResponseEntity<Resource> profileImg(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
@@ -98,6 +99,7 @@ public class ProfileController {
 		return result;
 	}
 	
+	// 센터 이미지 가져오기
 	@GetMapping(value="/centerImg/{profile_file_idx}")
 	public ResponseEntity<Resource> img(@PathVariable int profile_file_idx){
 		return service.getImg(profile_file_idx);
