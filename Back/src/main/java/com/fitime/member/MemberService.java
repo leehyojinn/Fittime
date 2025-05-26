@@ -78,5 +78,14 @@ public class MemberService {
 		}
 		return row > 0 ? true : false;
 	}
+
+	public String findEmailByUserId(String user_id) {
+		return mapper.findEmailByUserId(user_id);
+	}
+
+	public boolean updateUserPassword(String user_id, String tempPwd) {
+		int row = mapper.updateUserPassword(user_id,tempPwd);
+		return row > 0;
+	}
 	
 }

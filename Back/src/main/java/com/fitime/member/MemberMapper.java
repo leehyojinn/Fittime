@@ -3,6 +3,7 @@ package com.fitime.member;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface MemberMapper {
@@ -26,4 +27,8 @@ public interface MemberMapper {
 	int makeTrainer(String id);
 
 	int makeCenter(String id);
+
+	String findEmailByUserId(String user_id);
+
+	int updateUserPassword(@Param("user_id") String userId, @Param("password") String password);
 }

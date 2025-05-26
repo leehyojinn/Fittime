@@ -88,5 +88,14 @@
 		)
 	</insert>
 	
+	<select id="findEmailByUserId" resultType="String">
+		select email from user where user_id = #{user_id}
+	</select>
+	
+    <update id="updateUserPassword" parameterType="map">
+        UPDATE User
+        SET password = #{password}
+        WHERE user_id = #{user_id}
+    </update>
 	
 </mapper>
