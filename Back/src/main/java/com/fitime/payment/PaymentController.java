@@ -61,31 +61,32 @@ public class PaymentController {
 	
 	// buyList 조회 = 내 구매내역 조회
 	@PostMapping(value="/list/buyList")
-	public Map<String, Object>getBuyList(@RequestBody String user_id){
+	public Map<String, Object>getBuyList(@RequestBody Map<String, String> param){
 		result = new HashMap<String, Object>();
-		List<BuyListDTO>list = service.getBuyList(user_id);
+		List<BuyListDTO>list = service.getBuyList(param.get("user_id"));
 		result.put("BuyList", list);
 		return result;
 	}
 	
 	// paymentList = 내 결제내역 조회
 	@PostMapping(value="/list/payment")
-	public Map<String, Object>getPayment(@RequestBody String user_id){
+	public Map<String, Object>getPayment(@RequestBody Map<String, String> param){
 		result = new HashMap<String, Object>();
-		List<PaymentDTO>list = service.getPayment(user_id);
+		List<PaymentDTO>list = service.getPayment(param.get("user_id"));
 		result.put("payment", list);
 		return result;
 	}
 	
 	// kakaoList
-	@PostMapping(value="/list/kakao")
-	public Map<String, Object>getKakaoByUser(@RequestBody String user_id){
+	@PostMapping(value="/list/kakaoByUser")
+	public Map<String, Object>getKakaoByUser(@RequestBody Map<String, String> param){
 		result = new HashMap<String, Object>();
-		List<KakaoDTO>list = service.getKakaoByUser(user_id);
-		result.put("payment", list);
+		List<KakaoDTO>list = service.getKakaoByUser(param.get("user_id"));
+		result.put("kakao", list);
 		return result;
 	}
 	
+	// 
 	
 	
 }

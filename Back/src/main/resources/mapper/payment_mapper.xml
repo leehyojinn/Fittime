@@ -39,7 +39,7 @@
 	</select>
 	
 	<select id="getKakaoByUser" resultType="com.fitime.dto.KakaoDTO">
-		select * from payment where user_id = #{param1}
+		select * from kakao where user_id = #{param1}
 	</select>
 	
 </mapper>
