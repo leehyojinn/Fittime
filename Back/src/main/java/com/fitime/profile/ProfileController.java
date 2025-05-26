@@ -33,17 +33,17 @@ public class ProfileController {
 		logger.info("file : {}",file);
 		result = new HashMap<String, Object>();
 		boolean success = false;
-		String level = (String) param.get("user_level");
+		int level = (int) param.get("user_level");
 		
 		logger.info("level = "+level);
 		switch (level) {
-		case "1": 
+		case 1: 
 			success = service.updateUserProfile(file,param);
 			break;
-		case "2": 
+		case 2: 
 			success = service.updateTrainerProfile(file,param);
 			break;
-		case "3": 
+		case 3: 
 			success = service.updateCenterProfile(files,file,param);
 			break;
 		default:
@@ -53,6 +53,27 @@ public class ProfileController {
 		result.put("success", success);
 		return result;
 	}
+	
+//	@PostMapping(value="/update/Profile")
+//	public Map<String, Object>updateProfile(@RequestBody Map<String, Object>param){
+//		logger.info("param : {}",param);
+//		result = new HashMap<String, Object>();
+//		int level = (int) param.get("user_level");
+//		boolean success = false;
+//		switch (level) {
+//		case 2: 
+//			success = service.updateTrainerProfile(param);
+//			break;
+//		case 3: 
+//			success = service.updateCenterProfile(param);
+//			break;
+//		default:
+//			success = service.updateUserProfile(param);
+//			break;
+//		}
+//		result.put("success", success);
+//		return result;
+//	}
 	
 	
 	// 프로필 데이터 가져오기
@@ -66,26 +87,26 @@ public class ProfileController {
 	}
 	
 	// 프로필 이미지 가져오기
-	@PostMapping(value="profileImg/profile")
-	public ResponseEntity<Resource> profileImg(@RequestBody Map<String, Object>param){
-		logger.info("param : {}",param);
-		String id = "";
-		String level = (String)param.get("user_level");
-		switch (level) {
-		case "1":
-			id = (String)param.get("user_id");
-			break;
-		case "2":
-			id = (String)param.get("trainer_id");		
-			break;
-		case "3":
-			id = (String)param.get("center_id");
-			break;
-		default:
-			break;
-		}
+	@GetMapping(value="profileImg/profile/{user_id}")
+	public ResponseEntity<Resource> profileImg(@PathVariable String user_id){
+		logger.info("user_id : "+user_id);
+//		String id = "";
+//		String level = (String)param.get("user_level");
+//		switch (level) {
+//		case 1:
+//			id = (String)param.get("user_id");
+//			break;
+//		case 2:
+//			id = (String)param.get("trainer_id");		
+//			break;
+//		case 3:
+//			id = (String)param.get("center_id");
+//			break;
+//		default:
+//			break;
+//		}
 		
-		return service.getFile(id);
+		return service.getFile(user_id);
 	} 
 	
 	// 프로필 이미지 삭제 (기본 이미지로 변경)

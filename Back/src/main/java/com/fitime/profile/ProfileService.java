@@ -138,6 +138,12 @@ public class ProfileService {
 		return row > 0 && save_success;
 	}
 
+
+//	public boolean updateUserProfile(Map<String, Object> param) {
+//		int row = dao.updateUserProfile(param);
+//		return row>0;
+//	}
+	
 	public boolean updateTrainerProfile(MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateTrainerProfile(param);
 		logger.info("row : " + row);
@@ -153,6 +159,11 @@ public class ProfileService {
 		}
 		return row>0 && save_success;
 	}
+	
+//	public boolean updateTrainerProfile(Map<String, Object>param) {
+//		int row = dao.updateTrainerProfile(param);
+//		return row>0;
+//	}
 
 	public boolean updateCenterProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateCenterProfile(param);
@@ -174,6 +185,11 @@ public class ProfileService {
 		}
 		return row > 0 && image_save && profile_save && image_delete;
 	}
+	
+//	public boolean updateCenterProfile(Map<String, Object> param) {
+//		int row = dao.updateCenterProfile(param);
+//		return row >0;
+//	}
 	
 	public Map<String, Object> detailUserProfile(String id) {
 		
@@ -267,6 +283,7 @@ public class ProfileService {
 		
 		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 	}
+
 
 	
 

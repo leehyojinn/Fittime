@@ -37,8 +37,8 @@
 		select file_name from profile_file where user_id = #{param1} and category = '프로필'
 	</select>
 	
-	<update id="updateUserProfile">
-		update user set password =#{password},
+	<update id="updateUserProfile" parameterType="map">
+		update user set password = #{password},
 		email = #{email},
 		address = #{address},
 		phone = #{phone}
@@ -57,9 +57,9 @@
 		delete from user_tag where user_id = #{param1}
 	</delete>
 	
-	<update id="updateTrainerProfile">
+	<update id="updateTrainerProfile" parameterType="map">
 		update user join trainer_profile tp on user.user_id = tp.trainer_id
-		set password = #{password}, 
+		set password = #{password},
 		email = #{email},
 		address = #{address},
 		phone = #{phone},
