@@ -30,5 +30,7 @@ public interface ChartDAO {
 
 	List<Map<String, Object>> trainerChart(int center_idx);
 
+	int getCenterIdx(String user_id);
+
 
 }

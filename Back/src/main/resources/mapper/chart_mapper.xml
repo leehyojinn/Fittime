@@ -116,4 +116,8 @@
 		WHERE u.user_level=2 AND tp.center_idx=#{param1} GROUP BY u.user_id, u.name
 	</select>	
 
+	<select id="getCenterIdx" resultType="int">
+		SELECT center_idx FROM center_profile WHERE center_id=#{center_id}	
+	</select>
+
 </mapper>

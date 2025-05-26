@@ -65,4 +65,8 @@ public class ChartService {
 		return result;
 	}
 
+	public int getCenterIdx(String user_id) {
+		return dao.getCenterIdx(user_id);
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.fitime.chart;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -26,6 +27,17 @@ public class ChartController {
 		String center_id = (String) param.get("center_id");
 		int center_idx = (int) param.get("center_idx");
 		return service.chart(center_id, center_idx);
+	}
+	
+	// center_idx 가져오기
+	@	PostMapping(value="/list/centerIdx")
+	public Map<String, Object> getCenterIdx(@RequestBody Map<String, Object> param){
+		String user_id = (String) param.get("user_id");
+		logger.info("사용자 아이디 : "+user_id);
+		int center_idx = service.getCenterIdx(user_id);
+		result = new HashMap<String, Object>();
+		result.put("center_idx", center_idx);
+		return result;
 	}
 
 }
