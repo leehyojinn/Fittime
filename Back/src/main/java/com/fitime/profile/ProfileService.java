@@ -144,20 +144,27 @@ public class ProfileService {
 //		return row>0;
 //	}
 	
-	public boolean updateTrainerProfile(MultipartFile file, Map<String, Object> param) {
+	public boolean updateTrainerProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateTrainerProfile(param);
 		logger.info("row : " + row);
 		List<Number> tags = (List<Number>) param.get("tags");
 		logger.info("tags" + tags);
-		if(tags != null && row > 0) {
-			dao.delTag((String)param.get("trainer_id"));
-			row = dao.insertTag((String)param.get("trainer_id"),tags);
-		}
-		boolean save_success = true;
+//		if(tags != null && row > 0) {
+//			dao.delTag((String)param.get("trainer_id"));
+//			row = dao.insertTag((String)param.get("trainer_id"),tags);
+//		}
+		boolean profile_save = true;
+		boolean image_save = true;
+		boolean image_delete = true;
 		if(file !=null) {
-			save_success = fileSave((String)param.get("trainer_id"),file);
+			profile_save = fileSave((String)param.get("trainer_id"),file);
 		}
-		return row>0 && save_success;
+		if(files!=null && files.length>0 &&!files[0].isEmpty()) { // 트레이너 이미지가 들어온 경우
+			logger.info("여기까진 오니 ?");
+			image_delete = fileDel((String)param.get("trainer_id"));
+			image_save = fileSave((String)param.get("trainer_id"),files);
+		}
+		return row > 0 && image_save && profile_save && image_delete;
 	}
 	
 //	public boolean updateTrainerProfile(Map<String, Object>param) {
@@ -213,13 +220,18 @@ public class ProfileService {
 			id = (String)param.get("trainer_id");
 			result = dao.detailTrainerProfile(id);
 			tags = dao.getTags(id);
+			List<Profile_fileDTO>list = dao.photoList(id);
+			if(!list.isEmpty()) {
+				result.put("photos", list);
+				logger.info("result : {}",result);
+			}
 			result.put("tags", tags);
 			break;
 		case "3":
 			id = (String)param.get("center_id");
 			result = dao.detailCenterProfile(id);
 			tags = dao.getTags(id);
-			List<Profile_fileDTO>list = dao.photoList(id);
+			list = dao.photoList(id);
 			if(!list.isEmpty()) {
 				result.put("photos", list);
 				logger.info("result : {}",result);

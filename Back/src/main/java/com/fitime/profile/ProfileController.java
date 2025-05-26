@@ -41,7 +41,7 @@ public class ProfileController {
 			success = service.updateUserProfile(file,param);
 			break;
 		case 2: 
-			success = service.updateTrainerProfile(file,param);
+			success = service.updateTrainerProfile(files,file,param);
 			break;
 		case 3: 
 			success = service.updateCenterProfile(files,file,param);
