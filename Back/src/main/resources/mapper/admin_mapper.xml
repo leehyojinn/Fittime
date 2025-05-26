@@ -121,7 +121,7 @@
 	</select>
 	
 	<select id="selectFileNamesByReportIdx" resultType="String">
-    	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
+    	SELECT file_name FROM file_image WHERE post_idx = #{report_idx}
 	</select>
 	
 	<update id="blacklist_level">
