@@ -39,7 +39,7 @@ public class ReservationService {
 
 	public Map<String, Object> listUserBooking(String page, String user_id) {
 		pageSize = 5;
-		int totalPage = dao.pages(pageSize);
+		int totalPage = dao.pagesByUser(pageSize,user_id);
 		int paging = Integer.parseInt(page);
 		Map<String, Object> list = new HashMap<String, Object>();
 		
@@ -60,7 +60,7 @@ public class ReservationService {
 	
 	public Map<String, Object> listTrainerBooking(String page, String trainer_id) {
 		pageSize = 5;
-		int totalPage = dao.pages(pageSize);
+		int totalPage = dao.pagesByTrainer(pageSize,trainer_id);
 		int paging = Integer.parseInt(page);
 		Map<String, Object> list = new HashMap<String, Object>();
 		
@@ -81,7 +81,7 @@ public class ReservationService {
 	
 	public Map<String, Object> listCenterBooking(String page,String center_id) {
 		pageSize = 20;
-		int totalPage = dao.pages(pageSize);
+		int totalPage = dao.pagesByCenter(pageSize,center_id);
 		int paging = Integer.parseInt(page);
 		Map<String, Object> list = new HashMap<String, Object>();
 		

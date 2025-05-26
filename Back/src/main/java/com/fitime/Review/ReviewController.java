@@ -1,6 +1,7 @@
 package com.fitime.Review;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -107,5 +108,14 @@ public class ReviewController {
 		return result;
 	}
 
+	@PostMapping(value="/list/reviewByUser")
+	public Map<String, Object>reviewByUser(@RequestBody Map<String, String>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, String>>list = service.reviewByUser(param);
+		result.put("reviews", list);
+		return result;
+	}
+	
 	
 }

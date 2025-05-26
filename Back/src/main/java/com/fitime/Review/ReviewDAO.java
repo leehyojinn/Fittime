@@ -1,6 +1,7 @@
 package com.fitime.Review;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,5 +34,7 @@ public interface ReviewDAO {
 	List<String> reviewImgSearch(int idx);
 
 	int fileDelReview(int idx);
+
+	List<Map<String, String>> reviewByUser(Map<String, String> param);
 
 }

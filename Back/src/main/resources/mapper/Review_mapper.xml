@@ -53,4 +53,10 @@
 	<delete id="fileDelReview">
 		 DELETE FROM file_image WHERE post_idx = #{param1} AND category = "리뷰" ;
 	</delete>
+	
+	<select id="reviewByUser" parameterType="map" resultType="map">
+		select *,
+		(select u.user_level from `user` u where u.user_id=r.target_id) as level
+		 from review r where user_id = #{user_id}
+	</select>
 </mapper>

@@ -18,7 +18,11 @@ public interface ReservationDAO {
 	
 	int maxPeople(int product_idx);
 
-	int pages(int pageSize);
+	int pagesByUser(int pageSize, String user_id);
+	
+	int pagesByTrainer(int pageSize, String user_id);
+	
+	int pagesByCenter(int pageSize, String user_id);
 
 	ArrayList<ReservationDTO> listUserBooking(Map<String, Object> param);
 	

@@ -31,8 +31,16 @@
 		SELECT max_people FROM product WHERE product_idx=#{param1}
 	</select>
 	
-	<select id="pages" resultType="int" parameterType="map">
-		SELECT CEIL(COUNT(reservation_idx)/#{pageSize}) AS pages FROM reservation
+	<select id="pagesByUser" resultType="int">
+		SELECT CEIL(COUNT(reservation_idx)/#{param1}) AS pages FROM reservation where user_id = #{param2}
+	</select>
+	
+	<select id="pagesByTrainer" resultType="int">
+		SELECT CEIL(COUNT(reservation_idx)/#{param1}) AS pages FROM reservation where trainer_id = #{param2}
+	</select>
+	
+	<select id="pagesByCenter" resultType="int">
+		SELECT CEIL(COUNT(reservation_idx)/#{param1}) AS pages FROM reservation where center_id = #{param2}
 	</select>
 	
 	<select id="listUserBooking" resultType="map" parameterType="map">
@@ -42,6 +50,7 @@
 			,r.trainer_id
 			,r.center_id
 			,r.product_idx
+			,(select p.product_name from product p where r.product_idx = p.product_idx) as product_name
 			,r.date
 			,r.start_time
 			,r.end_time

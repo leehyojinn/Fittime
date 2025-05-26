@@ -145,4 +145,8 @@ public class ReviewService {
 		return dao.overayReview(dto);
 	}
 
+	public List<Map<String, String>> reviewByUser(Map<String, String> param) {
+		return dao.reviewByUser(param);
+	}
+
 }
