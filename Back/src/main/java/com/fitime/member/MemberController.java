@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,9 +90,11 @@ public class MemberController {
 		result = new HashMap<String, Object>();
 		String email = (String) param.get("email");
 		String userId = service.findId(email);
-		if(!userId.equals("") || userId != null) {
+		if(userId != null && !userId.equals("")) {
 			result.put("success", true);
 			result.put("user_id", userId);
+		}else{
+			result.put("success", false);
 		}
 		return result;
 	}
@@ -99,13 +102,9 @@ public class MemberController {
 	// 비밀번호 찾기
 	@PostMapping(value="/find/password")
 	public Map<String, Object> findPw(@RequestBody Map<String, Object> param){
-		logger.info("패스워드 찾기 요청 : "+param);
-		result = new HashMap<String, Object>();
-		String userPw = service.findPw(param);
-		result.put("success", true);
-		result.put("password", userPw);
-		return result;
+		logger.info("패스워드 찾기 요청 : "+param); result = new HashMap<String, Object>();
+		String userPw = service.findPw(param); result.put("success", true);
+		result.put("password", userPw); return result;
 	}
-	
 	
 }
