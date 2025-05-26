@@ -126,14 +126,17 @@ public class MemberController {
 	
 
 	@PostMapping("/emailSend/{user_id}")
-	private Map<String, Object> sendMail(@PathVariable String user_id) {
+	private Map<String, Object> sendMail(@PathVariable String user_id, @RequestBody Map<String, Object> param) {
 	    logger.info("메일 발송");
 
 	    Map<String, Object> result = new HashMap<>();
 
 	    // 1. user_id로 이메일 조회
+	    String email = (String) param.get("email");
 	    String receiverId = service.findEmailByUserId(user_id);
-	    if (receiverId == null) {
+	    logger.info("이메일 : {}",email);
+	    logger.info("DB 이메일 : {}",receiverId);
+	    if (receiverId == null || email == null || !email.equalsIgnoreCase(receiverId)) {
 	        logger.info("해당 유저의 이메일이 없습니다.");
 	        result.put("success", false);
 	        result.put("msg", "해당 유저의 이메일이 없습니다.");
