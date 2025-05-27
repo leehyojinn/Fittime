@@ -117,7 +117,7 @@
 	</select>	
 
 	<select id="getCenterIdx" resultType="int">
-		SELECT center_idx FROM center_profile WHERE center_id=#{center_id}	
+		SELECT center_idx FROM center_profile WHERE center_id=#{param1}	
 	</select>
 
 </mapper>
