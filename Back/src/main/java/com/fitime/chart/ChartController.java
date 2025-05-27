@@ -24,9 +24,9 @@ public class ChartController {
 	@PostMapping(value="/list/chart")
 	public Map<String, Object> chart(@RequestBody Map<String, Object> param){
 		logger.info("가져오는 파라메터 : {}",param);
-		String center_id = (String) param.get("center_id");
+		String user_id = (String) param.get("user_id");
 		int center_idx = (int) param.get("center_idx");
-		return service.chart(center_id, center_idx);
+		return service.chart(user_id, center_idx);
 	}
 	
 	// center_idx 가져오기

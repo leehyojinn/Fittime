@@ -57,7 +57,7 @@ public class ChartService {
 		result.put("currentSalesData", currentSalesData);
 		result.put("salesData", salesData);
 		result.put("bookData", bookData);
-		result.put("productSalesData", productData);
+		result.put("productSalesData", productSalesData);
 		result.put("trainerBookData", trainerBookData);
 		result.put("trainerRaitngData", trainerRaitngData);
 		result.put("productPopularData", productPopularData);
@@ -65,8 +65,8 @@ public class ChartService {
 		return result;
 	}
 
-	public int getCenterIdx(String user_id) {
-		return dao.getCenterIdx(user_id);
+	public Integer getCenterIdx(String center_id) {
+		return dao.getCenterIdx(center_id); // null 허용
 	}
 
 }
