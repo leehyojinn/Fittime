@@ -1,6 +1,7 @@
 package com.fitime.profile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -125,6 +126,26 @@ public class ProfileController {
 	public ResponseEntity<Resource> img(@PathVariable int profile_file_idx){
 		return service.getImg(profile_file_idx);
 	}
+	
+	// 태그 리스트 가져오기
+	@PostMapping(value="/list/tags/{user_level}")
+	public Map<String, Object>tagsList(@PathVariable int user_level){
+		logger.info("user_level : "+user_level);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>tags = service.tagsList(user_level);
+		result.put("tags", tags);
+		return result;
+	}
+	
+	// 태그 입력하기
+//	@PostMapping(value="/insert/tags")
+//	public Map<String, Object>insertTags(@RequestBody Map<String, Object>param){
+//		logger.info("param : {}",param);
+//		result = new HashMap<String, Object>();
+//		boolean success = service.insertTags(param);
+//		result.put("success", success);
+//		return result;
+//	}
 	
 }
 

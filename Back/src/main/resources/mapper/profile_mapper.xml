@@ -74,7 +74,9 @@
 		account_number = #{account_number},
 		operation_hours = #{operation_hours},
 		phone = #{phone},
-		address = #{address},
+		sido = #{sido},
+		gugun = #{gugun},
+		eupmyeondong = #{eupmyeondong},
 		latitude = #{latitude},
 		longitude = #{longitude},
 		exercise_level = #{exercise_level},
@@ -115,5 +117,22 @@
 	<select id="getTags" parameterType="String">
 		select tag_name from user_tag ut join tag t ON ut.tag_idx = t.tag_idx where ut.user_id = #{param1}
 	</select>
+	
+	<select id="trainerTags" resultType="map">
+		select * from tag where category ='트레이너'
+	</select>
 
+	<select id="centerTags" resultType="map">
+		select * from tag where category ='센터'
+	</select>
+	
+	<insert id="insertTrainerTags">
+		insert into user_tag (user_id,tag_idx)
+		values (#{param1},#{param2})
+	</insert>
+	
+	<insert id="insertCenterTags">
+		insert into user_tag (user_id,tag_idx)
+		values (#{param1},#{param2})
+	</insert>
 </mapper>

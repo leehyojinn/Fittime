@@ -176,10 +176,10 @@ public class ProfileService {
 		int row = dao.updateCenterProfile(param);
 		logger.info("tags : "+ param.get("tags"));
 		List<Number> tags = (List<Number>) param.get("tags");
-		if(tags != null && row > 0) {
-			dao.delTag((String)param.get("center_id"));
-			row = dao.insertTag((String)param.get("center_id"),tags);
-		}
+//		if(tags != null && row > 0) {
+//			dao.delTag((String)param.get("center_id"));
+//			row = dao.insertTag((String)param.get("center_id"),tags);
+//		}
 		boolean image_save = true;
 		boolean profile_save = true;
 		boolean image_delete = true;
@@ -261,7 +261,6 @@ public class ProfileService {
 		
 		try {
 			String content_type = Files.probeContentType(Paths.get(path));
-			logger.info(content_type);
 			headers.add("Content-type", content_type);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -294,6 +293,43 @@ public class ProfileService {
 		}
 		
 		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
+	}
+
+	public List<Map<String, Object>> tagsList(int level) {
+		
+		List<Map<String, Object>>tags = new ArrayList<Map<String,Object>>();
+		switch (level) {
+		case 2:
+			tags = dao.trainerTags();
+			break;
+		case 3:
+			tags = dao.centerTags();
+			break;
+		default:
+			
+			break;
+		}
+		return tags;
+	}
+
+	public boolean insertTags(Map<String, Object> param) {
+		int row = 0;
+		String[] tags = (String[]) param.get("tags");
+		switch ((String)param.get("user_level")) {
+		case "2": 
+			for (String tag : tags) {
+				row = dao.insertTrainerTags((String)param.get("user_id"), tag);
+			}
+			break;
+		case "3":
+			for (String tag : tags) {
+				row = dao.insertTrainerTags((String)param.get("user_id"), tag);
+			}
+			break;
+		default:
+			break;
+		}
+		return row>0?true:false;
 	}
 
 
