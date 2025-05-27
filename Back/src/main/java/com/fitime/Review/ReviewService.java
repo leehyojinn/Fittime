@@ -149,4 +149,8 @@ public class ReviewService {
 		return dao.reviewByUser(param);
 	}
 
+	public List<Map<String, Object>> reviewByTrainer(Map<String, String> param) {
+		return dao.reviewByTrainer(param);
+	}
+
 }

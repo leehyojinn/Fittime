@@ -117,5 +117,13 @@ public class ReviewController {
 		return result;
 	}
 	
+	@PostMapping(value="/list/reviewByTrainer")
+	public Map<String, Object>reviewByTrainer(@RequestBody Map<String, String>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = service.reviewByTrainer(param);
+		result.put("reviews", list);
+		return result;
+	}
 	
 }
