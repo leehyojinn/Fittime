@@ -14,5 +14,8 @@ public class WebConfig implements WebMvcConfigurer {
         //팝업이미지
         registry.addResourceHandler("/popup/**")
                 .addResourceLocations("file:///C:/img/popup/");
+        //센터이미지
+        registry.addResourceHandler("/center_profile/**")
+                .addResourceLocations("file:///C:/img/profile/");
     }
 }

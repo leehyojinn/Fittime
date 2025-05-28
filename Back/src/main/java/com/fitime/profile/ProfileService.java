@@ -250,7 +250,6 @@ public class ProfileService {
 	public ResponseEntity<Resource> getFile(String id) {
 		Resource res = null;
 		HttpHeaders headers = new HttpHeaders();
-		
 		String filename = dao.getFileName(id);
 		if(filename == null) {
 			filename = "basic.png";

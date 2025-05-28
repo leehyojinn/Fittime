@@ -10,7 +10,7 @@
         )
         values (
             #{center_id},#{product_name}, #{price}, #{discount_rate}, #{max_people},
-            #{count}, #{expiration_period}, '비활성'
+            #{count}, #{expiration_period}, 1
         )
     </insert>
     
