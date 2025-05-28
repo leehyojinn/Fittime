@@ -11,6 +11,21 @@ public class ReviewDTO {
 	private double rating;
 	private String content;
 	private Date reg_date;
+	private Double avg_rating;
+	private Integer rating_count;
+	
+	public Double getAvg_rating() {
+		return avg_rating;
+	}
+	public void setAvg_rating(Double avg_rating) {
+		this.avg_rating = avg_rating;
+	}
+	public Integer getRating_count() {
+		return rating_count;
+	}
+	public void setRating_count(Integer rating_count) {
+		this.rating_count = rating_count;
+	}
 	public int getReview_idx() {
 		return review_idx;
 	}
