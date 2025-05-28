@@ -153,4 +153,8 @@ public class ReviewService {
 		return dao.reviewByTrainer(param);
 	}
 
+	public List<Map<String, Object>> reviewByCenter(Map<String, Object> param) {
+		return dao.reviewByCenter(param);
+	}
+
 }

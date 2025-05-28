@@ -126,4 +126,13 @@ public class ReviewController {
 		return result;
 	}
 	
+	@PostMapping(value="/list/reviewByCenter")
+	public Map<String, Object>reviewByCenter(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = service.reviewByCenter(param);
+		result.put("reviews", list);
+		return result;
+	}
+	
 }

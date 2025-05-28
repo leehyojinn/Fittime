@@ -32,7 +32,8 @@ public class ProfileService {
 	
 	private boolean fileSave(String id, MultipartFile file) {
 		boolean success = true;
-		String filename = id+"_profile"; // 프로필 이미지 덮어쓰기를 위해 정해진 이름으로 저장
+		String ext = (file.getOriginalFilename()).substring((file.getOriginalFilename()).lastIndexOf("."));
+		String filename = id+"_profile"+ext; // 프로필 이미지 덮어쓰기를 위해 정해진 이름으로 저장
 		
 		int row = dao.profileSearch(id);
 		

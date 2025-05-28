@@ -65,4 +65,10 @@
 		(select u.name from user u where u.user_id = r.user_id) as user_name
 		 from review r where target_id = #{trainer_id}
 	</select>
+	
+	<select id="reviewByCenter" parameterType="map" resultType="map">
+		select *,
+		(select u.name from user u where u.user_id = r.user_id) as user_name
+		 from review r where target_id = #{center_id}
+	</select>
 </mapper>

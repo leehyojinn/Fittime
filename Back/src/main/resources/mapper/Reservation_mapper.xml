@@ -63,8 +63,8 @@
 			,u.name AS trainer_name
 		FROM reservation r LEFT JOIN center_profile cp ON r.center_id=cp.center_id
 		LEFT JOIN class cl ON r.product_idx=cl.product_idx
-		LEFT JOIN user u ON r.trainer_id=u.user_id AND u.user_level=2
-		WHERE r.user_id=#{user_id} AND r.status='예약'
+		LEFT JOIN user u ON r.trainer_id=u.user_id 
+		WHERE r.user_id=#{user_id} AND r.status='예약' AND u.user_level=2
 		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
@@ -91,9 +91,9 @@
 				,c.end_time AS class_end_time
 		FROM reservation r
 		LEFT JOIN user u ON r.user_id=u.user_id
-		INNER JOIN product p ON r.product_idx=p.product_idx AND p.status=1 AND p.delete='false'
+		INNER JOIN product p ON r.product_idx=p.product_idx 
 		LEFT JOIN class c ON r.class_idx=c.class_idx
-		WHERE r.trainer_id=#{trainer_id} AND r.status='예약'
+		WHERE r.trainer_id=#{trainer_id} AND r.status='예약' AND p.status=1 AND p.delete='false'
 		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
@@ -104,8 +104,10 @@
 			,u.name as user_name
     		,u.phone as user_phone
 			,r.trainer_id
+			,(select u2.name from user u2 where u2.user_id=r.trainer_id) as trainer_name
 			,r.center_id
 			,r.product_idx
+			,p.product_name
 			,r.date
 			,r.start_time
 			,r.end_time
@@ -119,9 +121,9 @@
 	    		,c.end_time AS class_end_time
 		FROM reservation r
 		LEFT JOIN user u ON r.user_id=u.user_id
-		LEFT JOIN product p ON r.product_idx=p.product_idx AND p.status=1 AND p.delete='false'
-		LEFT JOIN class c ON p.product_idx=c.product_idx
-		WHERE r.center_id=#{center_id} AND r.status='예약'
+		LEFT JOIN product p ON r.product_idx=p.product_idx 
+		LEFT JOIN class c ON r.class_idx=c.class_idx
+		WHERE r.center_id=#{center_id} AND r.status='예약' AND p.status=1 AND p.delete='false'
 		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	

@@ -39,4 +39,6 @@ public interface ReviewDAO {
 
 	List<Map<String, Object>> reviewByTrainer(Map<String, String> param);
 
+	List<Map<String, Object>> reviewByCenter(Map<String, Object> param);
+
 }
