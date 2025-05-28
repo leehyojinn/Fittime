@@ -98,4 +98,8 @@
         WHERE user_id = #{user_id}
     </update>
 	
+	<select id="get_exerciseLevel" resultType="int">
+		select exercise_level from center_profile cp where center_id = #{param1}
+	</select>
+	
 </mapper>

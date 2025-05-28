@@ -63,7 +63,7 @@
 		join center_profile cp on p.center_id = cp.center_id
 		where cp.center_id = #{center_id}
 		and `delete` = false
-		<choose>
+		<!-- <choose>
 			<when test="exercise_level==1">
 				and cp.exercise_level=1
 			</when>
@@ -74,7 +74,7 @@
 				and cp.exercise_level=3
 			</when>
 			<otherwise></otherwise>
-		</choose>
+		</choose> -->
 		
 	</select>
 
@@ -133,5 +133,23 @@
 	<delete id="classDel">
 		delete from class where class_idx=#{class_idx}
 	</delete>
+	
+	<select id="trainerList" resultType="map">
+		select 
+			tp.trainer_idx,
+			tp.trainer_id , 
+			u.name , 
+			u.phone , 
+			(select avg(r.rating) from review r where r.target_id=tp.trainer_id)as rating,
+			(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id)as file_name 
+		from center_profile cp 
+			join trainer_profile tp on cp.center_idx = tp.center_idx 
+			join `user` u on u.user_id = tp.trainer_id 
+		where cp.center_id = #{param1}
+	</select>
+	
+	<update id="trainerDel">
+		update trainer_profile set center_idx = 0 where trainer_idx = #{param1}
+	</update>
 	
 </mapper>

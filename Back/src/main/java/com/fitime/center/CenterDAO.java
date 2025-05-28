@@ -51,4 +51,8 @@ public interface CenterDAO {
 
 	int classUpdate(Map<String, Object> param);
 
+	List<Map<String, Object>> trainerList(String id);
+
+	int trainerDel(int idx);
+
 }

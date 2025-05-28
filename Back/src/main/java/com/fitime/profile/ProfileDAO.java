@@ -55,9 +55,9 @@ public interface ProfileDAO {
 
 	List<Map<String, Object>> centerTags();
 
-	int insertTrainerTags(String id, String tag);
+	int insertTrainerTags(String id, Integer tag);
 
-	int insertCenterTags(String id, String tag);
+	int insertCenterTags(String id, Integer tag);
 
 
 

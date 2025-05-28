@@ -31,4 +31,6 @@ public interface MemberMapper {
 	String findEmailByUserId(String user_id);
 
 	int updateUserPassword(@Param("user_id") String userId, @Param("password") String password);
+
+	int get_exerciseLevel(String id);
 }

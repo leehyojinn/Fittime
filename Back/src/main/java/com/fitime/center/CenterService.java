@@ -137,4 +137,13 @@ public class CenterService {
 		return row>0;
 	}
 
+	public List<Map<String, Object>> trainerList(String id) {
+		return dao.trainerList(id);
+	}
+
+	public boolean trainerDel(int idx) {
+		int row = dao.trainerDel(idx);
+		return row>0?true:false;
+	}
+
 }

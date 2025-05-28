@@ -138,14 +138,14 @@ public class ProfileController {
 	}
 	
 	// 태그 입력하기
-//	@PostMapping(value="/insert/tags")
-//	public Map<String, Object>insertTags(@RequestBody Map<String, Object>param){
-//		logger.info("param : {}",param);
-//		result = new HashMap<String, Object>();
-//		boolean success = service.insertTags(param);
-//		result.put("success", success);
-//		return result;
-//	}
+	@PostMapping(value="/insert/tags")
+	public Map<String, Object>insertTags(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.insertTags(param);
+		result.put("success", success);
+		return result;
+	}
 	
 }
 

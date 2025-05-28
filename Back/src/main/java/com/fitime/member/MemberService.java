@@ -87,5 +87,9 @@ public class MemberService {
 		int row = mapper.updateUserPassword(user_id,tempPwd);
 		return row > 0;
 	}
+
+	public int get_exerciseLevel(String id) {
+		return mapper.get_exerciseLevel(id);
+	}
 	
 }

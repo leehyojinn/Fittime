@@ -117,7 +117,7 @@ public class CenterController {
 		logger.info("param : {}",param);
 		result = new HashMap<String, Object>();
 		List<ProductDTO>list = service.productList(param); 
-		result.put("list", list);
+		result.put("products", list);
 		return result;
 	}
 	
@@ -196,6 +196,26 @@ public class CenterController {
 		logger.info("class_idx : "+class_idx);
 		result = new HashMap<String, Object>();
 		boolean success = service.classDel(class_idx);
+		result.put("success",success);
+		return result;
+	}
+	
+	// 소속 트레이너 리스트
+	@PostMapping(value="/list/trainers/{center_id}")
+	public Map<String, Object>trainerList(@PathVariable String center_id){
+		logger.info("center_id : "+center_id);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = service.trainerList(center_id);
+		result.put("trainers", list);
+		return result ;
+	}
+	
+	// 소속 트레이너 삭제
+	@PostMapping(value="/del/trainers/{trainer_idx}")
+	public Map<String, Object>trainerDel(@PathVariable int trainer_idx){
+		logger.info("trainer_idx : "+trainer_idx);
+		result = new HashMap<String, Object>();
+		boolean success = service.trainerDel(trainer_idx);
 		result.put("success",success);
 		return result;
 	}

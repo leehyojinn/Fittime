@@ -60,6 +60,10 @@ public class MemberController {
 		String loginId = params.get("user_id");
 		if(!loginId.equals("") && loginId!=null) {
 			int user_level = service.get_level(params);
+			if(user_level == 3) {
+				int exercise_level =service.get_exerciseLevel(params.get("user_id"));
+				result.put("exercise_level", exercise_level);
+			}
 			String token = Jwt.setToken("user_id",params.get("user_id"));
 			result.put("token", token);
 			result.put("user_level", user_level);

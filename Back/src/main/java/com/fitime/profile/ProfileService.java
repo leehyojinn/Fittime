@@ -314,16 +314,18 @@ public class ProfileService {
 
 	public boolean insertTags(Map<String, Object> param) {
 		int row = 0;
-		String[] tags = (String[]) param.get("tags");
+		ArrayList<Integer>tags = (ArrayList<Integer>) param.get("tags");
 		switch ((String)param.get("user_level")) {
 		case "2": 
-			for (String tag : tags) {
+			dao.delTag((String)param.get("user_id"));
+			for (Integer tag : tags) {
 				row = dao.insertTrainerTags((String)param.get("user_id"), tag);
 			}
 			break;
 		case "3":
-			for (String tag : tags) {
-				row = dao.insertTrainerTags((String)param.get("user_id"), tag);
+			dao.delTag((String)param.get("user_id"));
+			for (Integer tag : tags) {
+				row = dao.insertCenterTags((String)param.get("user_id"), tag);
 			}
 			break;
 		default:
