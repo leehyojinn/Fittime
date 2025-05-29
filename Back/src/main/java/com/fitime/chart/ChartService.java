@@ -41,7 +41,7 @@ public class ChartService {
 		// 월별 트레이너 예약 수
 		List<Map<String, Object>> trainerBookData = dao.trainerBookChart(center_id);
 		
-		// 월별 인기 트레이너 (별점 기준)
+		// 인기 트레이너 (별점 기준)
 		List<Map<String, Object>> trainerRatingData = dao.trainerRatingChart(center_idx);
 		
 		// 인기 상품 순
