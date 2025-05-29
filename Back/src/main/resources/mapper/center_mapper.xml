@@ -152,4 +152,24 @@
 		update trainer_profile set center_idx = 0 where trainer_idx = #{param1}
 	</update>
 	
+	<select id="searchTrainers"  resultType="map">
+		select tp.*,
+		(select u.name from user u where u.user_id = tp.trainer_id) as name ,
+		(select file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name
+		from trainer_profile tp 
+		where 
+		<choose>
+			<when test="id == null or id == ''">
+			</when>
+			<otherwise>
+				binary tp.trainer_id like concat('%',#{id},'%') and
+			</otherwise>
+		</choose>
+		tp.center_idx = 0
+	</select>
+	
+	<update id="addTrainer" parameterType="map">
+		update trainer_profile set center_idx = #{center_idx} where trainer_idx = #{trainer_idx}
+	</update>
+	
 </mapper>

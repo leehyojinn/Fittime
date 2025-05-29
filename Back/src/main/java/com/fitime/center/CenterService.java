@@ -146,4 +146,14 @@ public class CenterService {
 		return row>0?true:false;
 	}
 
+	public List<Map<String, Object>> searchTrainers(Map<String, Object> param) {
+		String id = (String)param.get("id");
+		return dao.searchTrainers(id);
+	}
+
+	public boolean addTrainer(Map<String, Object> param) {
+		int row = dao.addTrainer(param);
+		return row>0?true:false;
+	}
+
 }

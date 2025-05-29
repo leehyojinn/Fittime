@@ -55,4 +55,8 @@ public interface CenterDAO {
 
 	int trainerDel(int idx);
 
+	List<Map<String, Object>> searchTrainers(String id);
+
+	int addTrainer(Map<String, Object> param);
+
 }

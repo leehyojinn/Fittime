@@ -220,4 +220,24 @@ public class CenterController {
 		return result;
 	}
 	
+	// 소속 트레이너 검색
+	@PostMapping(value="/search/trainers")
+	public Map<String, Object>searchTrainers(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>trainers = service.searchTrainers(param);
+		result.put("trainers", trainers);
+		return result;
+	}
+	
+	// 소속 트레이너 추가
+	@PostMapping(value="/add/trainer")
+	public Map<String, Object>addTrainer(@RequestBody Map<String, Object>param){
+		logger.info("parma : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.addTrainer(param);
+		result.put("success", success);
+		return result;
+	}
+	
 }
