@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.CenterProfileDTO;
 import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.ProductDTO;
@@ -31,58 +32,6 @@ public class CenterController {
 	
 	@Autowired
 	CenterService service;
-	
-	// 상품추가
-	@PostMapping("/product_insert")
-	public Map<String, Object> product_insert(@RequestBody ProductDTO dto){
-		
-		result = new HashMap<String, Object>();
-		
-		boolean success = service.product_insert(dto);
-		
-		result.put("success", success);
-		
-		return result;
-	}
-	
-	// 상품 리스트
-	@PostMapping("/product_list/{user_id}")
-	public Map<String, Object> product_list(@PathVariable String user_id){
-		
-		result = new HashMap<String, Object>();
-		
-		List<ProductDTO> list = service.product_list(user_id);
-		
-		result.put("list", list);
-		
-		return result;
-	}
-	
-	// 상품업데이트
-	@PostMapping("/product_update/{user_id}/{product_idx}")
-	public Map<String, Object> product_update(@PathVariable String user_id,@PathVariable Integer product_idx, @RequestBody ProductDTO dto){
-		
-		result = new HashMap<String, Object>();
-		
-		boolean success = service.product_update(user_id,product_idx,dto);
-		
-		result.put("success", success);
-		
-		return result;
-	}
-	
-	// 상태 토글
-	@PostMapping("/product_status/{user_id}/{product_idx}")
-	public Map<String, Object> product_status(@PathVariable String user_id, @PathVariable Integer product_idx, @RequestBody ProductDTO dto){
-		
-		result = new HashMap<String, Object>();
-		
-		boolean success = service.product_status(user_id,product_idx,dto);
-		
-		result.put("success", success);
-		
-		return result;
-	}
 	
 	// 신고하기
 	@PostMapping("/complaint")
@@ -220,6 +169,7 @@ public class CenterController {
 		return result;
 	}
 	
+
 	// 소속 트레이너 검색
 	@PostMapping(value="/search/trainers")
 	public Map<String, Object>searchTrainers(@RequestBody Map<String, Object>param){
@@ -237,6 +187,17 @@ public class CenterController {
 		result = new HashMap<String, Object>();
 		boolean success = service.addTrainer(param);
 		result.put("success", success);
+		return result;
+	}
+
+	@PostMapping("/center_profile/{center_id}")
+	public Map<String, Object> center_profile(@PathVariable String center_id){
+		result = new HashMap<String, Object>();
+		
+		List<CenterProfileDTO> list = service.center_profile(center_id);
+		
+		result.put("list", list);
+		
 		return result;
 	}
 	

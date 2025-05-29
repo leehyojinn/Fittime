@@ -9,6 +9,14 @@ public class ClassDTO {
 	private String start_time;
 	private String end_time;
 	private String week;
+	private boolean delete;
+	
+	public boolean isDelete() {
+		return delete;
+	}
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
 	public int getClass_idx() {
 		return class_idx;
 	}
