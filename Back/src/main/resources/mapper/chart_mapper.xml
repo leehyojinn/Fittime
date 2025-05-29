@@ -113,7 +113,7 @@
 		JOIN user u ON tp.trainer_id=u.user_id
 		LEFT JOIN reservation rs ON u.user_id=rs.trainer_id
 		LEFT JOIN review rv ON u.user_id=rv.target_id
-		WHERE u.user_level=2 AND tp.center_idx=#{param1} GROUP BY u.user_id, u.name
+		WHERE u.user_level=2 AND tp.center_idx=#{param1} GROUP BY u.user_id, u.name ORDER BY avg_rating DESC
 	</select>	
 
 	<select id="getCenterIdx" resultType="int">

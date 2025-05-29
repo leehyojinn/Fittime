@@ -42,7 +42,7 @@ public class ChartService {
 		List<Map<String, Object>> trainerBookData = dao.trainerBookChart(center_id);
 		
 		// 월별 인기 트레이너 (별점 기준)
-		List<Map<String, Object>> trainerRaitngData = dao.trainerRatingChart(center_idx);
+		List<Map<String, Object>> trainerRatingData = dao.trainerRatingChart(center_idx);
 		
 		// 인기 상품 순
 		List<Map<String, Object>> productPopularData = dao.productPopularChart(center_id);
@@ -59,7 +59,7 @@ public class ChartService {
 		result.put("bookData", bookData);
 		result.put("productSalesData", productSalesData);
 		result.put("trainerBookData", trainerBookData);
-		result.put("trainerRaitngData", trainerRaitngData);
+		result.put("trainerRatingData", trainerRatingData);
 		result.put("productPopularData", productPopularData);
 		result.put("trainerData", trainerData);
 		return result;
