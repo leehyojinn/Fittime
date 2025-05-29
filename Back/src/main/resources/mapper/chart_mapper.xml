@@ -101,6 +101,7 @@
 			u.name AS trainer_name
 			,COUNT(rs.reservation_idx) AS reservation_cnt
 			,ROUND(AVG(rv.rating), 1) AS avg_rating
+			,COUNT(review_idx) AS review_cnt
 		FROM trainer_profile tp
 		JOIN user u ON tp.trainer_id=u.user_id
 		LEFT JOIN reservation rs ON u.user_id=rs.trainer_id
