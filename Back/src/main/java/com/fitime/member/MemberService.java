@@ -19,10 +19,10 @@ public class MemberService {
 		String level = params.get("user_level");
 		switch (level) {
 		case "2":
-			success = makeProfile(params.get("user_id"), level);
+			success = makeProfile(params, level);
 			break;
 		case "3":
-			success = makeProfile(params.get("user_id"), level);
+			success = makeProfile(params, level);
 			break;
 		default:
 			success = true;
@@ -64,14 +64,14 @@ public class MemberService {
 		return mapper.findPw(param);
 	}
 
-	public boolean makeProfile(String id, String level) {
+	public boolean makeProfile(Map<String, String> params, String level) {
 		int row = 0;
 		switch (level) {
 		case "2" : 
-			row = mapper.makeTrainer(id);
+			row = mapper.makeTrainer(params.get("user_id"));
 			break;
 		case "3" :
-			row = mapper.makeCenter(id);
+			row = mapper.makeCenter(params);
 			break;
 		default:
 			break;

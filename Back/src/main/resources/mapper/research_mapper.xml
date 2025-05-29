@@ -6,10 +6,7 @@
 	<select id="searchLocation" resultType="map" parameterType="map">
 		select
 		cp.center_name,
-		concat(cp.sido,' ',
-		cp.gugun,' ',
-		cp.eupmyeondong,' ',
-		cp.detail_address) as address ,
+		cp.address ,
 		(select min(p.price)
 		from product p
 		where p.center_id=cp.center_id)as price,
@@ -139,7 +136,7 @@
 	<select id="centerName" parameterType="map" resultType="map">
 		select 
 		cp.center_name,
-		concat(cp.sido,' ',cp.gugun,' ',cp.eupmyeondong,' ',cp.detail_address) as address,
+		cp.address,
 		(select avg(r.rating) from review r where r.target_id = cp.center_id)as rating,
 		(select count(r.review_idx) from review r where r.target_id = cp.center_id)as cnt, 
 		(select file_name from profile_file pf where pf.user_id=cp.center_id) as file_name,

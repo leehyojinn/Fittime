@@ -68,21 +68,19 @@
 		VALUES (#{param1},0,'')
 	</insert>
 	
-	<insert id="makeCenter">
-		INSERT INTO Center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, sido, gugun, eupmyeondong, detail_address, latitude, longitude, exercise_level, exercise)
+	<insert id="makeCenter" parameterType="map">
+		INSERT INTO Center_profile (center_id, center_name, introduction, account_number, operation_hours, phone, sido, gugun, eupmyeondong, address,  exercise_level, exercise)
 		VALUES (
- 			#{param1},
+ 			#{user_id},
  		    '',
 		    '',
 		    '',
 		    '',
 		    '',
-		    '',
-		    '',
-		    '',
-		    '',
-		    37.57188903608805,
-		    126.98722274939155,
+		    #{sido},
+		    #{gugun},
+		    #{eupmyeondong},
+		    #{address},
 		    0,
 		    ''
 		)

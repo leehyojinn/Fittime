@@ -26,7 +26,7 @@ public interface MemberMapper {
 	
 	int makeTrainer(String id);
 
-	int makeCenter(String id);
+	int makeCenter(Map<String, String> params);
 
 	String findEmailByUserId(String user_id);
 

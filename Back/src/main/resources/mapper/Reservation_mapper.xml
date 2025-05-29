@@ -138,8 +138,7 @@
 			,r.center_id
 			,(select center_name from center_profile where center_id=r.center_id) AS center_name
 			,(select phone from center_profile where center_id=r.center_id) AS center_phone
-			,(select concat(sido,' ',gugun,' ',eupmyeondong,' ',detail_address)as address
-			from center_profile cp where center_id=r.center_id)
+			,(select cp.address from center_profile cp where center_id=r.center_id)
 			,r.product_idx
 		    ,p.product_name
 		    ,p.duration

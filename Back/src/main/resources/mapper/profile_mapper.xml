@@ -90,7 +90,7 @@
 
 	<select id="detailTrainerProfile" resultType="map" parameterType="String">
 		select *,
-		(select concat(cp.sido,' ',cp.gugun,' ',cp.eupmyeondong,' ',detail_address)  from center_profile cp where cp.center_idx = tp.center_idx ) as center_address,
+		(select cp.address from center_profile cp where cp.center_idx = tp.center_idx ) as center_address,
 		(select cp.phone from center_profile cp where cp.center_idx = tp.center_idx) as center_phone,
 		(select cp.center_name from center_profile cp where cp.center_idx = tp.center_idx) as center_name
 		from user join trainer_profile tp ON user.user_id = tp.trainer_id 
