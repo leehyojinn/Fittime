@@ -78,7 +78,7 @@
 		where cp.sido = #{sido}
 		and cp.gugun = #{gugun}
 		and cp.eupmyeondong = #{eupmyeondong}
-		<if test = "exercise != null and exercise != ''">
+		<if test = "exercise != null and exercise != '' and exercise !='전체'">
 			and cp.exercise = #{exercise}
 		</if>
 		<if test = "gender != null and gender != ''">
@@ -149,6 +149,18 @@
 		where u.user_level = 3
 		and binary cp.center_id like concat('%',#{param1},'%')
 		limit 5 offset #{param2}
+	</select>
+	
+	<select id="cityList" resultType="String">
+		select distinct sido from center_profile
+	</select>
+	
+	<select id="districtList" resultType="String" parameterType="map">
+		select distinct gugun from center_profile where sido = #{sido}
+	</select>
+	
+	<select id="neighborhoodList" resultType="String" parameterType="map">
+		select distinct eupmyeondong from center_profile where sido = #{sido} and gugun = #{gugun}
 	</select>
 
 </mapper>

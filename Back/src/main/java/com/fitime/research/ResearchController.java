@@ -44,4 +44,19 @@ public class ResearchController {
 		return service.searchName(param);
 	}
 	
+	@PostMapping(value="/get/city")
+	public Map<String, Object>getCity(){
+		return service.getCity();
+	}
+	
+	@PostMapping(value="/get/district")
+	public Map<String, Object>getDistrict(@RequestBody Map<String, Object>param){
+		return service.getDistrict(param);
+	}
+	
+	@PostMapping(value="/get/neighborhood")
+	public Map<String, Object>getNeighborhood(@RequestBody Map<String, Object>param){
+		return service.getNeighborhood(param);
+	}
+	
 }

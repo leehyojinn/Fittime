@@ -34,6 +34,27 @@ public class ResearchService {
 		return map;
 	}
 
+	public Map<String, Object> getCity() {
+		Map<String, Object>map = new HashMap<String, Object>();
+		List<String>list = dao.cityList();
+		map.put("City", list);
+		return map;
+	}
+
+	public Map<String, Object> getDistrict(Map<String, Object> param) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		List<String>list = dao.districtList(param);
+		map.put("District", list);
+		return map;
+	}
+
+	public Map<String, Object> getNeighborhood(Map<String, Object> param) {
+		Map<String, Object>map = new HashMap<String, Object>();
+		List<String>list = dao.neighborhoodList(param);
+		map.put("Neighborhood", list);
+		return map;
+	}
+
 
 	
 }
