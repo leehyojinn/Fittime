@@ -25,8 +25,12 @@
 		where pf.user_id=cp.center_id and pf.category = '프로필') as file_name 
 		from center_profile cp
 		where cp.sido = #{sido}
+		<if test = "gugun != null and gugun !=''">
 		and cp.gugun = #{gugun}
+		</if>
+		<if test = "eupmyeondong != null and eupmyeondong !=''">
 		and cp.eupmyeondong = #{eupmyeondong}
+		</if>
 		<if test="exercise !=null and exercise !='' and exercise != '전체'" >
 			and cp.exercise = #{exercise}
 		</if>
@@ -62,23 +66,28 @@
 
 	<select id="searchTrainer" resultType="map" parameterType="map">
 		select 
+		tp.trainer_id,
 		cp.center_name ,
+		cp.address,
 		cp.exercise ,
-		cp.latitude ,
-		cp.longitude ,
 		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
 		(select avg(r.rating) from review r where r.target_id = tp.trainer_id) as rating ,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as review_cnt,
 		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
-		(select name from `user` u where u.user_id=tp.trainer_id) as name,
+		u.name,
+		u.gender,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']') from user_tag ut
 		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags
 		from trainer_profile tp 
 		join center_profile cp on cp.center_idx = tp.center_idx
 		join user u on tp.trainer_id = u.user_id
 		where cp.sido = #{sido}
+		<if test = "gugun != null and gugun !=''">
 		and cp.gugun = #{gugun}
+		</if>
+		<if test = "eupmyeondong != null and eupmyeondong !=''">
 		and cp.eupmyeondong = #{eupmyeondong}
+		</if>
 		<if test = "exercise != null and exercise != '' and exercise !='전체'">
 			and cp.exercise = #{exercise}
 		</if>

@@ -77,8 +77,6 @@
 		sido = #{sido},
 		gugun = #{gugun},
 		eupmyeondong = #{eupmyeondong},
-		latitude = #{latitude},
-		longitude = #{longitude},
 		exercise_level = #{exercise_level},
 		exercise = #{exercise}
 		where center_id = #{center_id}
