@@ -4,27 +4,37 @@
 <mapper namespace="com.fitime.reservation.ReservationDAO">
 
 	<insert id="booking" parameterType="map">
-		INSERT INTO Reservation(
-			user_id
-			,trainer_id
-			,center_id
-			,product_idx
-			,date
-			,start_time
-			,end_time
-		)VALUES(
-			#{user_id}
-			,#{trainer_id}
-			,#{center_id}
-			,#{product_idx}
-			,#{date}
-			,#{start_time}
-			,#{end_time}
-		)
+	    INSERT INTO Reservation(
+	        user_id,
+	        trainer_id,
+	        center_id,
+	        product_idx,
+	        class_idx,
+	        date,
+	        start_time,
+	        end_time
+	    ) VALUES (
+	        #{user_id},
+	        #{trainer_id},
+	        #{center_id},
+	        #{product_idx},
+	        #{class_idx, jdbcType=INTEGER},
+	        #{date},
+	        #{start_time},
+	        #{end_time}
+	    )
 	</insert>
-	
-	<select id="countReservation" resultType="int">
-		SELECT COUNT(*) FROM reservation WHERE product_idx=#{param1} AND status='예약'
+
+	<select id="countReservation" resultType="int" parameterType="map">
+	    SELECT COUNT(*) 
+	    FROM reservation
+	    WHERE status = '예약'
+	    <if test="class_idx != null">
+	        AND class_idx = #{class_idx}
+	    </if>
+	    <if test="class_idx == null">
+	        AND product_idx = #{product_idx}
+	    </if>
 	</select>
 	
 	<select id="maxPeople" resultType="int">
@@ -178,6 +188,61 @@
 		UPDATE reservation SET status='취소' WHERE user_id=#{user_id} AND reservation_idx=#{reservation_idx}
 	</update>
 	
+	<select id="reser_center_info" resultType="com.fitime.dto.CenterRatingDTO" parameterType="String">
+	    SELECT
+	    	c.*,
+	        pf.file_name AS profile_image,
+	        (SELECT AVG(r.rating) FROM Review r WHERE r.target_id = c.center_id) AS avg_rating,
+	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = c.center_id) AS rating_count
+	    FROM center_profile c
+	    LEFT JOIN profile_file pf
+	        ON c.center_id = pf.user_id
+	    WHERE c.center_id = #{center_id}
+	</select>
 	
+	<select id="reser_center_product" resultType="com.fitime.dto.ProductDTO" parameterType="String">
+		select * from product where center_id = #{center_id}
+	</select>
+	
+	<select id="reser_trainer_info" resultType="com.fitime.dto.TrainerRatingDTO" parameterType="String">
+	    SELECT
+	        t.*,
+	        pf.file_name AS profile_image,
+	        (SELECT AVG(r.rating) FROM Review r WHERE r.target_id = t.trainer_id) AS avg_rating,
+	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = t.trainer_id) AS rating_count
+	    FROM trainer_profile t
+	    LEFT JOIN profile_file pf
+	        ON t.trainer_id = pf.user_id
+	    WHERE t.center_idx = #{center_idx}
+	</select>
+	
+	<select id="reserScheduleInfo" parameterType="map" resultType="com.fitime.dto.ScheduleDTO">
+	    SELECT 
+	        s.schedule_idx,
+	        s.user_id,
+	        s.title,
+	        s.content,
+	        s.start_date,
+	        s.end_date,
+	        s.start_time,
+	        s.end_time,
+	        s.status
+	    FROM schedule s
+	    WHERE s.status = '휴무'
+	      <if test="center_id != null and center_id != '' and trainer_id != null and trainer_id != ''">
+	        AND (s.user_id = #{center_id} OR s.user_id = #{trainer_id})
+	      </if>
+	      <if test="center_id != null and center_id != '' and (trainer_id == null or trainer_id == '')">
+	        AND s.user_id = #{center_id}
+	      </if>
+	      <if test="trainer_id != null and trainer_id != '' and (center_id == null or center_id == '')">
+	        AND s.user_id = #{trainer_id}
+	      </if>
+	</select>
+	
+	<select id="reser_class_info" resultType="com.fitime.dto.ClassDTO" parameterType="map">
+		select * from class where center_id = #{center_id} and trainer_id = #{trainer_id} 
+	</select>
+
 
 </mapper>

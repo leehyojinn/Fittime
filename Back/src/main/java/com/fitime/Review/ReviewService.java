@@ -1,4 +1,4 @@
-package com.fitime.Review;
+package com.fitime.review;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +13,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,10 +91,10 @@ public class ReviewService {
 
 
 	//list
-	public Map<String, Object> listReview(String page, Map<String, Object> params) {
+	public Map<String, Object> listReview(String page) {
 		
 		int totalPage = dao.pages();
-		List<ReviewDTO> list = new ArrayList<ReviewDTO>();
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		int listPage = Integer.parseInt(page);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -149,12 +154,34 @@ public class ReviewService {
 		return dao.reviewByUser(param);
 	}
 
+
 	public List<Map<String, Object>> reviewByTrainer(Map<String, String> param) {
 		return dao.reviewByTrainer(param);
 	}
 
 	public List<Map<String, Object>> reviewByCenter(Map<String, Object> param) {
 		return dao.reviewByCenter(param);
+	}
+	
+	public ResponseEntity<Resource> getImg(int file_idx) {
+		Resource res = null;
+		HttpHeaders headers = new HttpHeaders();
+		
+		Map<String, String> fileMap = dao.getImg(file_idx);
+		logger.info("fileMap : {}",fileMap);
+		res = new FileSystemResource("C:/img/review/"+fileMap.get("file_name"));
+		logger.info("res : "+res);
+		
+		try {
+			String content_type = Files.probeContentType(Paths.get("C:/img/img"+fileMap.get("file_name")));
+			headers.add("Content-Type", content_type);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
+
 	}
 
 }

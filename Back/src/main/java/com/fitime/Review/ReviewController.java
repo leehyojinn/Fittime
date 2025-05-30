@@ -1,4 +1,4 @@
-package com.fitime.Review;
+package com.fitime.review;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +7,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,16 +33,9 @@ public class ReviewController {
 
 	// list
 	@PostMapping(value = "/list/review/{page}")
-	public Map<String, Object> listReview(@PathVariable String page, @RequestBody Map<String, Object> params) {
+	public Map<String, Object> listReview(@PathVariable String page) {
 
-		result = new HashMap<String, Object>();
-
-		Map<String, Object> map = service.listReview(page, params);
-
-		result.put("page", page);
-		result.put("params", params);
-
-		return map;
+		return service.listReview(page);
 	}
 
 	// detail
@@ -59,13 +56,15 @@ public class ReviewController {
 
 	// insert
 	@PostMapping(value = "/insert/review")
-	public Map<String, Object> insertReview(MultipartFile[] files , ReviewDTO dto) {
+	public Map<String, Object> insertReview(@ModelAttribute ReviewDTO dto) {
 		logger.info("insert dto : {}", dto);
 
 		int reviewCount = service.overayReview(dto);
 		
 		result = new HashMap<String, Object>();
 		boolean success = false; 
+		
+		MultipartFile[] files = dto.getFiles();
 		
 		if (reviewCount > 0) {
 			result.put("success", success);
@@ -117,6 +116,7 @@ public class ReviewController {
 		return result;
 	}
 	
+
 	@PostMapping(value="/list/reviewByTrainer")
 	public Map<String, Object>reviewByTrainer(@RequestBody Map<String, String>param){
 		logger.info("param : {}",param);
@@ -133,6 +133,13 @@ public class ReviewController {
 		List<Map<String, Object>>list = service.reviewByCenter(param);
 		result.put("reviews", list);
 		return result;
+	}
+
+	// 사진 가져오기
+	@GetMapping(value="/reviewImg/{file_idx}")
+	public ResponseEntity<Resource> img(@PathVariable String file_idx){
+		int idx = Integer.parseInt(file_idx);
+		return service.getImg(idx);
 	}
 	
 }

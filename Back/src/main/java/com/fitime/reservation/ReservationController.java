@@ -7,16 +7,20 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fitime.dto.CenterRatingDTO;
+import com.fitime.dto.ClassDTO;
+import com.fitime.dto.ProductDTO;
 import com.fitime.dto.Profile_fileDTO;
 import com.fitime.dto.ReservationDTO;
+import com.fitime.dto.ScheduleDTO;
+import com.fitime.dto.TrainerRatingDTO;
 
 @CrossOrigin
 @RestController
@@ -98,4 +102,64 @@ public class ReservationController {
 		return result;
 	}
 
+	//센터 정보
+	@PostMapping("/reservation/center_info/{center_id}")
+	public Map<String, Object> reser_center_info(@PathVariable String center_id){
+		result = new HashMap<String, Object>();
+		
+		List<CenterRatingDTO> list = service.reser_center_info(center_id);
+		
+		result.put("list", list);
+		
+		return result;
+	}
+	
+	//상품정보
+	@PostMapping("/reservation/center_product/{center_id}")
+	public Map<String, Object> reser_center_product(@PathVariable String center_id){
+		
+		result = new HashMap<String, Object>();
+		
+		List<ProductDTO> list = service.reser_center_product(center_id);
+		
+		result.put("list", list);
+		
+		return result;
+	}
+	
+	//트레이너 정보
+	@PostMapping("/reservation/trainer_info/{center_idx}")
+	public Map<String, Object> reser_trainer_info(@PathVariable String center_idx){
+		
+		result = new HashMap<String, Object>();
+		
+		List<TrainerRatingDTO> list = service.reser_trainer_info(center_idx);
+		
+		result.put("list", list);
+		
+		return result;
+	}
+	
+	//스케줄 정보
+	@PostMapping("/reservation/schedule_info")
+	public Map<String, Object> reser_schedule_info(@RequestBody Map<String, Object> param) {
+	    Map<String, Object> result = new HashMap<>();
+	    List<ScheduleDTO> list = service.reserScheduleInfo(param);
+	    result.put("list", list);
+	    return result;
+	}
+	
+	//클래스 정보
+	@PostMapping("/reservation/class_info")
+	public Map<String, Object> reser_class_info(@RequestBody Map<String, String> param){
+		
+		result = new HashMap<String, Object>();
+		
+		List<ClassDTO> list = service.reser_class_info(param);
+		
+		result.put("list", list);
+		
+		return result;
+	}
+	
 }
