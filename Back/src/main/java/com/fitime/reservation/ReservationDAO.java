@@ -6,8 +6,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.fitime.dto.CenterRatingDTO;
+import com.fitime.dto.ClassDTO;
+import com.fitime.dto.ProductDTO;
 import com.fitime.dto.Profile_fileDTO;
 import com.fitime.dto.ReservationDTO;
+import com.fitime.dto.ScheduleDTO;
+import com.fitime.dto.TrainerRatingDTO;
 
 @Mapper
 public interface ReservationDAO {
@@ -37,6 +42,16 @@ public interface ReservationDAO {
 	int updateBooking(Map<String, Object> param);
 
 	int cancelBooking(Map<String, Object> param);
+
+	List<CenterRatingDTO> reser_center_info(String center_id);
+
+	List<ProductDTO> reser_center_product(String center_id);
+
+	List<TrainerRatingDTO> reser_trainer_info(String center_idx);
+
+	List<ScheduleDTO> reserScheduleInfo(Map<String, Object> param);
+
+	List<ClassDTO> reser_class_info(Map<String, String> param);
 
 
 

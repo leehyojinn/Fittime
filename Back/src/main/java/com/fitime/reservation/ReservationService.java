@@ -8,15 +8,17 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fitime.dto.CenterRatingDTO;
+import com.fitime.dto.ClassDTO;
+import com.fitime.dto.ProductDTO;
 import com.fitime.dto.Profile_fileDTO;
 import com.fitime.dto.ReservationDTO;
+import com.fitime.dto.ScheduleDTO;
+import com.fitime.dto.TrainerRatingDTO;
 
 @Service
 public class ReservationService {
@@ -25,17 +27,33 @@ public class ReservationService {
 	@Autowired ReservationDAO dao;
 	int pageSize = 0;
 	
+	@SuppressWarnings("unused")
 	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public boolean booking(Map<String, Object> param) {
-		int product_idx = (Integer) param.get("product_idx");
-		int reservation_cnt = dao.countReservation(product_idx);
-		int max_people = dao.maxPeople(product_idx);
-		int row = 0;
-		if(reservation_cnt < max_people) {
-			row = dao.booking(param);
-		}		
-		return row>0;
+	    Integer class_idx = (Integer) param.get("class_idx");
+	    Integer product_idx = (Integer) param.get("product_idx");
+	    int row = 0;
+
+	    // class_idx와 max_people이 모두 있을 때만 인원 체크
+	    if (class_idx != null) {
+	        Integer max_people = dao.maxPeople(product_idx); // max_people 조회 (null 가능)
+	        if (max_people != null) {
+	            int reservation_cnt = dao.countReservation(product_idx);
+	            if (reservation_cnt < max_people) {
+	                row = dao.booking(param);
+	            } else {
+	                return false;
+	            }
+	        } else {
+	            row = dao.booking(param);
+	        }
+	    } else {
+	        // class_idx가 아예 없으면 인원 체크 없이 예약
+	        row = dao.booking(param);
+	    }
+	    return row > 0;
 	}
+
 
 	public Map<String, Object> listUserBooking(String page, String user_id) {
 		pageSize = 5;
@@ -116,6 +134,31 @@ public class ReservationService {
 	public boolean cancelBooking(Map<String, Object> param) {
 		int row = dao.cancelBooking(param);
 		return row>0;
+	}
+
+
+	public List<CenterRatingDTO> reser_center_info(String center_id) {
+		return dao.reser_center_info(center_id);
+	}
+
+
+	public List<ProductDTO> reser_center_product(String center_id) {
+		return dao.reser_center_product(center_id);
+	}
+
+
+	public List<TrainerRatingDTO> reser_trainer_info(String center_idx) {
+		return dao.reser_trainer_info(center_idx);
+	}
+
+
+	public List<ScheduleDTO> reserScheduleInfo(Map<String, Object> param) {
+		return  dao.reserScheduleInfo(param);
+	}
+
+
+	public List<ClassDTO> reser_class_info(Map<String, String> param) {
+		return dao.reser_class_info(param);
 	}
 
 

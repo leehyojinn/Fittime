@@ -1,7 +1,14 @@
 package com.fitime.dto;
 
 public class CenterRatingDTO {
-    private String center_id;
+	private Integer center_idx;
+    public Integer getCenter_idx() {
+		return center_idx;
+	}
+	public void setCenter_idx(Integer center_idx) {
+		this.center_idx = center_idx;
+	}
+	private String center_id;
     private String center_name;
     private String introduction;
     private Double avg_rating;
