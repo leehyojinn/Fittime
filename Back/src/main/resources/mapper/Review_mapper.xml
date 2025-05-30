@@ -12,7 +12,10 @@
     </select>
     
 	<select id="listReview" parameterType="com.fitime.dto.ReviewDTO" resultType="map">
-		SELECT review_idx,(select concat('[',group_concat(concat('"',fi.file_idx,'"')),']') from file_image fi where fi.category='리뷰'and fi.post_idx=r.review_idx)as file_idx, user_id ,target_id ,rating ,content ,reg_date FROM review r ORDER BY review_idx DESC LIMIT 10 offset #{param1};
+		SELECT review_idx,(select concat('[',group_concat(concat('"',fi.file_idx,'"')),']') from file_image fi where fi.category='리뷰'and fi.post_idx=r.review_idx)as file_idx, user_id ,target_id ,rating ,content ,reg_date FROM review r ORDER BY review_idx DESC 
+		<if test="offset==0">
+		LIMIT 10 offset #{offset};
+		</if>
 	</select>
 
 	<select id="detailReview" parameterType="com.fitime.dto.ReviewDTO">

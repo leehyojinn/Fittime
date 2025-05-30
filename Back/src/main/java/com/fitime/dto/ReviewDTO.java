@@ -16,6 +16,8 @@ public class ReviewDTO {
 
 	private Double avg_rating;
 	private Integer rating_count;
+	private MultipartFile[] files;
+	
 	
 	public Double getAvg_rating() {
 		return avg_rating;
@@ -29,7 +31,7 @@ public class ReviewDTO {
 	public void setRating_count(Integer rating_count) {
 		this.rating_count = rating_count;
 	}
-	private MultipartFile[] files;
+	
 	
 	public MultipartFile[] getFiles() {
 		return files;
