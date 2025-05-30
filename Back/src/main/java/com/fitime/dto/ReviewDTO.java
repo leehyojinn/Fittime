@@ -2,6 +2,8 @@ package com.fitime.dto;
 
 import java.sql.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ReviewDTO {
 
 	private int review_idx;
@@ -11,6 +13,7 @@ public class ReviewDTO {
 	private double rating;
 	private String content;
 	private Date reg_date;
+
 	private Double avg_rating;
 	private Integer rating_count;
 	
@@ -25,6 +28,14 @@ public class ReviewDTO {
 	}
 	public void setRating_count(Integer rating_count) {
 		this.rating_count = rating_count;
+	}
+	private MultipartFile[] files;
+	
+	public MultipartFile[] getFiles() {
+		return files;
+	}
+	public void setFiles(MultipartFile[] files) {
+		this.files = files;
 	}
 	public int getReview_idx() {
 		return review_idx;

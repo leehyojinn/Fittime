@@ -1,4 +1,4 @@
-package com.fitime.Review;
+package com.fitime.review;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ public interface ReviewDAO {
 
 	int pages();
 
-    List<ReviewDTO> listReview(int offset);
+    List<Map<String, Object>> listReview(int offset);
 
 	int totalPage();
 
@@ -37,8 +37,12 @@ public interface ReviewDAO {
 
 	List<Map<String, String>> reviewByUser(Map<String, String> param);
 
+
 	List<Map<String, Object>> reviewByTrainer(Map<String, String> param);
 
 	List<Map<String, Object>> reviewByCenter(Map<String, Object> param);
+
+	Map<String, String> getImg(int file_idx);
+
 
 }

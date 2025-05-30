@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fitime.Review.ReviewDAO">
+<mapper namespace="com.fitime.review.ReviewDAO">
 
 	<select id="pages" resultType="int">	
 		SELECT CEIL(COUNT(review_idx) / 10) AS pages FROM review;
@@ -11,8 +11,8 @@
         SELECT COUNT(*) FROM review
     </select>
     
-	<select id="listReview" parameterType="com.fitime.dto.ReviewDTO" >
-		SELECT review_idx, user_id ,target_id ,rating ,content ,reg_date FROM review ORDER BY review_idx DESC LIMIT 10 offset #{param1};
+	<select id="listReview" parameterType="com.fitime.dto.ReviewDTO" resultType="map">
+		SELECT review_idx,(select concat('[',group_concat(concat('"',fi.file_idx,'"')),']') from file_image fi where fi.category='리뷰'and fi.post_idx=r.review_idx)as file_idx, user_id ,target_id ,rating ,content ,reg_date FROM review r ORDER BY review_idx DESC LIMIT 10 offset #{param1};
 	</select>
 
 	<select id="detailReview" parameterType="com.fitime.dto.ReviewDTO">
@@ -60,6 +60,7 @@
 		 from review r where user_id = #{user_id}
 	</select>
 	
+
 	<select id="reviewByTrainer" parameterType="map" resultType="map">
 		select *,
 		(select u.name from user u where u.user_id = r.user_id) as user_name
@@ -70,5 +71,9 @@
 		select *,
 		(select u.name from user u where u.user_id = r.user_id) as user_name
 		 from review r where target_id = #{center_id}
+	</select>
+	
+	<select id="getImg" resultType="map">
+		select file_name from file_image where file_idx = #{param1}
 	</select>
 </mapper>
