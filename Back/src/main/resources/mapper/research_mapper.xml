@@ -126,6 +126,7 @@
 
 	<select id="trainerName" parameterType="map" resultType="map">
 		select 
+		u.user_id,
 		u.name,
 		cp.center_name ,
 		cp.exercise,
@@ -145,6 +146,7 @@
 
 	<select id="centerName" parameterType="map" resultType="map">
 		select 
+		cp.center_idx,
 		cp.center_name,
 		cp.address,
 		(select avg(r.rating) from review r where r.target_id = cp.center_id)as rating,
