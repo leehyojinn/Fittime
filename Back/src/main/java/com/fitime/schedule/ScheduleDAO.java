@@ -1,6 +1,7 @@
 package com.fitime.schedule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,5 +18,11 @@ public interface ScheduleDAO {
 	int schedule_update(@Param("user_id") String user_id,@Param("schedule_idx") Integer schedule_idx, @Param("dto") ScheduleDTO dto);
 
 	int schedule_del(String user_id, Integer schedule_idx);
+	
+	List<Map<String, Object>> user_reservation_schedule(String user_id);
+	
+	List<Map<String, Object>> trainer_reservation_schedule(String trainer_id);
+
+	List<ScheduleDTO> get_center_dayoff(String trainer_id);
 
 }

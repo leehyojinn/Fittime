@@ -1,6 +1,7 @@
 package com.fitime.schedule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,5 +36,20 @@ public class ScheduleService {
 		int row = dao.schedule_del(user_id,schedule_idx);
 		return row > 0;
 	}
+
+	public List<Map<String, Object>> user_reservation_schedule(String user_id) {
+		return dao.user_reservation_schedule(user_id);
+	}
+	
+	public List<Map<String, Object>> trainer_reservation_schedule(String trainer_id) {
+		return dao.trainer_reservation_schedule(trainer_id);
+	}
+	
+	public List<ScheduleDTO> get_center_dayoff(String trainer_id) {
+		return dao.get_center_dayoff(trainer_id);
+		
+	}
+
+
 
 }
