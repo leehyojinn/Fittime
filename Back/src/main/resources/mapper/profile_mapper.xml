@@ -102,7 +102,7 @@
 	</select>
 	
 	<select id="detailCenterProfile" resultType="map" parameterType="String">
-		select * from user join center_profile cp ON user.user_id = cp.center_id 
+		select *,cp.address as center_address from user join center_profile cp ON user.user_id = cp.center_id 
 		where center_id = #{param1}
 	</select>
 	

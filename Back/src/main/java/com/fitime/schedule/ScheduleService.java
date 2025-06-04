@@ -89,6 +89,7 @@ public class ScheduleService {
 				Map<String, Object> schedule = new HashMap<>();
 				schedule.put("title", item.get("product_name"));
 				schedule.put("trainer", item.get("trainer_name"));
+				schedule.put("user_name", item.get("user_name"));
 				schedule.put("date", date.toString());
 				schedule.put("start_time", item.get("start_time"));
 				schedule.put("end_time", item.get("end_time"));

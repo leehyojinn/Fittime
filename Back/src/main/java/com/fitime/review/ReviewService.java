@@ -184,4 +184,8 @@ public class ReviewService {
 
 	}
 
+	public Map<String, Object> getReview(int idx) {
+		return dao.getReview(idx);
+	}
+
 }

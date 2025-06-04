@@ -142,12 +142,13 @@
 		join trainer_profile tp on tp.trainer_id = u.user_id
 		join center_profile cp on cp.center_idx = tp.center_idx 
 		where u.user_level = 2
-		and BINARY tp.trainer_id like concat('%',#{param1},'%')
+		and BINARY u.name like concat('%',#{param1},'%')
 		limit 5 offset #{param2}
 	</select>
 
 	<select id="centerName" parameterType="map" resultType="map">
 		select 
+		cp.center_id,
 		cp.center_idx,
 		cp.center_name,
 		cp.address,
@@ -161,7 +162,7 @@
 		from user u
 		join center_profile cp on u.user_id = cp.center_id
 		where u.user_level = 3
-		and binary cp.center_id like concat('%',#{param1},'%')
+		and binary cp.center_name like concat('%',#{param1},'%')
 		limit 5 offset #{param2}
 	</select>
 	

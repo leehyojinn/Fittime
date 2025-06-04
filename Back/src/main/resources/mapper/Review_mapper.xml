@@ -79,4 +79,13 @@
 	<select id="getImg" resultType="map">
 		select file_name from file_image where file_idx = #{param1}
 	</select>
+	
+	<select id="getReview" resultType="map">
+		select r.*,r2.trainer_id ,r2.center_id,
+	(select u.name from user u where u.user_id=r2.center_id) as center_name,
+	(select u.name from user u where u.user_id=r2.trainer_id) as trainer_name
+	from review r 
+	join reservation r2 on r.reservation_idx =r2.reservation_idx 
+	where r.review_idx = #{param1}
+	</select>
 </mapper>

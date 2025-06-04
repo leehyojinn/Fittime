@@ -53,6 +53,14 @@ public class ReviewController {
 
 		return result;
 	}
+	
+	@GetMapping(value="/get/review/{review_idx}")
+	public Map<String, Object>getReview(@PathVariable int review_idx){
+		result = new HashMap<String, Object>();
+		Map<String, Object>map = service.getReview(review_idx);
+		result.put("map", map);
+		return result;
+	}
 
 	// insert
 	@PostMapping(value = "/insert/review")
