@@ -262,11 +262,21 @@
 	<select id="countReservationByDate" resultType="int">
 	    SELECT COUNT(*)
 	    FROM reservation
-	    WHERE class_idx = #{class_idx}
+	    WHERE product_idx = #{product_idx}
 	      AND date = #{date}
 	      AND (start_time IS NULL OR start_time = '')
 	      AND (end_time IS NULL OR end_time = '')
 	      AND status = '예약'
+	</select>
+	
+	<select id="countReservationByDateRange" resultType="map">
+	  SELECT date, COUNT(*) as cnt
+	  FROM reservation
+	  WHERE product_idx = #{product_idx}
+	    AND date BETWEEN #{start_date} AND #{end_date}
+	    AND (class_idx IS NULL OR class_idx = '')
+	    AND status = '예약'
+	  GROUP BY date
 	</select>
 
 </mapper>

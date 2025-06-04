@@ -50,7 +50,7 @@ public class ReservationService {
 	            }
 	        } else {
 	            // 시간 없는 상품: 날짜별로만 인원 체크 (혹은 전체 상품별)
-	            int reservation_cnt = dao.countReservationByDate(class_idx, date);
+	            int reservation_cnt = dao.countReservationByDate(product_idx, date);
 	            if (reservation_cnt < max_people) {
 	                row = dao.booking(param);
 	            } else {
@@ -179,6 +179,17 @@ public class ReservationService {
     // 날짜별 예약 인원 (시간 없는 상품)
     public int countReservationByDate(Integer product_idx, String date) {
         return dao.countReservationByDate(product_idx, date);
+    }
+    
+    public Map<String, Integer> countReservationByDateRange(int product_idx, String start_date, String end_date) {
+        List<Map<String, Object>> list = dao.countReservationByDateRange(product_idx, start_date, end_date);
+        Map<String, Integer> result = new HashMap<>();
+        for (Map<String, Object> row : list) {
+            String date = (String) row.get("date");
+            Integer cnt = ((Number) row.get("cnt")).intValue();
+            result.put(date, cnt);
+        }
+        return result;
     }
 
 }
