@@ -5,13 +5,14 @@
 
 	<select id="searchLocation" resultType="map" parameterType="map">
 		select
+		cp.center_idx,
 		cp.center_id,
 		cp.center_name,
 		cp.address ,
 		(select min(p.price)
 		from product p
 		where p.center_id=cp.center_id)as price,
-		(select avg(r.rating)
+		(select round(avg(r.rating),1)
 		from review r
 		where r.target_id=cp.center_id)as rating,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']')
@@ -66,12 +67,13 @@
 
 	<select id="searchTrainer" resultType="map" parameterType="map">
 		select 
+		u.user_id,
 		tp.trainer_id,
 		cp.center_name ,
 		cp.address,
 		cp.exercise ,
 		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
-		(select avg(r.rating) from review r where r.target_id = tp.trainer_id) as rating ,
+		(select round(avg(r.rating),1) from review r where r.target_id = tp.trainer_id) as rating ,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as review_cnt,
 		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
 		u.name,
@@ -130,7 +132,7 @@
 		u.name,
 		cp.center_name ,
 		cp.exercise,
-		(select avg(r.rating) from review r where r.target_id=tp.trainer_id) as rating,
+		(select round(avg(r.rating), 1) from review r where r.target_id=tp.trainer_id) as rating,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as cnt,
 		(select file_name from profile_file pf where pf.user_id = tp.trainer_id) as file_name,
 		(select min(price) from product p where p.trainer_id = tp.trainer_id) as min_price,
@@ -149,7 +151,7 @@
 		cp.center_idx,
 		cp.center_name,
 		cp.address,
-		(select avg(r.rating) from review r where r.target_id = cp.center_id)as rating,
+		(select round(avg(r.rating),1) from review r where r.target_id = cp.center_id)as rating,
 		(select count(r.review_idx) from review r where r.target_id = cp.center_id)as cnt, 
 		(select file_name from profile_file pf where pf.user_id=cp.center_id and pf.category = '프로필') as file_name,
 		(select min(price) from product p where p.center_id = cp.center_id)as price,
