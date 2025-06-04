@@ -126,8 +126,12 @@ public class ReviewService {
 	}
 
 	public boolean delReview(int review_idx) {
-		boolean success = fileDelReview(review_idx);
+		boolean success = true;
+		int cnt = dao.findFiles(review_idx);
 		int row = dao.delReview(review_idx);
+		if(cnt > 0) {
+			success = fileDelReview(review_idx);
+		}
 		return row > 0 && success;
 	}
 
@@ -186,6 +190,14 @@ public class ReviewService {
 
 	public Map<String, Object> getReview(int idx) {
 		return dao.getReview(idx);
+	}
+
+	public int findFiles(int review_idx) {
+		return dao.findFiles(review_idx);
+	}
+
+	public List<String> getPhotos(int review_idx) {
+		return dao.getPhotos(review_idx);
 	}
 
 }

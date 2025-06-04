@@ -58,6 +58,11 @@ public class ReviewController {
 	public Map<String, Object>getReview(@PathVariable int review_idx){
 		result = new HashMap<String, Object>();
 		Map<String, Object>map = service.getReview(review_idx);
+		int cnt = service.findFiles(review_idx);
+		if(cnt>0) {
+			List<String> photos = service.getPhotos(review_idx);
+			result.put("photos", photos);
+		}
 		result.put("map", map);
 		return result;
 	}

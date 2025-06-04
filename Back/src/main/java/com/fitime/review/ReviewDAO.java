@@ -46,5 +46,9 @@ public interface ReviewDAO {
 
 	Map<String, Object> getReview(int idx);
 
+	int findFiles(int review_idx);
+
+	List<String> getPhotos(int review_idx);
+
 
 }
