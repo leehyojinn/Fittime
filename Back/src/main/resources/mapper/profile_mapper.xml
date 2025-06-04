@@ -88,10 +88,16 @@
 
 	<select id="detailTrainerProfile" resultType="map" parameterType="String">
 		select *,
-		(select cp.address from center_profile cp where cp.center_idx = tp.center_idx ) as center_address,
+		cp.address as center_address,
+		cp.phone as center_phone,
+		cp.center_name,
+		cp.exercise		
+		<!-- (select cp.address from center_profile cp where cp.center_idx = tp.center_idx ) as center_address,
 		(select cp.phone from center_profile cp where cp.center_idx = tp.center_idx) as center_phone,
-		(select cp.center_name from center_profile cp where cp.center_idx = tp.center_idx) as center_name
-		from user join trainer_profile tp ON user.user_id = tp.trainer_id 
+		(select cp.center_name from center_profile cp where cp.center_idx = tp.center_idx) as center_name -->
+		from user 
+		join trainer_profile tp ON user.user_id = tp.trainer_id 
+		join center_profile cp ON tp.center_idx = cp.center_idx
 		where tp.trainer_id = #{param1}
 	</select>
 	

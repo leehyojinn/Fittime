@@ -79,7 +79,7 @@ public class ProfileController {
 	
 	// 프로필 데이터 가져오기
 	// 프로필 이미지가 없을 경우 기본 이미지 가져오기(기본 이미지 : profile_file_idx = 0 or user_id = 사이관리자(5))
-	@PostMapping(value="detail/profile")
+	@PostMapping(value="/detail/profile")
 	public Map<String, Object>detailProfile(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
 		result = new HashMap<String, Object>();
@@ -88,7 +88,7 @@ public class ProfileController {
 	}
 	
 	// 프로필 이미지 가져오기
-	@GetMapping(value="profileImg/profile/{user_id}")
+	@GetMapping(value="/profileImg/profile/{user_id}")
 	public ResponseEntity<Resource> profileImg(@PathVariable String user_id){
 		logger.info("user_id : "+user_id);
 //		String id = "";
@@ -111,7 +111,7 @@ public class ProfileController {
 	} 
 	
 	// 프로필 이미지 삭제 (기본 이미지로 변경)
-	@DeleteMapping(value="del/profileImg")
+	@DeleteMapping(value="/del/profileImg")
 	public Map<String, Object> delProfileImg(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
 		String id = (String)param.get("user_id");
