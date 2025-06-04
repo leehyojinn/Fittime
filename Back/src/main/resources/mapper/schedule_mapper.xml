@@ -102,6 +102,7 @@
 	        c.class_idx
 	        ,cp.center_name
 	        ,p.product_name
+	        ,(SELECT name FROM user u WHERE r.user_id = u.user_id) AS user_name
 	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
 	        ,c.start_time
 	        ,c.end_time
