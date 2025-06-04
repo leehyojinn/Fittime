@@ -38,12 +38,15 @@
 		    cp.center_name
 		    ,p.product_name
 		    ,(SELECT name FROM user u WHERE r.trainer_id=u.user_id) AS trainer_name
+		    ,r.
 		    ,CASE
-		    	WHEN r.class_idx IS NOT NULL THEN (SELECT c.start_time FROM class c WHERE r.class_idx=c.class_idx)
+		    	WHEN r.class_idx IS NOT NULL
+		    		THEN (SELECT c.start_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
 		    	ELSE r.start_time
 		    	END AS start_time
 		    ,CASE
-		    	WHEN r.class_idx IS NOT NULL THEN (SELECT c.end_time FROM class c WHERE r.class_idx=c.class_idx)
+		    	WHEN r.class_idx IS NOT NULL
+		    		THEN (SELECT c.end_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
 		    	ELSE r.end_time
 		    	END AS end_time
 		FROM reservation r
@@ -86,10 +89,40 @@
 			,s.start_date
 			,s.end_date
 			,s.status
-		FROM schedule s 
-		JOIN center_profile cp ON s.user_id=cp.center_id
-		JOIN trainer_profile tp ON cp.center_idx=tp.center_idx
-		WHERE tp.trainer_id=#{param1} AND s.status='휴무'
+		FROM schedule s
+		WHERE s.status  = '휴무'
+		AND s.user_id = (
+			SELECT cp.center_id FROM trainer_profile tp JOIN center_profile cp ON tp.center_idx = cp.center_idx 
+			WHERE tp.trainer_id = #{param1})
+	</select>
+	
+	<!-- 클래스 날짜 출력 -->
+	<select id="get_class_schedule" resultType="map">
+		SELECT
+	        c.class_idx
+	        ,cp.center_name
+	        ,p.product_name
+	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
+	        ,c.start_time
+	        ,c.end_time
+	        ,c.week
+	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
+	        ,p.duration
+	    FROM reservation r
+	    JOIN class c ON r.class_idx = c.class_idx
+	    JOIN product p ON c.product_idx = p.product_idx
+	    JOIN center_profile cp ON p.center_id = cp.center_id
+	    WHERE r.trainer_id=#{trainer_id}
+	    GROUP BY
+		    c.class_idx
+		    ,cp.center_name
+		    ,p.product_name
+		    ,trainer_name
+		    ,c.start_time
+		    ,c.end_time
+		    ,c.week
+		    ,p.duration
+		ORDER BY c.start_time
 	</select>
 
 </mapper>

@@ -25,4 +25,6 @@ public interface ScheduleDAO {
 
 	List<ScheduleDTO> get_center_dayoff(String trainer_id);
 
+	List<Map<String, Object>> get_class_schedule(Map<String, Object> param);
+
 }
