@@ -35,7 +35,7 @@
 	<select id="TrainerRatingList" resultType="com.fitime.dto.TrainerRatingDTO">
 	    SELECT
 	      t.trainer_id,
-	      u.name AS trainer_name,
+	      u.name,
 	      t.career,
 	      pf.file_name AS profile_image,
 	      ROUND(AVG(r.rating), 2) AS avg_rating,
