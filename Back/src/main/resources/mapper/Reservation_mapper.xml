@@ -207,16 +207,19 @@
 	<select id="reser_trainer_info" resultType="com.fitime.dto.TrainerRatingDTO" parameterType="String">
 	    SELECT
 	        t.*,
+	        u.*,
 	        pf.file_name AS profile_image,
 	        (SELECT AVG(r.rating) FROM Review r WHERE r.target_id = t.trainer_id) AS avg_rating,
 	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = t.trainer_id) AS rating_count
 	    FROM trainer_profile t
 	    LEFT JOIN profile_file pf
 	        ON t.trainer_id = pf.user_id
+	    LEFT JOIN User u
+	    	ON t.trainer_id = u.user_id
 	    WHERE t.center_idx = #{center_idx}
 	</select>
 	
-	<select id="reserScheduleInfo" parameterType="map" resultType="com.fitime.dto.ScheduleDTO">
+	<select id="reser_schedule_info" parameterType="map" resultType="com.fitime.dto.ScheduleDTO">
 	    SELECT 
 	        s.schedule_idx,
 	        s.user_id,
@@ -241,8 +244,29 @@
 	</select>
 	
 	<select id="reser_class_info" resultType="com.fitime.dto.ClassDTO" parameterType="map">
-		select * from class where center_id = #{center_id} and trainer_id = #{trainer_id} 
+		select * from class where center_id = #{center_id} and trainer_id = #{trainer_id} and product_idx = #{product_idx} 
 	</select>
-
+	
+	<!-- 시간별 인원 카운트 -->
+	<select id="countReservationByTime" resultType="int">
+	    SELECT COUNT(*)
+	    FROM reservation
+	    WHERE class_idx = #{class_idx}
+	      AND date = #{date}
+	      AND start_time = #{start_time}
+	      AND end_time = #{end_time}
+	      AND status = '예약'
+	</select>
+	
+	<!-- 날짜별 인원 카운트 (시간 없는 상품) -->
+	<select id="countReservationByDate" resultType="int">
+	    SELECT COUNT(*)
+	    FROM reservation
+	    WHERE class_idx = #{class_idx}
+	      AND date = #{date}
+	      AND (start_time IS NULL OR start_time = '')
+	      AND (end_time IS NULL OR end_time = '')
+	      AND status = '예약'
+	</select>
 
 </mapper>

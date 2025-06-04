@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.fitime.dto.CenterRatingDTO;
 import com.fitime.dto.ClassDTO;
@@ -49,15 +50,20 @@ public interface ReservationDAO {
 
 	List<TrainerRatingDTO> reser_trainer_info(String center_idx);
 
-	List<ScheduleDTO> reserScheduleInfo(Map<String, Object> param);
+	List<ScheduleDTO> reser_schedule_info(Map<String, Object> param);
 
 	List<ClassDTO> reser_class_info(Map<String, String> param);
 
+	int countReservationByTime(
+		    @Param("class_idx") Integer class_idx,
+		    @Param("date") String date,
+		    @Param("start_time") String start_time,
+		    @Param("end_time") String end_time
+		);
 
-
-
-
-
-
+		int countReservationByDate(
+		    @Param("class_idx") Integer class_idx,
+		    @Param("date") String date
+		);
 
 }

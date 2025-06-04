@@ -144,7 +144,7 @@ public class ReservationController {
 	@PostMapping("/reservation/schedule_info")
 	public Map<String, Object> reser_schedule_info(@RequestBody Map<String, Object> param) {
 	    Map<String, Object> result = new HashMap<>();
-	    List<ScheduleDTO> list = service.reserScheduleInfo(param);
+	    List<ScheduleDTO> list = service.reser_schedule_info(param);
 	    result.put("list", list);
 	    return result;
 	}
@@ -161,5 +161,33 @@ public class ReservationController {
 		
 		return result;
 	}
+	
+	@PostMapping("/reservation/booked_count")
+    public Map<String, Object> bookedCount(@RequestBody Map<String, Object> param) {
+        List<Map<String, Object>> times = (List<Map<String, Object>>) param.get("times");
+        Integer class_idx = (Integer) param.get("class_idx");
+        String date = (String) param.get("date");
+
+        Map<String, Integer> counts = new HashMap<>();
+        for (Map<String, Object> t : times) {
+            String start_time = (String) t.get("start_time");
+            String end_time = (String) t.get("end_time");
+            int cnt = service.countReservationByTime(class_idx, date, start_time, end_time);
+            counts.put(start_time + "-" + end_time, cnt);
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("counts", counts);
+        return result;
+    }
+
+    @PostMapping("/reservation/booked_count_date")
+    public Map<String, Object> bookedCountDate(@RequestBody Map<String, Object> param) {
+        Integer product_idx = (Integer) param.get("product_idx");
+        String date = (String) param.get("date");
+        int cnt = service.countReservationByDate(product_idx, date);
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", cnt);
+        return result;
+    }
 	
 }

@@ -32,27 +32,38 @@ public class ReservationService {
 	public boolean booking(Map<String, Object> param) {
 	    Integer class_idx = (Integer) param.get("class_idx");
 	    Integer product_idx = (Integer) param.get("product_idx");
+	    String date = (String) param.get("date");
+	    String start_time = (String) param.get("start_time");
+	    String end_time = (String) param.get("end_time");
 	    int row = 0;
 
-	    // class_idx와 max_people이 모두 있을 때만 인원 체크
-	    if (class_idx != null) {
-	        Integer max_people = dao.maxPeople(product_idx); // max_people 조회 (null 가능)
-	        if (max_people != null) {
-	            int reservation_cnt = dao.countReservation(product_idx);
+	    Integer max_people = dao.maxPeople(product_idx);
+
+	    if (class_idx != null && max_people != null) {
+	        // 시간 있는 상품
+	        if (start_time != null && end_time != null && !start_time.isEmpty() && !end_time.isEmpty()) {
+	            int reservation_cnt = dao.countReservationByTime(class_idx, date, start_time, end_time);
 	            if (reservation_cnt < max_people) {
 	                row = dao.booking(param);
 	            } else {
 	                return false;
 	            }
 	        } else {
-	            row = dao.booking(param);
+	            // 시간 없는 상품: 날짜별로만 인원 체크 (혹은 전체 상품별)
+	            int reservation_cnt = dao.countReservationByDate(class_idx, date);
+	            if (reservation_cnt < max_people) {
+	                row = dao.booking(param);
+	            } else {
+	                return false;
+	            }
 	        }
 	    } else {
-	        // class_idx가 아예 없으면 인원 체크 없이 예약
+	        // class_idx가 없으면 인원 체크 없이 예약
 	        row = dao.booking(param);
 	    }
 	    return row > 0;
 	}
+
 
 
 	public Map<String, Object> listUserBooking(String page, String user_id) {
@@ -152,8 +163,8 @@ public class ReservationService {
 	}
 
 
-	public List<ScheduleDTO> reserScheduleInfo(Map<String, Object> param) {
-		return  dao.reserScheduleInfo(param);
+	public List<ScheduleDTO> reser_schedule_info(Map<String, Object> param) {
+		return  dao.reser_schedule_info(param);
 	}
 
 
@@ -161,5 +172,13 @@ public class ReservationService {
 		return dao.reser_class_info(param);
 	}
 
+    public int countReservationByTime(Integer class_idx, String date, String start_time, String end_time) {
+        return dao.countReservationByTime(class_idx, date, start_time, end_time);
+    }
+
+    // 날짜별 예약 인원 (시간 없는 상품)
+    public int countReservationByDate(Integer product_idx, String date) {
+        return dao.countReservationByDate(product_idx, date);
+    }
 
 }

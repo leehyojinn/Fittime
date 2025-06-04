@@ -2,28 +2,30 @@ package com.fitime.dto;
 
 public class TrainerRatingDTO {
     private String trainer_id;
-    private String trainer_name;
-    private String introduction;
+    private String name;
+    private String career;
     private String profile_image;
     private Double avg_rating;
     private Integer rating_count;
+    
+    
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCareer() {
+		return career;
+	}
+	public void setCareer(String career) {
+		this.career = career;
+	}
 	public String getTrainer_id() {
 		return trainer_id;
 	}
 	public void setTrainer_id(String trainer_id) {
 		this.trainer_id = trainer_id;
-	}
-	public String getTrainer_name() {
-		return trainer_name;
-	}
-	public void setTrainer_name(String trainer_name) {
-		this.trainer_name = trainer_name;
-	}
-	public String getIntroduction() {
-		return introduction;
-	}
-	public void setIntroduction(String introduction) {
-		this.introduction = introduction;
 	}
 	public String getProfile_image() {
 		return profile_image;
