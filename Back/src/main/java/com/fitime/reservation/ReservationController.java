@@ -190,4 +190,14 @@ public class ReservationController {
         return result;
     }
 	
+    @PostMapping("/reservation/booked_count_date_range")
+    public Map<String, Object> bookedCountDateRange(@RequestBody Map<String, Object> param) {
+        Integer product_idx = (Integer) param.get("product_idx");
+        String start_date = (String) param.get("start_date");
+        String end_date = (String) param.get("end_date");
+        Map<String, Integer> counts = service.countReservationByDateRange(product_idx, start_date, end_date);
+        Map<String, Object> result = new HashMap<>();
+        result.put("counts", counts);
+        return result;
+    }
 }

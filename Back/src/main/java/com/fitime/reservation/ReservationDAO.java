@@ -61,9 +61,14 @@ public interface ReservationDAO {
 		    @Param("end_time") String end_time
 		);
 
-		int countReservationByDate(
-		    @Param("class_idx") Integer class_idx,
-		    @Param("date") String date
-		);
+	int countReservationByDate(
+	    @Param("product_idx") Integer product_idx,
+	    @Param("date") String date
+	);
 
+    List<Map<String, Object>> countReservationByDateRange(
+            @Param("product_idx") int product_idx,
+            @Param("start_date") String start_date,
+            @Param("end_date") String end_date
+    );
 }
