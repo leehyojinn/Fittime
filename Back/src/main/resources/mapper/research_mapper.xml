@@ -72,7 +72,7 @@
 		cp.center_name ,
 		cp.address,
 		cp.exercise ,
-		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
+		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id and category='프로필') as file_name,
 		(select round(avg(r.rating),1) from review r where r.target_id = tp.trainer_id) as rating ,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as review_cnt,
 		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
