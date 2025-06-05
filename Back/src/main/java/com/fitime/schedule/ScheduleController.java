@@ -108,10 +108,20 @@ public class ScheduleController {
 		return result;
 	}
 	
-	// 클래스 날짜 뽑아내기
+	// 회원용 클래스 날짜 뽑아내기
+	@PostMapping(value="/get_user_class_schedule")
+	public Map<String, Object> get_user_class_schedule(@RequestBody Map<String, Object> param){
+		logger.info("회원 반복 클래스 일정 : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
+		result.put("scheduleList", scheduleList);
+		return result;
+	}
+	
+	// 트레이너용 클래스 날짜 뽑아내기
 	@PostMapping(value="/get_class_schedule")
 	public Map<String, Object> get_class_schedule(@RequestBody Map<String, Object> param){
-		logger.info("반복 클래스 일정 : {}",param);
+		logger.info("트레이너 반복 클래스 일정 : {}",param);
 		result = new HashMap<String, Object>();
 		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
 		result.put("scheduleList", scheduleList);

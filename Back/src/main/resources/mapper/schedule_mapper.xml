@@ -38,7 +38,6 @@
 		    cp.center_name
 		    ,p.product_name
 		    ,(SELECT name FROM user u WHERE r.trainer_id=u.user_id) AS trainer_name
-		    ,r.
 		    ,CASE
 		    	WHEN r.class_idx IS NOT NULL
 		    		THEN (SELECT c.start_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
@@ -98,7 +97,36 @@
 			WHERE tp.trainer_id = #{param1})
 	</select>
 	
-	<!-- 클래스 날짜 출력 -->
+	<!-- 회원용 클래스 날짜 출력 -->
+	<select id="get_user_class_schedule" resultType="map">
+		SELECT
+	        c.class_idx
+	        ,cp.center_name
+	        ,p.product_name
+	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
+	        ,c.start_time
+	        ,c.end_time
+	        ,c.week
+	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
+	        ,p.duration
+	    FROM reservation r
+	    JOIN class c ON r.class_idx = c.class_idx
+	    JOIN product p ON c.product_idx = p.product_idx
+	    JOIN center_profile cp ON p.center_id = cp.center_id
+	    WHERE r.user_id=#{user_id}
+	    GROUP BY
+		    c.class_idx
+		    ,cp.center_name
+		    ,p.product_name
+		    ,trainer_name
+		    ,c.start_time
+		    ,c.end_time
+		    ,c.week
+		    ,p.duration
+		ORDER BY c.start_time
+	</select>
+	
+	<!-- 트레이너용 클래스 날짜 출력 -->
 	<select id="get_class_schedule" resultType="map">
 		SELECT
 	        c.class_idx

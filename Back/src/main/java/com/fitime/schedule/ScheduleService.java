@@ -59,8 +59,16 @@ public class ScheduleService {
 	}
 
 	public List<Map<String, Object>> get_class_schedule(Map<String, Object> param) {
-		List<Map<String, Object>> rawList = dao.get_class_schedule(param);
-		logger.info("rawList : "+rawList);
+		List<Map<String, Object>> rawList;
+		
+		if (param.containsKey("trainer_id")) {
+			rawList = dao.get_class_schedule(param);
+		}else if (param.containsKey("user_id")) {
+			rawList = dao.get_user_class_schedule(param);
+		}else {
+			throw new IllegalArgumentException("trainer_id 또는 user_id 필요");
+		}
+		
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		for (Map<String, Object> item : rawList) {
@@ -94,6 +102,7 @@ public class ScheduleService {
 				schedule.put("date", date.toString());
 				schedule.put("start_time", item.get("start_time"));
 				schedule.put("end_time", item.get("end_time"));
+				schedule.put("center_name", item.get("center_name"));
 				result.add(schedule);
 			}
 		}
