@@ -30,12 +30,27 @@ public class ReservationService {
 	@SuppressWarnings("unused")
 	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public boolean booking(Map<String, Object> param) {
-	    Integer class_idx = (Integer) param.get("class_idx");
-	    Integer product_idx = (Integer) param.get("product_idx");
+		
 	    String date = (String) param.get("date");
 	    String start_time = (String) param.get("start_time");
 	    String end_time = (String) param.get("end_time");
 	    int row = 0;
+
+	    Integer class_idx = null;
+	    Object classIdxObj = param.get("class_idx");
+	    if (classIdxObj instanceof Number) {
+	        class_idx = ((Number) classIdxObj).intValue();
+	    } else if (classIdxObj instanceof String) {
+	        class_idx = Integer.parseInt((String) classIdxObj);
+	    }
+
+	    Integer product_idx = null;
+	    Object productIdxObj = param.get("product_idx");
+	    if (productIdxObj instanceof Number) {
+	        product_idx = ((Number) productIdxObj).intValue();
+	    } else if (productIdxObj instanceof String) {
+	        product_idx = Integer.parseInt((String) productIdxObj);
+	    }
 
 	    Integer max_people = dao.maxPeople(product_idx);
 
