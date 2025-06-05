@@ -93,7 +93,7 @@
 		select count(file_idx) from file_image where category = '리뷰' and post_idx=#{param1}
 	</select>
 	
-	<select id="getPhotos" resultType="String">
-		select file_name from file_image where category = '리뷰' and post_idx=#{param1}
+	<select id="getPhotos" resultType="map">
+		select file_idx,file_name from file_image where category = '리뷰' and post_idx=#{param1}
 	</select>
 </mapper>

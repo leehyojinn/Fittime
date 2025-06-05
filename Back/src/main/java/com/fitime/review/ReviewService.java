@@ -139,13 +139,13 @@ public class ReviewService {
 		return dao.detailReview(dto);
 	}
 
-	public boolean updateReview(MultipartFile[] files, ReviewDTO dto) {
-		int row = dao.updateReview(dto);		
-		if(files != null) // 이미지가 들어왔을 때
+	public boolean updateReview(ReviewDTO dto) {
+		int row = dao.updateReview(dto);
+		if(dto.getFiles() != null) // 이미지가 들어왔을 때
 		{
 			int idx = dto.getReview_idx();
 			fileDelReview(idx);
-			fileSaveReview(files,idx); 
+			fileSaveReview(dto.getFiles(),idx); 
 		}
 		return row > 0 ? true : false;
 	}
@@ -177,7 +177,7 @@ public class ReviewService {
 		logger.info("res : "+res);
 		
 		try {
-			String content_type = Files.probeContentType(Paths.get("C:/img/img"+fileMap.get("file_name")));
+			String content_type = Files.probeContentType(Paths.get("C:/img/review"+fileMap.get("file_name")));
 			headers.add("Content-Type", content_type);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -196,7 +196,7 @@ public class ReviewService {
 		return dao.findFiles(review_idx);
 	}
 
-	public List<String> getPhotos(int review_idx) {
+	public List<Map<String, Object>> getPhotos(int review_idx) {
 		return dao.getPhotos(review_idx);
 	}
 

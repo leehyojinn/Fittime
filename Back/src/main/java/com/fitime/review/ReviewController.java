@@ -60,7 +60,7 @@ public class ReviewController {
 		Map<String, Object>map = service.getReview(review_idx);
 		int cnt = service.findFiles(review_idx);
 		if(cnt>0) {
-			List<String> photos = service.getPhotos(review_idx);
+			List<Map<String, Object>> photos = service.getPhotos(review_idx);
 			result.put("photos", photos);
 		}
 		result.put("map", map);
@@ -106,14 +106,14 @@ public class ReviewController {
 	}
 
 	// update
-	@PostMapping(value = "/update/review/{review_idx}")
-	public Map<String, Object> updateReview(MultipartFile[] files, ReviewDTO dto) {
+	@PostMapping(value = "/update/review")
+	public Map<String, Object> updateReview(@ModelAttribute ReviewDTO dto) {
 		logger.info("update dto : {} ", dto);
 		logger.info("update list idx : ", dto.getReview_idx());
 
 		result = new HashMap<String, Object>();
 		
-		boolean success = service.updateReview(files, dto);
+		boolean success = service.updateReview(dto);
 		
 		result.put("success" , success);
 			
