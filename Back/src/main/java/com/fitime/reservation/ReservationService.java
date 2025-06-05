@@ -76,6 +76,21 @@ public class ReservationService {
 	        // class_idx가 없으면 인원 체크 없이 예약
 	        row = dao.booking(param);
 	    }
+	    
+	    // ★ 구매한 상품(buy_idx가 있을 때) count 차감
+	    if (row > 0 && param.get("buy_idx") != null) {
+	        Integer buy_idx = null;
+	        Object buyIdxObj = param.get("buy_idx");
+	        if (buyIdxObj instanceof Number) {
+	            buy_idx = ((Number) buyIdxObj).intValue();
+	        } else if (buyIdxObj instanceof String) {
+	            buy_idx = Integer.parseInt((String) buyIdxObj);
+	        }
+	        if (buy_idx != null) {
+	            dao.decrementBuyListCount(buy_idx);
+	        }
+	    }
+	    
 	    return row > 0;
 	}
 
@@ -206,5 +221,11 @@ public class ReservationService {
         }
         return result;
     }
+
+
+
+	public List<Map<String, Object>> myproduct_list(String user_id) {
+		return dao.myproduct_list(user_id);
+	}
 
 }
