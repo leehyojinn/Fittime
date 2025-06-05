@@ -2,6 +2,7 @@ package com.fitime.kakaopay;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -108,6 +109,25 @@ public class KakaoPayService {
             // 실패 시 false 반환
             return false;
         }
+    }
+
+	public boolean payment(Map<String, Object> param) {
+		int row = kakaoPayDAO.payment(param);
+		return row > 0;
+	}
+
+	public boolean buy_list(Map<String, Object> param) {
+		int row = kakaoPayDAO.buy_list(param);
+		return row > 0;
+	}
+	
+    public void decrementRestPeriod() {
+    	kakaoPayDAO.decrementRestPeriod();
+    }
+	
+    @Scheduled(cron = "0 0 0 * * *")
+    public void dailyDecrementRestPeriod() {
+    	decrementRestPeriod();
     }
 
 }

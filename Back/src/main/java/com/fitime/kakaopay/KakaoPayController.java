@@ -49,11 +49,14 @@ public class KakaoPayController {
         @RequestParam String pg_token,
         @RequestBody Map<String, Object> param
     ) {
+    	logger.info("param : {}",param);
         boolean approved = kakaoPayService.approveKakaoPayment(tid, pg_token);
         if (approved) {
             kakaoPayService.updateKakaoPaymentStatus(tid, "성공");
             boolean booked = reservationservice.booking(param);
-            if (booked) {
+            boolean payment_insert = kakaoPayService.payment(param);
+            boolean buy_list_insert = kakaoPayService.buy_list(param);
+            if (booked && payment_insert && buy_list_insert) {
                 return ResponseEntity.ok("success");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("예약 실패");

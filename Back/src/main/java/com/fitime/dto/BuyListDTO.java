@@ -9,6 +9,21 @@ public class BuyListDTO {
 	private int product_idx;
 	private Date reg_date;
 	private int payment_idx;
+	private int count;
+	private int rest_period;
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getRest_period() {
+		return rest_period;
+	}
+	public void setRest_period(int rest_period) {
+		this.rest_period = rest_period;
+	}
 	public int getBuy_idx() {
 		return buy_idx;
 	}

@@ -12,4 +12,7 @@ public interface KakaoPayDAO {
     void updateKakaoPaymentStatus(@Param("tid") String tid, @Param("status") String status);
     String getOrderIdByTid(String tid);
     String getUserIdByTid(String tid);
+	int payment(Map<String, Object> param);
+	int buy_list(Map<String, Object> param);
+	void decrementRestPeriod();
 }

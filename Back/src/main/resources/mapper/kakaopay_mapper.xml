@@ -23,5 +23,21 @@
 	<select id="getUserIdByTid" parameterType="string" resultType="string">
 	    SELECT user_id FROM kakao WHERE tid = #{tid}
 	</select>
+	
+	<insert id="payment" useGeneratedKeys="true" keyProperty="payment_idx">
+		insert into payment(user_id,product_idx,payment_price,payment_method,status)
+			values(#{user_id},#{product_idx},#{payment_price},"카카오페이","결제")
+	</insert>
+	
+	<insert id="buy_list">
+		insert into buy_list(user_id,product_idx,payment_idx,count,rest_period)
+		values(#{user_id},#{product_idx},#{payment_idx},#{count},#{rest_period})
+	</insert>
+	
+	<update id="decrementRestPeriod">
+	  UPDATE buy_list
+	  SET rest_period = rest_period - 1
+	  WHERE rest_period > 0
+	</update>
 
 </mapper>
