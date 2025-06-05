@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.fitime.dto.BlackListDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
@@ -46,8 +47,16 @@ public interface AdminDAO {
 
 	int blacklist_level(String user_id);
 
-	int blacklist_status(String user_id, @Param("params") Map<String, String> params);
+	int blacklist_status(int report_idx, @Param("params") Map<String, String> params);
 
-	int setComplaintStatusDone(String user_id);
+	int setComplaintStatusDone(Map<String, Object> param);
+
+	List<BlackListDTO> blacklist();
+
+	int insertBlackList(@Param("user_id")String user_id, @Param("param")Map<String, Object> param);
+
+	int blacklistDel(int blacklist_idx);
+
+	int unblacklist_level(Map<String, Object> param);
 
 }

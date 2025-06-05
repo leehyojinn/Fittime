@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.BlackListDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
@@ -166,18 +167,29 @@ public class AdminService {
 		}
 
 		@Transactional
-		public boolean blacklist_level(String user_id) {
+		public boolean blacklist_level(String user_id, Map<String, Object> param) {
 		    int row1 = dao.blacklist_level(user_id);
-		    int row2 = dao.setComplaintStatusDone(user_id);
-		    return row1 > 0 && row2 > 0;
+		    int row2 = dao.setComplaintStatusDone(param);
+		    int row3 = dao.insertBlackList(user_id,param);
+		    return row1 > 0 && row2 > 0 && row3>0;
 		}
 
-		public boolean blacklist_status(String user_id, Map<String, String> params) {
-		    int row = dao.blacklist_status(user_id, params);
+		public boolean blacklist_status(int report_idx, Map<String, String> params) {
+		    int row = dao.blacklist_status(report_idx, params);
 		    if ("처리완료".equals(params.get("status"))) {
-		        dao.blacklist_level(user_id);
+		        dao.blacklist_level(params.get("user_id"));
 		    }
 		    return row > 0;
+		}
+
+		public List<BlackListDTO> blacklist() {
+			return dao.blacklist();
+		}
+
+		public boolean blacklistDel(int blacklist_idx, Map<String, Object> param) {
+			int row = dao.blacklistDel(blacklist_idx);
+			int row2 = dao.unblacklist_level(param);
+			return row>0 && row2>0 ;
 		}
 
 	
