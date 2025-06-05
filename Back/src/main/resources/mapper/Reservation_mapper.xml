@@ -72,7 +72,7 @@
 			,cl.end_time AS class_end_time
 			,u.name AS trainer_name
 		FROM reservation r LEFT JOIN center_profile cp ON r.center_id=cp.center_id
-		LEFT JOIN class cl ON r.product_idx=cl.product_idx
+		LEFT JOIN class cl ON r.class_idx=cl.class_idx
 		LEFT JOIN user u ON r.trainer_id=u.user_id 
 		WHERE r.user_id=#{user_id} AND r.status='예약' AND u.user_level=2
 		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
