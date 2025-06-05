@@ -19,10 +19,10 @@ public class MemberService {
 		String level = params.get("user_level");
 		switch (level) {
 		case "2":
-			success = makeProfile(params.get("user_id"), level);
+			success = makeProfile(params, level);
 			break;
 		case "3":
-			success = makeProfile(params.get("user_id"), level);
+			success = makeProfile(params, level);
 			break;
 		default:
 			success = true;
@@ -37,7 +37,8 @@ public class MemberService {
 	}
 
 	public int get_level(Map<String, String> params) {
-		return mapper.get_level(params);
+		Integer level =  mapper.get_level(params);
+		return (level != null) ? level : -1;
 	}
 
 	public boolean overlayId(Map<String, Object> param) {
@@ -63,19 +64,32 @@ public class MemberService {
 		return mapper.findPw(param);
 	}
 
-	public boolean makeProfile(String id, String level) {
+	public boolean makeProfile(Map<String, String> params, String level) {
 		int row = 0;
 		switch (level) {
 		case "2" : 
-			row = mapper.makeTrainer(id);
+			row = mapper.makeTrainer(params.get("user_id"));
 			break;
 		case "3" :
-			row = mapper.makeCenter(id);
+			row = mapper.makeCenter(params);
 			break;
 		default:
 			break;
 		}
 		return row > 0 ? true : false;
+	}
+
+	public String findEmailByUserId(String user_id) {
+		return mapper.findEmailByUserId(user_id);
+	}
+
+	public boolean updateUserPassword(String user_id, String tempPwd) {
+		int row = mapper.updateUserPassword(user_id,tempPwd);
+		return row > 0;
+	}
+
+	public int get_exerciseLevel(String id) {
+		return mapper.get_exerciseLevel(id);
 	}
 	
 }

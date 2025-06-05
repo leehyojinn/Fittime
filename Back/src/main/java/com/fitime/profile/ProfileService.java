@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,8 @@ public class ProfileService {
 	
 	private boolean fileSave(String id, MultipartFile file) {
 		boolean success = true;
-		String filename = id+"_profile"; // 프로필 이미지 덮어쓰기를 위해 정해진 이름으로 저장
+		String ext = (file.getOriginalFilename()).substring((file.getOriginalFilename()).lastIndexOf("."));
+		String filename = id+"_profile"+ext; // 프로필 이미지 덮어쓰기를 위해 정해진 이름으로 저장
 		
 		int row = dao.profileSearch(id);
 		
@@ -137,29 +139,65 @@ public class ProfileService {
 		return row > 0 && save_success;
 	}
 
-	public boolean updateTrainerProfile(MultipartFile file, Map<String, Object> param) {
+
+//	public boolean updateUserProfile(Map<String, Object> param) {
+//		int row = dao.updateUserProfile(param);
+//		return row>0;
+//	}
+	
+	public boolean updateTrainerProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateTrainerProfile(param);
-		boolean save_success = true;
+		logger.info("row : " + row);
+		List<Number> tags = (List<Number>) param.get("tags");
+		logger.info("tags" + tags);
+//		if(tags != null && row > 0) {
+//			dao.delTag((String)param.get("trainer_id"));
+//			row = dao.insertTag((String)param.get("trainer_id"),tags);
+//		}
+		boolean profile_save = true;
+		boolean image_save = true;
+		boolean image_delete = true;
 		if(file !=null) {
-			save_success = fileSave((String)param.get("trainer_id"),file);
+			profile_save = fileSave((String)param.get("trainer_id"),file);
 		}
-		return row>0 && save_success;
+		if(files!=null && files.length>0 &&!files[0].isEmpty()) { // 트레이너 이미지가 들어온 경우
+			logger.info("여기까진 오니 ?");
+			image_delete = fileDel((String)param.get("trainer_id"));
+			image_save = fileSave((String)param.get("trainer_id"),files);
+		}
+		return row > 0 && image_save && profile_save && image_delete;
 	}
+	
+//	public boolean updateTrainerProfile(Map<String, Object>param) {
+//		int row = dao.updateTrainerProfile(param);
+//		return row>0;
+//	}
 
 	public boolean updateCenterProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateCenterProfile(param);
+		logger.info("tags : "+ param.get("tags"));
+		List<Number> tags = (List<Number>) param.get("tags");
+//		if(tags != null && row > 0) {
+//			dao.delTag((String)param.get("center_id"));
+//			row = dao.insertTag((String)param.get("center_id"),tags);
+//		}
 		boolean image_save = true;
 		boolean profile_save = true;
 		boolean image_delete = true;
 		if(file!=null) { //대표 이미지가 들어온 경우
 			profile_save = fileSave((String)param.get("center_id"),file);
 		}
-		if(files!=null) { // 센터 이미지가 들어온 경우
+		if(files!=null && files.length>0 &&!files[0].isEmpty()) { // 센터 이미지가 들어온 경우
 			image_delete = fileDel((String)param.get("center_id"));
 			image_save = fileSave((String)param.get("center_id"),files);
 		}
 		return row > 0 && image_save && profile_save && image_delete;
 	}
+	
+//	public boolean updateCenterProfile(Map<String, Object> param) {
+//		int row = dao.updateCenterProfile(param);
+//		return row >0;
+//	}
 	
 	public Map<String, Object> detailUserProfile(String id) {
 		
@@ -173,6 +211,7 @@ public class ProfileService {
 		String level = (String)param.get("user_level");
 		String id ="";
 		Map<String, Object>result = new HashMap<String, Object>();
+		List<String>tags = new ArrayList<String>();
 		switch (level) {
 		case "1":
 			id = (String)param.get("user_id");
@@ -181,27 +220,36 @@ public class ProfileService {
 		case "2":
 			id = (String)param.get("trainer_id");
 			result = dao.detailTrainerProfile(id);
+			tags = dao.getTags(id);
+			List<Profile_fileDTO>list = dao.photoList(id);
+			if(!list.isEmpty()) {
+				result.put("photos", list);
+				logger.info("result : {}",result);
+			}
+			result.put("tags", tags);
 			break;
 		case "3":
 			id = (String)param.get("center_id");
 			result = dao.detailCenterProfile(id);
-			List<Profile_fileDTO>list = dao.photoList(id);
+			tags = dao.getTags(id);
+			list = dao.photoList(id);
 			if(!list.isEmpty()) {
-				result.put("photo", list);
+				result.put("photos", list);
 				logger.info("result : {}",result);
 			}
+			result.put("tags", tags);
 			break;
 		default:
 			result.put("success", false);
 			break;
 		}
+		
 		return result;
 	}
 
 	public ResponseEntity<Resource> getFile(String id) {
 		Resource res = null;
 		HttpHeaders headers = new HttpHeaders();
-		
 		String filename = dao.getFileName(id);
 		if(filename == null) {
 			filename = "basic.png";
@@ -213,7 +261,6 @@ public class ProfileService {
 		
 		try {
 			String content_type = Files.probeContentType(Paths.get(path));
-			logger.info(content_type);
 			headers.add("Content-type", content_type);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -247,6 +294,46 @@ public class ProfileService {
 		
 		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 	}
+
+	public List<Map<String, Object>> tagsList(int level) {
+		
+		List<Map<String, Object>>tags = new ArrayList<Map<String,Object>>();
+		switch (level) {
+		case 2:
+			tags = dao.trainerTags();
+			break;
+		case 3:
+			tags = dao.centerTags();
+			break;
+		default:
+			
+			break;
+		}
+		return tags;
+	}
+
+	public boolean insertTags(Map<String, Object> param) {
+		int row = 0;
+		ArrayList<Integer>tags = (ArrayList<Integer>) param.get("tags");
+		switch ((String)param.get("user_level")) {
+		case "2": 
+			dao.delTag((String)param.get("user_id"));
+			for (Integer tag : tags) {
+				row = dao.insertTrainerTags((String)param.get("user_id"), tag);
+			}
+			break;
+		case "3":
+			dao.delTag((String)param.get("user_id"));
+			for (Integer tag : tags) {
+				row = dao.insertCenterTags((String)param.get("user_id"), tag);
+			}
+			break;
+		default:
+			break;
+		}
+		return row>0?true:false;
+	}
+
 
 	
 

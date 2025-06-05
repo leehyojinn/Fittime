@@ -17,7 +17,14 @@ public class ComplaintDTO {
 	private String reg_date;
 	private List<MultipartFile> files;
 	private List<String> images;
+	private String target_id;
 	
+	public String getTarget_id() {
+		return target_id;
+	}
+	public void setTarget_id(String target_id) {
+		this.target_id = target_id;
+	}
 	public List<String> getImages() {
 		return images;
 	}

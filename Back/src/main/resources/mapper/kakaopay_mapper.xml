@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.kakaopay.KakaoPayDAO">
+
+    <insert id="insertKakaoPayment" parameterType="map">
+	  INSERT INTO kakao (user_id, tid, order_id, product_idx, total_amount, status)
+	  VALUES (#{user_id}, #{tid}, #{order_id}, #{product_idx}, #{total_amount}, #{status})
+	</insert>
+	
+	<select id="getKakaoPaymentByTid" parameterType="string" resultType="map">
+	  SELECT * FROM kakao WHERE tid = #{tid}
+	</select>
+	
+	<update id="updateKakaoPaymentStatus" parameterType="map">
+	  UPDATE kakao SET status = #{status} WHERE tid = #{tid}
+	</update>
+	    
+    <select id="getOrderIdByTid" parameterType="string" resultType="string">
+	    SELECT order_id FROM kakao WHERE tid = #{tid}
+	</select>
+	
+	<select id="getUserIdByTid" parameterType="string" resultType="string">
+	    SELECT user_id FROM kakao WHERE tid = #{tid}
+	</select>
+	
+	<insert id="payment" useGeneratedKeys="true" keyProperty="payment_idx">
+		insert into payment(user_id,product_idx,payment_price,payment_method,status)
+			values(#{user_id},#{product_idx},#{payment_price},"카카오페이","결제")
+	</insert>
+	
+	<insert id="buy_list">
+		insert into buy_list(user_id,product_idx,payment_idx,count,rest_period)
+		values(#{user_id},#{product_idx},#{payment_idx},#{count},#{rest_period})
+	</insert>
+	
+	<update id="decrementRestPeriod">
+	  UPDATE buy_list
+	  SET rest_period = rest_period - 1
+	  WHERE rest_period > 0
+	</update>
+
+</mapper>

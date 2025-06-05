@@ -5,15 +5,14 @@
 
 	<select id="searchLocation" resultType="map" parameterType="map">
 		select
+		cp.center_idx,
+		cp.center_id,
 		cp.center_name,
-		concat(cp.sido,' ',
-		cp.gugun,' ',
-		cp.eupmyeondong,' ',
-		cp.detail_address) as address ,
+		cp.address ,
 		(select min(p.price)
 		from product p
 		where p.center_id=cp.center_id)as price,
-		(select avg(r.rating)
+		(select round(avg(r.rating),1)
 		from review r
 		where r.target_id=cp.center_id)as rating,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']')
@@ -24,12 +23,16 @@
 		where r.target_id=cp.center_id) as review_cnt,
 		(select file_name
 		from profile_file pf
-		where pf.user_id=cp.center_id) as file_name 
+		where pf.user_id=cp.center_id and pf.category = '프로필') as file_name 
 		from center_profile cp
 		where cp.sido = #{sido}
+		<if test = "gugun != null and gugun !=''">
 		and cp.gugun = #{gugun}
+		</if>
+		<if test = "eupmyeondong != null and eupmyeondong !=''">
 		and cp.eupmyeondong = #{eupmyeondong}
-		<if test="exercise !=null and exercise !=''">
+		</if>
+		<if test="exercise !=null and exercise !='' and exercise != '전체'" >
 			and cp.exercise = #{exercise}
 		</if>
 		<if test = "tags != null and tags.size() > 0">
@@ -64,24 +67,30 @@
 
 	<select id="searchTrainer" resultType="map" parameterType="map">
 		select 
+		u.user_id,
+		tp.trainer_id,
 		cp.center_name ,
+		cp.address,
 		cp.exercise ,
-		cp.latitude ,
-		cp.longitude ,
-		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name,
-		(select avg(r.rating) from review r where r.target_id = tp.trainer_id) as rating ,
+		(select pf.file_name from profile_file pf where pf.user_id=tp.trainer_id and category='프로필') as file_name,
+		(select round(avg(r.rating),1) from review r where r.target_id = tp.trainer_id) as rating ,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as review_cnt,
 		(select min(p.price) from product p where p.trainer_id=tp.trainer_id) as price,
-		(select name from `user` u where u.user_id=tp.trainer_id) as name,
+		u.name,
+		u.gender,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']') from user_tag ut
 		join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags
 		from trainer_profile tp 
 		join center_profile cp on cp.center_idx = tp.center_idx
 		join user u on tp.trainer_id = u.user_id
 		where cp.sido = #{sido}
+		<if test = "gugun != null and gugun !=''">
 		and cp.gugun = #{gugun}
+		</if>
+		<if test = "eupmyeondong != null and eupmyeondong !=''">
 		and cp.eupmyeondong = #{eupmyeondong}
-		<if test = "exercise != null and exercise != ''">
+		</if>
+		<if test = "exercise != null and exercise != '' and exercise !='전체'">
 			and cp.exercise = #{exercise}
 		</if>
 		<if test = "gender != null and gender != ''">
@@ -119,10 +128,11 @@
 
 	<select id="trainerName" parameterType="map" resultType="map">
 		select 
+		u.user_id,
 		u.name,
 		cp.center_name ,
 		cp.exercise,
-		(select avg(r.rating) from review r where r.target_id=tp.trainer_id) as rating,
+		(select round(avg(r.rating), 1) from review r where r.target_id=tp.trainer_id) as rating,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as cnt,
 		(select file_name from profile_file pf where pf.user_id = tp.trainer_id) as file_name,
 		(select min(price) from product p where p.trainer_id = tp.trainer_id) as min_price,
@@ -132,17 +142,19 @@
 		join trainer_profile tp on tp.trainer_id = u.user_id
 		join center_profile cp on cp.center_idx = tp.center_idx 
 		where u.user_level = 2
-		and BINARY tp.trainer_id like concat('%',#{param1},'%')
+		and BINARY u.name like concat('%',#{param1},'%')
 		limit 5 offset #{param2}
 	</select>
 
 	<select id="centerName" parameterType="map" resultType="map">
 		select 
+		cp.center_id,
+		cp.center_idx,
 		cp.center_name,
-		concat(cp.sido,' ',cp.gugun,' ',cp.eupmyeondong,' ',cp.detail_address) as address,
-		(select avg(r.rating) from review r where r.target_id = cp.center_id)as rating,
+		cp.address,
+		(select round(avg(r.rating),1) from review r where r.target_id = cp.center_id)as rating,
 		(select count(r.review_idx) from review r where r.target_id = cp.center_id)as cnt, 
-		(select file_name from profile_file pf where pf.user_id=cp.center_id) as file_name,
+		(select file_name from profile_file pf where pf.user_id=cp.center_id and pf.category = '프로필') as file_name,
 		(select min(price) from product p where p.center_id = cp.center_id)as price,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')) ,']') 
 		from user_tag ut join tag t on ut.tag_idx = t.tag_idx
@@ -150,8 +162,20 @@
 		from user u
 		join center_profile cp on u.user_id = cp.center_id
 		where u.user_level = 3
-		and binary cp.center_id like concat('%',#{param1},'%')
+		and binary cp.center_name like concat('%',#{param1},'%')
 		limit 5 offset #{param2}
+	</select>
+	
+	<select id="cityList" resultType="String">
+		select distinct sido from center_profile
+	</select>
+	
+	<select id="districtList" resultType="String" parameterType="map">
+		select distinct gugun from center_profile where sido = #{sido}
+	</select>
+	
+	<select id="neighborhoodList" resultType="String" parameterType="map">
+		select distinct eupmyeondong from center_profile where sido = #{sido} and gugun = #{gugun}
 	</select>
 
 </mapper>

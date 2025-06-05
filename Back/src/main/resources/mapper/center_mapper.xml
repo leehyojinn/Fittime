@@ -2,44 +2,10 @@
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fitime.center.CenterDAO">
-
-	<!-- 상품등록 -->
-    <insert id="product_insert" parameterType="com.fitime.dto.ProductDTO">
-        insert into product (
-            center_id,product_name,price,discount_rate,max_people,count,expiration_period,status
-        )
-        values (
-            #{center_id},#{product_name}, #{price}, #{discount_rate}, #{max_people},
-            #{count}, #{expiration_period}, '비활성'
-        )
-    </insert>
-    
-    <!-- 상품리스트 -->
-    <select id="product_list" resultType="com.fitime.dto.ProductDTO">
-    	select * from product where center_id = #{user_id}
-    </select>
-    
-    <!-- 상품업데이트 -->
-    <update id="product_update">
-    UPDATE product SET 
-        product_name = #{dto.product_name},
-        price = #{dto.price},
-        discount_rate = #{dto.discount_rate},
-        max_people = #{dto.max_people},
-        count = #{dto.count},
-        expiration_period = #{dto.expiration_period}
-    WHERE center_id = #{user_id}
-      AND product_idx = #{product_idx}
-	</update>
-	
-	<!-- 상태 업데이트 -->
-	<update id="product_status">
-	    UPDATE product SET status = NOT status where center_id = #{user_id} and product_idx = #{product_idx}
-	</update>
 		
 	<insert id="complaint" parameterType="com.fitime.dto.ComplaintDTO" useGeneratedKeys="true" keyProperty="report_idx">
-	    insert into complaint(report_id, admin_id, review_idx, report_text, reason, status, reg_date)
-	    values(#{report_id}, #{admin_id}, #{review_idx}, #{report_text}, #{reason}, '미확인', #{reg_date})
+	    insert into complaint(report_id, review_idx, report_text, reason)
+	    values(#{report_id}, #{review_idx}, #{report_text}, #{reason})
 	</insert>
 	
 	<insert id="insertFileImages" parameterType="java.util.List">
@@ -51,19 +17,19 @@
 	</insert>
 	
 	<select id="complaint_list" resultType="com.fitime.dto.ComplaintDTO">
-		select * from complaint where admin_id = #{user_id}
+		select * from complaint where report_id = #{user_id}
 	</select>
 	
 	<select id="selectFileNamesByReportIdx" resultType="String">
-    	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
+    	SELECT file_name FROM file_image WHERE category='신고' and post_idx = #{report_idx}
 	</select>
 
 	<select id="productList" resultType="com.fitime.dto.ProductDTO" parameterType="map">
-		select * from product p
+		select p.*, cp.* from product p
 		join center_profile cp on p.center_id = cp.center_id
 		where cp.center_id = #{center_id}
 		and `delete` = false
-		<choose>
+		<!-- <choose>
 			<when test="exercise_level==1">
 				and cp.exercise_level=1
 			</when>
@@ -74,7 +40,7 @@
 				and cp.exercise_level=3
 			</when>
 			<otherwise></otherwise>
-		</choose>
+		</choose> -->
 		
 	</select>
 
@@ -84,28 +50,35 @@
 	</update>
 	
 	<insert id="productInsert" parameterType="map">
-		insert into product (
-		center_id,trainer_id,product_name,price,discount_rate,
-		<choose>
-			<when test = "exercise_level==1">duration</when>
-			<when test = "exercise_level==2">max_people</when>
-			<when test = "exercise_level==3">count</when>
-		</choose>
-		) values(
-		#{center_id},#{trainer_id},#{product_name},#{price},#{discount_rate},
-		<choose>
-			<when test = "exercise_level==1">#{duration}</when>
-			<when test = "exercise_level==2">#{max_people}</when>
-			<when test = "exercise_level==3">#{count}</when>
-		</choose>
-		)
+	  insert into product (
+	    center_id,
+	    product_name,
+	    price,
+	    discount_rate,
+	    max_people,
+	    <choose>
+	      <when test="exercise_level == 1">duration</when>
+	      <when test="exercise_level == 3">count</when>
+	    </choose>
+	  )
+	  values (
+	    #{center_id},
+	    #{product_name},
+	    #{price},
+	    #{discount_rate},
+	    #{max_people},
+	    <choose>
+	      <when test="exercise_level == 1">#{duration}</when>
+	      <when test="exercise_level == 3">#{count}</when>
+	    </choose>
+	  )
 	</insert>
+
 	
 	<update id="productUpdate" parameterType="map">
-		update product set product_name = #{product_name}, price = #{price}, discount_rate = #{discount_rate},
+		update product set product_name = #{product_name}, price = #{price}, discount_rate = #{discount_rate}, max_people = #{max_people},
 		<choose>
 			<when test="exercise_level==1">duration=#{duration}</when>
-			<when test="exercise_level==2">max_people=#{max_people}</when>
 			<when test="exercise_level==3">count=#{count}</when>
 		</choose>
 		where product_idx = #{product_idx}
@@ -114,24 +87,104 @@
 	<update id="productDel">
 		update product set `delete` = !`delete` where product_idx = #{product_idx}
 	</update>
+
 	
 	<select id="classList" parameterType="String" resultType="com.fitime.dto.ClassDTO">
-		select c.* from class c join product p on c.product_idx = p.product_idx 
-		where c.center_id = #{center_id} and p.status = true and p.`delete` = false 
+	    SELECT 
+	        c.*, 
+	        u.name 
+	    FROM 
+	        class c 
+	        JOIN product p ON c.product_idx = p.product_idx 
+	        JOIN user u ON p.trainer_id = u.user_id
+	    WHERE 
+	        c.center_id = #{center_id} 
+	        AND p.status = true 
+	        AND p.`delete` = false
+	        AND c.`delete` = false
 	</select>
 	
 	<insert id="classInsert" parameterType="map">
-		insert into class (center_id,trainer_id,product_idx,start_time,end_time,week)
-		values (#{center_id},#{trainer_id},#{product_idx},#{start_time},#{end_time},#{week})
+	    INSERT INTO class (
+	        center_id,
+	        trainer_id,
+	        product_idx,
+	        start_time,
+	        end_time,
+	        week
+	    ) VALUES (
+	        #{center_id},
+	        #{trainer_id},
+	        #{product_idx},
+	        #{start_time},
+	        #{end_time},
+	        #{week}
+	    )
 	</insert>
+	
+	<!-- 상품 트레이너 정보 업데이트 -->
+	<update id="updateProductTrainer" parameterType="map">
+	    UPDATE product
+	    SET trainer_id = #{trainer_id}
+	    WHERE product_idx = #{product_idx}
+	</update>
+
 	
 	<update id="classUpdate" parameterType="map">
 		update class set trainer_id = #{trainer_id}, product_idx = #{product_idx}, start_time =#{start_time}, end_time=#{end_time}, week = #{week}
 		where class_idx = #{class_idx}
 	</update>
 	
-	<delete id="classDel">
-		delete from class where class_idx=#{class_idx}
-	</delete>
+	<update id="classDel">
+		UPDATE class SET `delete` = TRUE WHERE class_idx = #{class_idx}
+	</update>
 	
+	<select id="trainerList" resultType="map">
+		SELECT
+		  tp.trainer_idx,
+		  tp.trainer_id,
+		  u.name,
+		  u.phone,
+		  AVG(r.rating) as rating,
+		  GROUP_CONCAT(pf.file_name) as file_names
+		FROM center_profile cp
+		JOIN trainer_profile tp ON cp.center_idx = tp.center_idx
+		JOIN `user` u ON u.user_id = tp.trainer_id
+		LEFT JOIN review r ON r.target_id = tp.trainer_id
+		LEFT JOIN profile_file pf ON pf.user_id = tp.trainer_id
+		WHERE cp.center_id = #{param1}
+		GROUP BY tp.trainer_idx, tp.trainer_id, u.name, u.phone
+				
+	</select>
+	
+	<update id="trainerDel">
+		update trainer_profile set center_idx = 0 where trainer_idx = #{param1}
+	</update>
+	
+
+	<select id="searchTrainers"  resultType="map">
+		select tp.*,
+		(select u.name from user u where u.user_id = tp.trainer_id) as name ,
+		(select file_name from profile_file pf where pf.user_id=tp.trainer_id) as file_name
+		from trainer_profile tp 
+		where 
+		<choose>
+			<when test="id == null or id == ''">
+			</when>
+			<otherwise>
+				binary tp.trainer_id like concat('%',#{id},'%') and
+			</otherwise>
+		</choose>
+		tp.center_idx = 0
+	</select>
+	
+	<update id="addTrainer" parameterType="map">
+		update trainer_profile set center_idx = #{center_idx} where trainer_idx = #{trainer_idx}
+	</update>
+
+	<select id="center_profile" resultType="com.fitime.dto.CenterProfileDTO">
+		select * from center_profile where center_id = #{center_id}
+	</select>
+	
+
 </mapper>

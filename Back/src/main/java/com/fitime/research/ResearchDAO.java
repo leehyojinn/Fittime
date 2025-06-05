@@ -16,5 +16,11 @@ public interface ResearchDAO {
 
 	List<Map<String, Object>> centerName(String name, int page);
 
+	List<String> cityList();
+
+	List<String> districtList(Map<String, Object> param);
+
+	List<String> neighborhoodList(Map<String, Object> param);
+
 
 }

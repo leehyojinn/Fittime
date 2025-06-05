@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitime.dto.CenterProfileDTO;
 import com.fitime.dto.ClassDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.FileImageDTO;
@@ -27,27 +28,6 @@ public class CenterService {
 	
 	@Autowired
 	CenterDAO dao;
-
-	public boolean product_insert(ProductDTO dto) {
-		
-		int row = dao.product_insert(dto);
-		
-		return row > 0;
-	}
-
-	public List<ProductDTO> product_list(String user_id) {
-		return dao.product_list(user_id);
-	}
-
-	public boolean product_update(String user_id, Integer product_idx, ProductDTO dto) {
-		int row = dao.product_update(user_id,product_idx,dto);
-		return row > 0;
-	}
-
-	public boolean product_status(String user_id, Integer product_idx, ProductDTO dto) {
-		int row = dao.product_status(user_id,product_idx,dto);
-		return row>0;
-	}
 
 	@Transactional
 	public boolean complaint(ComplaintDTO dto) {
@@ -122,9 +102,17 @@ public class CenterService {
 		return dao.classList(param);
 	}
 
+	@Transactional
 	public boolean classInsert(Map<String, Object> param) {
-		int row = dao.classInsert(param);
-		return row>0;
+	    // 1. 클래스 등록
+	    int row = dao.classInsert(param);
+
+	    // 2. 등록 성공 시, 상품의 트레이너 정보도 업데이트
+	    if(row > 0) {
+	        dao.updateProductTrainer(param);
+	        return true;
+	    }
+	    return false;
 	}
 
 	public boolean classDel(int idx) {
@@ -135,6 +123,32 @@ public class CenterService {
 	public boolean classUpdate(Map<String, Object> param) {
 		int row = dao.classUpdate(param);
 		return row>0;
+	}
+
+	public List<Map<String, Object>> trainerList(String id) {
+		return dao.trainerList(id);
+	}
+
+	public boolean trainerDel(int idx) {
+		int row = dao.trainerDel(idx);
+		return row>0?true:false;
+	}
+
+
+	public List<Map<String, Object>> searchTrainers(Map<String, Object> param) {
+		String id = (String)param.get("id");
+		return dao.searchTrainers(id);
+	}
+
+	public boolean addTrainer(Map<String, Object> param) {
+		int row = dao.addTrainer(param);
+		return row>0?true:false;
+	}
+
+	public List<CenterProfileDTO> center_profile(String center_id) {
+
+		return dao.center_profile(center_id);
+
 	}
 
 }

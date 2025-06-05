@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.payment.PaymentDAO">
+
+	<insert id="paymentInsert" parameterType="com.fitime.dto.PaymentDTO">
+		insert into payment (user_id, product_idx, payment_price, payment_method)
+		values (#{user_id},#{product_idx},#{payment_price},#{payment_method})
+	</insert>
+
+	<insert id="buyListInsert" parameterType="com.fitime.dto.PaymentDTO">
+		insert into buy_List(user_id, product_idx, payment_idx)
+		values (#{user_id},#{product_idx},#{payment_idx})
+	</insert>
+
+	<update id="paymentCancel">
+		update payment set status = '취소' where payment_idx = #{param1}
+	</update>
+
+	<delete id="buyListDel">
+		delete from buy_List where payment_idx = #{param1}
+	</delete>
+	
+	<insert id="kakaoReady" parameterType="map">
+		insert into kakao (tid, user_id, total_amount, pg_token, created_at)
+		values (#{tid}, #{user_id}, #{total_amount}, #{pg_token},#{created_at})
+	</insert>
+	
+	<update id="kakaoApprove" parameterType="map">
+		update kakao set order_id = #{partner_order_id}, item_name= #{item_name}, status = '결제', aprroved_at = #{approved_at} where tid=#{tid}
+	</update>
+	
+	<select id="getBuyList" resultType="com.fitime.dto.BuyListDTO">
+		select * from buy_List where user_id = #{param1}
+	</select>
+	
+	<select id="getPayment" resultType="com.fitime.dto.PaymentDTO">
+		select * from payment where user_id = #{param1}
+	</select>
+	
+	<select id="getKakaoByUser" resultType="com.fitime.dto.KakaoDTO">
+		select * from kakao where user_id = #{param1}
+	</select>
+	
+</mapper>

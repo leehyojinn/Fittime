@@ -117,11 +117,11 @@
 	
 	<!-- 블랙리스트 리스트 -->
 	<select id="blacklist_list" resultType="com.fitime.dto.ComplaintDTO">
-		select * from complaint
+		select *,(select user_id from review r where r.review_idx = c.review_idx) as target_id from complaint c
 	</select>
 	
 	<select id="selectFileNamesByReportIdx" resultType="String">
-    	SELECT file_name FROM file_image WHERE report_idx = #{report_idx}
+    	SELECT file_name FROM file_image WHERE post_idx = #{report_idx}
 	</select>
 	
 	<update id="blacklist_level">
@@ -130,16 +130,38 @@
 		where user_id = #{user_id}
 	</update>
 	
-	<update id="setComplaintStatusDone">
+	<update id="setComplaintStatusDone" parameterType="map">
 	    UPDATE complaint 
 	    SET status = '처리완료'
-	    WHERE report_id = #{user_id}
+	    WHERE report_idx = #{report_idx}
 	</update>
 	
 	<update id="blacklist_status">
 		UPDATE complaint 
-		SET status = #{params.status}
-		where report_id = #{user_id}
+		SET status = #{params.status},
+		process_history = #{params.process_history},
+		admin_id = #{params.admin_id}
+		where report_idx = #{report_idx}
+	</update>
+	
+	<select id="blacklist" resultType="com.fitime.dto.BlackListDTO">
+		select b.*,u.name from blacklist b
+		join user u on u.user_id = b.target_id
+	</select>
+
+	<insert id="insertBlackList">
+		insert into blacklist (report_idx, target_id)
+		values (#{param.report_idx},#{user_id})
+	</insert>
+
+	<delete id="blacklistDel">
+		delete from blacklist where blacklist_idx = #{param1}
+	</delete>
+
+	<update id="unblacklist_level" parameterType="map">
+		UPDATE user 
+		SET user_level = 1
+		where user_id = #{user_id}
 	</update>
 
 </mapper>

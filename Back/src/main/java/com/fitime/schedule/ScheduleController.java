@@ -77,4 +77,55 @@ public class ScheduleController {
 		
 		return result;
 	}
+	
+	// 회원용 클래스 일정
+	@PostMapping(value="/user_reservation_schedule/{user_id}")
+	public Map<String, Object> user_reservation_schedule(@PathVariable String user_id){
+		logger.info("회원용 클래스 일정 불러오기 : {}", user_id);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>> userList = service.user_reservation_schedule(user_id);
+		result.put("userList", userList);
+		return result;
+	}
+	
+	// 트레이너용 클래스 일정
+	@PostMapping(value="/trainer_reservation_schedule/{trainer_id}")
+	public Map<String, Object> trainer_reservation_schedule(@PathVariable String trainer_id){
+		logger.info("트레이너용 클래스 일정 불러오기 : {}",trainer_id);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>> trainerList = service.trainer_reservation_schedule(trainer_id);
+		result.put("trainerList", trainerList);
+		return result;
+	}
+	
+	// 트레이너 캘린더 센터 휴무 동기화
+	@PostMapping(value="/center_dayoff/{trainer_id}")
+	public Map<String, Object> get_center_dayoff(@PathVariable String trainer_id){
+		logger.info("해당 트레이너 휴무일 : {}",trainer_id);
+		result = new HashMap<String, Object>();
+		List<ScheduleDTO> dayoff = service.get_center_dayoff(trainer_id);
+		result.put("dayoff", dayoff);
+		return result;
+	}
+	
+	// 회원용 클래스 날짜 뽑아내기
+	@PostMapping(value="/get_user_class_schedule")
+	public Map<String, Object> get_user_class_schedule(@RequestBody Map<String, Object> param){
+		logger.info("회원 반복 클래스 일정 : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
+		result.put("scheduleList", scheduleList);
+		return result;
+	}
+	
+	// 트레이너용 클래스 날짜 뽑아내기
+	@PostMapping(value="/get_class_schedule")
+	public Map<String, Object> get_class_schedule(@RequestBody Map<String, Object> param){
+		logger.info("트레이너 반복 클래스 일정 : {}",param);
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
+		result.put("scheduleList", scheduleList);
+		return result;
+	}
+	
 }

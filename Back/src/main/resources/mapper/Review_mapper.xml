@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fitime.Review.ReviewDAO">
+<mapper namespace="com.fitime.review.ReviewDAO">
 
-	<select id="pages" resultType="int">
+	<select id="pages" resultType="int">	
 		SELECT CEIL(COUNT(review_idx) / 10) AS pages FROM review;
 	</select>
 
@@ -11,15 +11,21 @@
         SELECT COUNT(*) FROM review
     </select>
     
-	<select id="listReview" parameterType="com.fitime.dto.ReviewDTO" >
-		SELECT review_idx, user_id ,target_id ,rating ,content ,reg_date FROM review ORDER BY review_idx DESC LIMIT 10 offset #{param1};
+	<select id="listReview" parameterType="com.fitime.dto.ReviewDTO" resultType="map">
+		SELECT review_idx,(select concat('[',group_concat(concat('"',fi.file_idx,'"')),']') from file_image fi where fi.category='리뷰'and fi.post_idx=r.review_idx)as file_idx, user_id ,target_id ,rating ,content ,reg_date FROM review r ORDER BY review_idx DESC 
+		<if test="offset==0">
+		LIMIT 10 offset #{offset};
+		</if>
 	</select>
 
 	<select id="detailReview" parameterType="com.fitime.dto.ReviewDTO">
 	    SELECT * FROM review WHERE review_idx = #{review_idx}
 	</select>
 
-    <insert id="insertReview" parameterType="com.fitime.dto.ReviewDTO" >
+    <insert id="insertReview" parameterType="com.fitime.dto.ReviewDTO" 
+    useGeneratedKeys="true"
+    keyColumn="review_idx"
+    keyProperty="review_idx">
         INSERT INTO review (user_id, target_id,reservation_idx,rating, content)
         VALUES (#{dto.user_id},#{dto.target_id},#{dto.reservation_idx},#{dto.rating}, #{dto.content})
     </insert>
@@ -29,14 +35,65 @@
     </select>
     
     
-    <delete id="delReview" parameterType="com.fitime.dto.ReviewDTO">
-  		DELETE FROM review WHERE review_idx = #{review_idx};
+    <delete id="delReview" >
+  		DELETE FROM review WHERE review_idx = #{param1};
     </delete>
 	
 	<update id="updateReview" parameterType="com.fitime.dto.ReviewDTO">
-		UPDATE review SET rating = #{rating}, content = #{content} ,reg_date = #{reg_date}
+		UPDATE review SET rating = #{rating}, content = #{content}
 			WHERE review_idx = #{review_idx};
 	</update>
 	
+	<select id="reviewImgSave">
+		INSERT INTO file_image ( post_idx, file_name, category )
+			VALUES (#{param1}, #{param2}, "리뷰");
+	</select>
 	
+	<select id="reviewImgSearch" resultType="String">
+		SELECT file_name FROM file_image WHERE category = "리뷰" AND post_idx = #{param1};
+	</select>
+	
+	<delete id="fileDelReview">
+		 DELETE FROM file_image WHERE post_idx = #{param1} AND category = "리뷰" ;
+	</delete>
+	
+	<select id="reviewByUser" parameterType="map" resultType="map">
+		select *,
+		(select u.user_level from `user` u where u.user_id=r.target_id) as level
+		 from review r where user_id = #{user_id}
+	</select>
+	
+
+	<select id="reviewByTrainer" parameterType="map" resultType="map">
+		select *,
+		(select u.name from user u where u.user_id = r.user_id) as user_name
+		 from review r where target_id = #{trainer_id}
+	</select>
+	
+	<select id="reviewByCenter" parameterType="map" resultType="map">
+		select *,
+		(select u.name from user u where u.user_id = r.user_id) as user_name
+		 from review r where target_id = #{center_id}
+	</select>
+	
+	<select id="getImg" resultType="map">
+		select file_name from file_image where file_idx = #{param1}
+	</select>
+	
+	<select id="getReview" resultType="map">
+		select r.*,r2.trainer_id ,r2.center_id,
+	(select u.name from user u where u.user_id=r2.center_id) as center_name,
+	(select u.name from user u where u.user_id=r2.trainer_id) as trainer_name
+	from review r 
+	join reservation r2 on r.reservation_idx =r2.reservation_idx 
+	where r.review_idx = #{param1}
+	</select>
+	
+	<select id="findFiles" parameterType="int">
+		select count(file_idx) from file_image where category = '리뷰' and post_idx=#{param1}
+	</select>
+	
+	<select id="getPhotos" resultType="map">
+		select file_idx,file_name from file_image where category = '리뷰' and post_idx=#{param1}
+	</select>
 </mapper>

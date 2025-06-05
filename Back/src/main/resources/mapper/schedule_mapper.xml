@@ -5,8 +5,8 @@
 
 	<!-- 스케줄 등록 -->
 	<insert id="schedule_insert">
-		insert into schedule(user_id,title,content,date,start_time,end_time,status) 
-		values(#{user_id},#{title},#{content},#{date},#{start_time},#{end_time},#{status});
+		insert into schedule(user_id,title,content,start_date,end_date,start_time,end_time,status) 
+		values(#{user_id},#{title},#{content},#{start_date},#{end_date},#{start_time},#{end_time},#{status});
 	</insert>
 	
 	<!-- 스케줄 리스트 -->
@@ -19,7 +19,8 @@
 		UPDATE schedule
 	    SET title = #{dto.title},
 	    content = #{dto.content},
-	    date = #{dto.date},
+	    start_date = #{dto.start_date},
+	    end_date = #{dto.end_date},
 	    start_time = #{dto.start_time},
 	    end_time = #{dto.end_time},
 	    status = #{dto.status}
@@ -30,5 +31,130 @@
 	<delete id="schedule_del">
 		delete from schedule where user_id = #{user_id} and schedule_idx = #{schedule_idx}
 	</delete>
+	
+	<!-- 회원용 클래스 리스트 -->
+	<select id="user_reservation_schedule" resultType="map">
+		SELECT
+		    cp.center_name
+		    ,p.product_name
+		    ,(SELECT name FROM user u WHERE r.trainer_id=u.user_id) AS trainer_name
+		    ,CASE
+		    	WHEN r.class_idx IS NOT NULL
+		    		THEN (SELECT c.start_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
+		    	ELSE r.start_time
+		    	END AS start_time
+		    ,CASE
+		    	WHEN r.class_idx IS NOT NULL
+		    		THEN (SELECT c.end_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
+		    	ELSE r.end_time
+		    	END AS end_time
+		FROM reservation r
+		JOIN product p ON r.product_idx = p.product_idx
+		JOIN center_profile cp ON r.center_id = cp.center_id
+		WHERE r.user_id=#{param1} AND r.status = '예약' AND r.trainer_id IS NOT NULL
+		ORDER BY start_time
+	</select>
+	
+	<!-- 트레이너용 클래스 리스트 -->
+	<select id="trainer_reservation_schedule" resultType="map">
+		SELECT
+		    cp.center_name
+		    ,p.product_name
+		    ,IF(r.class_idx IS NULL OR p.max_people = 1, u.name, NULL) AS user_name
+		    ,IF(r.class_idx IS NOT NULL, c.start_time, r.start_time) AS start_time
+		    ,IF(r.class_idx IS NOT NULL, c.end_time, r.end_time) AS end_time
+		    ,COUNT(*) AS reservation_cnt
+		FROM reservation r
+		JOIN product p ON r.product_idx = p.product_idx
+		JOIN center_profile cp ON r.center_id = cp.center_id
+		LEFT JOIN class c ON r.class_idx = c.class_idx
+		LEFT JOIN user u ON r.user_id = u.user_id
+		WHERE r.trainer_id=#{param1} AND r.status = '예약'
+		AND (r.start_time IS NOT NULL OR c.start_time IS NOT NULL)
+		AND (r.end_time IS NOT NULL OR c.end_time IS NOT NULL)
+		GROUP BY
+		    cp.center_name <!-- 동일한 센터 -->
+		    ,p.product_name
+		    ,user_name <!-- 1:1인 경우 -->
+		    ,start_time
+		    ,end_time
+		    ,r.class_idx <!-- 클래스별로 -->
+		ORDER BY start_time
+	</select>
+	
+	<!-- 트레이너 캘린더 센터 휴무 동기화 -->
+	<select id="get_center_dayoff" resultType="com.fitime.dto.ScheduleDTO">
+		SELECT
+			s.title
+			,s.content
+			,s.start_date
+			,s.end_date
+			,s.status
+		FROM schedule s
+		WHERE s.status  = '휴무'
+		AND s.user_id = (
+			SELECT cp.center_id FROM trainer_profile tp JOIN center_profile cp ON tp.center_idx = cp.center_idx 
+			WHERE tp.trainer_id = #{param1})
+	</select>
+	
+	<!-- 회원용 클래스 날짜 출력 -->
+	<select id="get_user_class_schedule" resultType="map">
+		SELECT
+	        c.class_idx
+	        ,cp.center_name
+	        ,p.product_name
+	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
+	        ,c.start_time
+	        ,c.end_time
+	        ,c.week
+	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
+	        ,p.duration
+	    FROM reservation r
+	    JOIN class c ON r.class_idx = c.class_idx
+	    JOIN product p ON c.product_idx = p.product_idx
+	    JOIN center_profile cp ON p.center_id = cp.center_id
+	    WHERE r.user_id=#{user_id}
+	    GROUP BY
+		    c.class_idx
+		    ,cp.center_name
+		    ,p.product_name
+		    ,trainer_name
+		    ,c.start_time
+		    ,c.end_time
+		    ,c.week
+		    ,p.duration
+		ORDER BY c.start_time
+	</select>
+	
+	<!-- 트레이너용 클래스 날짜 출력 -->
+	<select id="get_class_schedule" resultType="map">
+		SELECT
+	        c.class_idx
+	        ,cp.center_name
+	        ,p.product_name
+	        ,(SELECT name FROM user u WHERE r.user_id = u.user_id) AS user_name
+	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
+	        ,(SELECT name FROM user u WHERE r.user_id = u.user_id) AS user_name
+	        ,c.start_time
+	        ,c.end_time
+	        ,c.week
+	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
+	        ,p.duration
+	    FROM reservation r
+	    JOIN class c ON r.class_idx = c.class_idx
+	    JOIN product p ON c.product_idx = p.product_idx
+	    JOIN center_profile cp ON p.center_id = cp.center_id
+	    WHERE r.trainer_id=#{trainer_id}
+	    GROUP BY
+		    c.class_idx
+		    ,cp.center_name
+		    ,p.product_name
+		    ,trainer_name
+		    ,c.start_time
+		    ,c.end_time
+		    ,c.week
+		    ,p.duration
+		ORDER BY c.start_time
+	</select>
 
 </mapper>

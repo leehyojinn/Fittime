@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.fitime.dto.Profile_fileDTO;
 
@@ -43,6 +44,25 @@ public interface ProfileDAO {
 	List<Profile_fileDTO> photoList(String id);
 
 	Map<String, String> getImg(int profile_file_idx);
+
+	List<String> getTags(String id);
+
+	int insertTag(@Param("user_id") String user_id,@Param("tags") List<Number> tags);
+
+	void delTag(String string);
+
+	List<Map<String, Object>> trainerTags();
+
+	List<Map<String, Object>> centerTags();
+
+	int insertTrainerTags(String id, Integer tag);
+
+	int insertCenterTags(String id, Integer tag);
+
+
+
+
+
 
 
 }

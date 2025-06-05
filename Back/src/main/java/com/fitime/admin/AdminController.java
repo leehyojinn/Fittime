@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fitime.dto.BlackListDTO;
 import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.PopupDTO;
 import com.fitime.dto.TagDTO;
@@ -202,11 +203,12 @@ public class AdminController {
     
     //블랙리스트 레벨 변경
     @PostMapping("/blacklist_level/{user_id}")
-    public Map<String, Object> blacklist_level(@PathVariable String user_id){
-    	
+    public Map<String, Object> blacklist_level(@PathVariable String user_id,@RequestBody Map<String, Object>param){
+    	logger.info("user_id : "+user_id);
+    	logger.info("param : {}",param);
     	result = new HashMap<String, Object>();
     	
-    	boolean success = service.blacklist_level(user_id);
+    	boolean success = service.blacklist_level(user_id,param);
     	
     	result.put("success", success);
     	
@@ -214,17 +216,38 @@ public class AdminController {
     }
     
     // 블랙리스트 상태변경
-    @PostMapping("/blacklist_status/{user_id}")
-    public Map<String, Object> blacklist_status(@PathVariable String user_id, @RequestBody Map<String, String> params){
+    @PostMapping("/blacklist_status/{report_idx}")
+    public Map<String, Object> blacklist_status(@PathVariable int report_idx, @RequestBody Map<String, String> params){
     	
     	result = new HashMap<String, Object>();
     	
-    	boolean success = service.blacklist_status(user_id,params);
+    	boolean success = service.blacklist_status(report_idx,params);
     	
     	result.put("success", success);
     	
     	return result;
     }
+    
+    // 블랙리스트 인 사람들의 리스트
+    @PostMapping("/list/blacklist")
+    public Map<String, Object> blacklist(){
+    	result = new HashMap<String, Object>();
+    	List<BlackListDTO>list = service.blacklist();
+    	result.put("blacklist", list);
+    	return result;
+    }
+    
+    // 블랙리스트 해제
+    @PostMapping("/del/blacklist/{blacklist_idx}")
+    public Map<String, Object> blacklistDel(@PathVariable int blacklist_idx,@RequestBody Map<String, Object>param){
+    	logger.info("idx : "+blacklist_idx);
+    	logger.info("param : {}",param);
+    	result = new HashMap<String, Object>();
+    	boolean success = service.blacklistDel(blacklist_idx,param);
+    	result.put("success",success);
+    	return result;
+    }
+    
 }
 	
 

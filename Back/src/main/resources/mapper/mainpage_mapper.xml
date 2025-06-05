@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.mainpage.MainPageDAO">
+
+	<select id="CenterRatingList" resultType="com.fitime.dto.CenterRatingDTO">
+		SELECT
+		  c.center_id,
+		  c.center_name,
+		  c.introduction,
+		  pf.file_name AS profile_image,
+		  ROUND(AVG(r.rating), 2) AS avg_rating,
+		  COUNT(r.review_idx) AS rating_count
+		FROM Center_profile c
+		JOIN User u ON c.center_id = u.user_id
+		LEFT JOIN Reservation res ON c.center_id = res.center_id
+		LEFT JOIN Review r ON r.reservation_idx = res.reservation_idx AND r.target_id = c.center_id
+		LEFT JOIN (
+		    SELECT user_id, file_name
+		    FROM profile_file
+		    WHERE category = '프로필'
+		    AND profile_file_idx = (
+		        SELECT MIN(profile_file_idx)
+		        FROM profile_file pf2
+		        WHERE pf2.user_id = profile_file.user_id
+		          AND pf2.category = '프로필'
+		    )
+		) pf ON c.center_id = pf.user_id
+		WHERE u.user_level = 3
+		GROUP BY c.center_id, c.center_name, c.introduction, pf.file_name
+		ORDER BY avg_rating DESC
+		LIMIT 5
+	</select>
+	
+	<select id="TrainerRatingList" resultType="com.fitime.dto.TrainerRatingDTO">
+	    SELECT
+	      t.trainer_id,
+	      u.name,
+	      t.career,
+	      pf.file_name AS profile_image,
+	      ROUND(AVG(r.rating), 2) AS avg_rating,
+	      COUNT(r.review_idx) AS rating_count
+	    FROM Trainer_profile t
+	    JOIN User u ON t.trainer_id = u.user_id
+	    LEFT JOIN Reservation res ON t.trainer_id = res.trainer_id
+	    LEFT JOIN Review r ON r.reservation_idx = res.reservation_idx AND r.target_id = t.trainer_id
+	    LEFT JOIN (
+	        SELECT user_id, file_name
+	        FROM profile_file
+	        WHERE category = '프로필'
+	        AND profile_file_idx = (
+	            SELECT MIN(profile_file_idx)
+	            FROM profile_file pf2
+	            WHERE pf2.user_id = profile_file.user_id
+	              AND pf2.category = '프로필'
+	        )
+	    ) pf ON t.trainer_id = pf.user_id
+	    WHERE u.user_level = 2
+	    GROUP BY t.trainer_id, u.name, t.career, pf.file_name
+	    ORDER BY avg_rating DESC
+	    LIMIT 5
+	</select>
+		
+   
+</mapper>
