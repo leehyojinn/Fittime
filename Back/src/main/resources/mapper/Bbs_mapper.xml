@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitime.bbs.BbsDAO">
+
+	<insert id="writeBbs" parameterType="com.fitime.dto.BbsDTO"
+	useGeneratedKeys="true"
+	keyColumn="board_idx"
+	keyProperty="board_idx">
+		insert into board (user_id,title,content,category)
+		values (#{user_id},#{title},#{content},#{category})
+	</insert>
+	
+	<insert id="ImgSave">
+		insert into file_image (file_name,category,post_idx)
+		value (#{param1},'게시판',#{param2})
+	</insert>
+	
+	<select id="ImgSearch">
+		select file_name from file_image where category = '게시판' and post_idx = #{param1}
+	</select>
+	
+	<delete id="ImgDel">
+		delete from file_image where category = '게시판' and post_idx = #{param1}
+	</delete>
+	
+	<update id="updateBbs" parameterType="com.fitime.dto.BbsDTO">
+		update board set title = #{title}, content = #{content} where board_idx = #{board_idx}
+	</update>
+	
+	<select id="findFiles">
+		select count(file_idx) from file_image where category='게시판' and post_idx = #{param1}
+	</select>
+	
+	<update id="delBbs">
+		update board set state = '비활성' where board_idx = #{param1}
+	</update>
+	
+	<select id="listBbs" resultType="map">
+		select * from board where category=#{param1} and state='활성' order by reg_date desc limit #{param2} offset #{param3}
+	</select>
+	
+	<select id="getTotalPage">
+		select ceil(count(board_idx)/#{param1}) as totalpage from board where category=#{param2}
+	</select>
+	
+	<select id="detailBbs" resultType="com.fitime.dto.BbsDTO">
+		select * from board where board_idx = #{param1}
+	</select>
+	
+	<select id="findphotos" resultType="map">
+		select file_idx,file_name from file_image where category='게시판' and post_idx = #{param1}
+	</select>
+	
+	<select id="getImg" resultType="map">
+		select file_name from file_image where file_idx = #{param1}
+	</select>
+	
+</mapper>
