@@ -34,5 +34,23 @@ public interface BbsDAO {
 	
 	Map<String, String> getImg(int file_idx);
 
+	int writeCommnet(Map<String, Object> param);
+
+	int updateComment(Map<String, Object> param);
+
+	int delComment(int idx);
+
+	List<Map<String, Object>> listComment(int idx);
+
+	int writeReply(Map<String, Object> param);
+
+	int updateReply(Map<String, Object> param);
+
+	int delReply(int idx);
+
+	List<Map<String, Object>> listReply(int idx);
+
+	int overlayReply(int idx);
+
 	 
 }

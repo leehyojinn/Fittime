@@ -66,4 +66,44 @@
 		select file_name from file_image where file_idx = #{param1}
 	</select>
 	
+	<insert id="writeCommnet" parameterType="map">
+		insert into boardcomment (board_idx,user_id,content)
+		values (#{board_idx},#{user_id},#{content})
+	</insert>
+	
+	<update id="updateComment" parameterType="map">
+		update boardcomment set content = #{content} where comment_idx = #{comment_idx}
+	</update>
+	
+	<update id="delComment">
+		update boardcomment set state = '비활성' where comment_idx = #{param1}
+	</update>
+	
+	<select id="listComment" resultType="map">
+		select * from boardcomment where state ='활성' and board_idx = #{param1}
+	</select>
+	
+	<insert id="writeReply" parameterType="map">
+		insert into board_reply (comment_idx,user_id,content)
+		values (#{comment_idx},#{user_id},#{content})
+	</insert>
+	
+	<update id="updateReply" parameterType="map">
+		update board_reply set content = #{content} where reply_idx = #{reply_idx}
+	</update>
+	
+	<delete id="delReply">
+		delete from board_reply where reply_idx = #{param1}
+	</delete>
+	
+	<select id="overlayReply">
+		select count(reply_idx) from board_reply where comment_idx = #{param1}
+	</select>
+	
+	<select id="listReply" resultType="map">
+		select br.* from board_reply br 
+		join boardcomment b on br.comment_idx =b.comment_idx 
+		where board_idx = #{param1}
+	</select>
+	
 </mapper>

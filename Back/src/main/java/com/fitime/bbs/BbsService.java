@@ -142,5 +142,47 @@ public class BbsService {
 		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 
 	}
+
+	public boolean writeComment(Map<String, Object> param) {
+		int row = dao.writeCommnet(param);
+		return row > 0;
+	}
+
+	public boolean updateComment(Map<String, Object> param) {
+		int row = dao.updateComment(param);
+		return row>0;
+	}
+
+	public boolean delCommnet(int idx) {
+		int row = dao.delComment(idx);
+		return row>0;
+	}
+
+	public List<Map<String, Object>> listComment(int idx) {
+		return dao.listComment(idx);
+	}
+
+	public boolean writeReply(Map<String, Object> param) {
+		int row = 0;
+		int cnt = dao.overlayReply((int)param.get("comment_idx"));
+		if(cnt > 0) {
+			return false;
+		}else {
+			row = dao.writeReply(param);
+		}
+		return row > 0;
+	}
 	
+	public boolean updateReply(Map<String, Object> param) {
+		int row = dao.updateReply(param);
+		return row>0;
+	}
+	public boolean delReply(int idx) {
+		int row = dao.delReply(idx);
+		return row>0;
+	}
+
+	public List<Map<String, Object>> listReply(int idx) {
+		return dao.listReply(idx);
+	}
 }

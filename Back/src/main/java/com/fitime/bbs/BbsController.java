@@ -70,10 +70,77 @@ public class BbsController {
 	}
 	
 	// 사진 가져오기
-		@GetMapping(value="/bbsImg/{file_idx}")
-		public ResponseEntity<Resource> img(@PathVariable String file_idx){
-			int idx = Integer.parseInt(file_idx);
-			return service.getImg(idx);
-		}
-		
+	@GetMapping(value="/bbsImg/{file_idx}")
+	public ResponseEntity<Resource> img(@PathVariable String file_idx){
+		int idx = Integer.parseInt(file_idx);
+		return service.getImg(idx);
+	}
+	
+	@PostMapping(value="/write/comment")
+	public Map<String, Object> writeComment(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.writeComment(param);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/update/comment")
+	public Map<String, Object> updateComment(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.updateComment(param);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/list/comment/{board_idx}")
+	public Map<String, Object>listComment(@PathVariable int board_idx){
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>list = service.listComment(board_idx);
+		result.put("comments", list);
+		return result;
+	}
+	
+	@PostMapping(value="/del/comment/{comment_idx}")
+	public Map<String, Object>delComment(@PathVariable int comment_idx){
+		result = new HashMap<String, Object>();
+		boolean success = service.delCommnet(comment_idx);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/write/reply")
+	public Map<String, Object> writeReply(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.writeReply(param);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/update/reply")
+	public Map<String, Object> updateReply(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
+		result = new HashMap<String, Object>();
+		boolean success = service.updateReply(param);
+		result.put("success", success);
+		return result;
+	}
+	
+	@PostMapping(value="/list/reply/{board_idx}")
+	public Map<String, Object>listReply(@PathVariable int board_idx){
+		result = new HashMap<String, Object>();
+		List<Map<String, Object>>reply = service.listReply(board_idx);
+		result.put("reply", reply);
+		return result;
+	}
+	
+	@PostMapping(value="/del/reply/{reply_idx}")
+	public Map<String, Object>delReply(@PathVariable int reply_idx){
+		result = new HashMap<String, Object>();
+		boolean success = service.delReply(reply_idx);
+		result.put("success", success);
+		return result;
+	}
 }
