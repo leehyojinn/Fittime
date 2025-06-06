@@ -36,12 +36,22 @@
 		update board set state = '비활성' where board_idx = #{param1}
 	</update>
 	
-	<select id="listBbs" resultType="map">
-		select * from board where category=#{param1} and state='활성' order by reg_date desc limit #{param2} offset #{param3}
+	<select id="listBbs" resultType="map" parameterType="map">
+		select * from board where category=#{category} and state='활성' 
+		<if test="user_id != null and user_id !=''">
+			and user_id=#{user_id}
+		</if>
+		order by reg_date desc
+		<if test="user_id == null or user_id ==''">
+		limit #{cnt} offset #{offset}
+		</if>
 	</select>
 	
-	<select id="getTotalPage">
-		select ceil(count(board_idx)/#{param1}) as totalpage from board where category=#{param2}
+	<select id="getTotalPage" parameterType="map">
+		select ceil(count(board_idx)/#{cnt}) as totalpage from board where category=#{category}
+		<if test="user_id != null and user_id !=''">
+			and user_id=#{user_id}
+		</if>
 	</select>
 	
 	<select id="detailBbs" resultType="com.fitime.dto.BbsDTO">

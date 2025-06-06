@@ -103,9 +103,12 @@ public class BbsService {
 	public Map<String, Object> listBbs(Map<String, Object>param) {
 		Map<String, Object> result= new HashMap<String, Object>();
 		int cnt = 10; // 페이지당 리스트 갯수
-		int totalpage = dao.getTotalPage(cnt,(String)param.get("category"));
+		Map<String, Object>queryParam = new HashMap<String, Object>(param);
+		queryParam.put("cnt", cnt);
+		int totalpage = dao.getTotalPage(queryParam);
 		int offset = ((int)param.get("page")-1)*cnt;
-		List<Map<String, Object>>list = dao.listBbs((String)param.get("category"),cnt,offset);
+		queryParam.put("offset", offset);
+		List<Map<String, Object>>list = dao.listBbs(queryParam);
 		result.put("list", list);
 		result.put("totalpage", totalpage);
 		return result;

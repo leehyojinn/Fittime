@@ -24,9 +24,9 @@ public interface BbsDAO {
 
 	int delBbs(int board_idx);
 
-	List<Map<String, Object>> listBbs(String category, int cnt, int offset);
+	List<Map<String, Object>> listBbs(Map<String, Object>param);
 
-	int getTotalPage(int cnt, String category);
+	int getTotalPage(Map<String, Object>param);
 
 	BbsDTO detailBbs(int idx);
 

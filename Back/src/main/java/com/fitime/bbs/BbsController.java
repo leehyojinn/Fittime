@@ -75,5 +75,5 @@ public class BbsController {
 			int idx = Integer.parseInt(file_idx);
 			return service.getImg(idx);
 		}
-	
+		
 }
