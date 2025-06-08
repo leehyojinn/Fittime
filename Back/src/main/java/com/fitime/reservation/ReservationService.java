@@ -1,5 +1,6 @@
 package com.fitime.reservation;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -226,6 +228,11 @@ public class ReservationService {
 
 	public List<Map<String, Object>> myproduct_list(String user_id) {
 		return dao.myproduct_list(user_id);
+	}
+	
+	@Scheduled(cron = "0 0 0 * * *")
+	    public void decrementDailyCount() {
+	        dao.decrementDailyCount();
 	}
 
 }

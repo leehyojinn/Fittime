@@ -75,4 +75,6 @@ public interface ReservationDAO {
 	List<Map<String, Object>> myproduct_list(String user_id);
 
 	void decrementBuyListCount(Integer buy_idx);
+
+	void decrementDailyCount();
 }

@@ -297,5 +297,8 @@
 	    UPDATE buy_list SET count = count - 1 WHERE buy_idx = #{buy_idx} AND count > 0
 	</update>
 	
+	<update id="decrementDailyCount">
+		UPDATE buy_list SET rest_period = rest_period - 1 WHERE rest_period > 0;
+	</update>
 
 </mapper>
