@@ -72,7 +72,7 @@ public interface ReservationDAO {
             @Param("end_date") String end_date
     );
 
-	List<Map<String, Object>> myproduct_list(String user_id);
+	List<Map<String, Object>> myproduct_list(Map<String, Object> param);
 
 	void decrementBuyListCount(Integer buy_idx);
 

@@ -201,16 +201,13 @@ public class ReservationController {
         return result;
     }
     
-    @PostMapping("/reservation/myproudct_list/{user_id}")
-    public Map<String, Object> myproduct_list(@PathVariable String user_id){
-    	
-    	result = new HashMap<String, Object>();
-    	
-    	List<Map<String, Object>> list = service.myproduct_list(user_id);
-    	
-    	result.put("list", list);
-    	
-    	return result;
+    @PostMapping("/reservation/myproduct_list")
+    public Map<String, Object> myproduct_list(@RequestBody Map<String, Object> param){
+        result = new HashMap<String, Object>();
+        List<Map<String, Object>> list = service.myproduct_list(param);
+        result.put("list", list);
+        return result;
     }
+
     
 }

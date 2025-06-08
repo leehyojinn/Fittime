@@ -226,8 +226,8 @@ public class ReservationService {
 
 
 
-	public List<Map<String, Object>> myproduct_list(String user_id) {
-		return dao.myproduct_list(user_id);
+	public List<Map<String, Object>> myproduct_list(Map<String, Object> param) {
+		return dao.myproduct_list(param);
 	}
 	
 	@Scheduled(cron = "0 0 0 * * *")

@@ -279,19 +279,22 @@
 	  GROUP BY date
 	</select>
 	
-	<select id="myproduct_list">
-		SELECT
-		    b.*,        
-		    p.*,
-		    pr.*
-		FROM
-		    buy_list b
-		LEFT JOIN
-		    payment p ON b.payment_idx = p.payment_idx
-		LEFT JOIN
-		    product pr ON b.product_idx = pr.product_idx
-		where b.user_id = #{user_id}
+	<select id="myproduct_list" parameterType="map">
+	    SELECT
+	        b.*,        
+	        p.*,
+	        pr.*
+	    FROM
+	        buy_list b
+	    LEFT JOIN
+	        payment p ON b.payment_idx = p.payment_idx
+	    LEFT JOIN
+	        product pr ON b.product_idx = pr.product_idx
+	    WHERE
+	        b.user_id = #{user_id}
+	        AND pr.center_id = #{center_id}
 	</select>
+
 	
 	<update id="decrementBuyListCount" parameterType="int">
 	    UPDATE buy_list SET count = count - 1 WHERE buy_idx = #{buy_idx} AND count > 0
