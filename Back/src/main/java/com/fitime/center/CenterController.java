@@ -37,9 +37,10 @@ public class CenterController {
 	@PostMapping("/complaint")
 	public Map<String, Object> complaint(
 	    @RequestPart("complaint") ComplaintDTO dto,
-	    @RequestPart("files") List<MultipartFile> files) {
-
-	    dto.setFiles(files);
+	    @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+		if(files != null && !files.isEmpty()) {
+			dto.setFiles(files);
+		}
 	    boolean success = service.complaint(dto);
 
 	    Map<String, Object> result = new HashMap<>();

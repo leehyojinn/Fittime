@@ -37,17 +37,19 @@ public class CenterService {
 	    int reportIdx = dto.getReport_idx(); // useGeneratedKeys로 PK 반환
 
 	    List<FileImageDTO> fileList = new ArrayList<>();
-	    for (MultipartFile file : dto.getFiles()) {
-	        try {
-	            String savedFileName = fileSave(file);
-	            FileImageDTO fileDto = new FileImageDTO();
-	            fileDto.setReport_idx(reportIdx);
-	            fileDto.setFile_name(savedFileName);
-	            // 필요시 category, post_idx 등 추가 세팅
-	            fileList.add(fileDto);
-	        } catch (Exception e) {
-	            throw new RuntimeException("파일 저장 실패", e);
-	        }
+	    if(dto.getFiles() != null && !dto.getFiles().isEmpty()) {
+		    for (MultipartFile file : dto.getFiles()) {
+		        try {
+		            String savedFileName = fileSave(file);
+		            FileImageDTO fileDto = new FileImageDTO();
+		            fileDto.setReport_idx(reportIdx);
+		            fileDto.setFile_name(savedFileName);
+		            // 필요시 category, post_idx 등 추가 세팅
+		            fileList.add(fileDto);
+		        } catch (Exception e) {
+		            throw new RuntimeException("파일 저장 실패", e);
+		        }
+		    }
 	    }
 	    if (!fileList.isEmpty()) {
 	        dao.insertFileImages(fileList);
