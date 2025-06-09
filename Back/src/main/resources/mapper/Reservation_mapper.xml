@@ -201,7 +201,7 @@
 	</select>
 	
 	<select id="reser_center_product" resultType="com.fitime.dto.ProductDTO" parameterType="String">
-		select * from product where center_id = #{center_id} where `delete` = false
+		select * from product where center_id = #{center_id} and `delete` = false
 	</select>
 	
 	<select id="reser_trainer_info" resultType="com.fitime.dto.TrainerRatingDTO" parameterType="String">
