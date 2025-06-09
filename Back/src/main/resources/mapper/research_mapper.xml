@@ -134,7 +134,7 @@
 		cp.exercise,
 		(select round(avg(r.rating), 1) from review r where r.target_id=tp.trainer_id) as rating,
 		(select count(r.review_idx) from review r where r.target_id=tp.trainer_id) as cnt,
-		(select file_name from profile_file pf where pf.user_id = tp.trainer_id) as file_name,
+		(select file_name from profile_file pf where pf.user_id = tp.trainer_id and pf.category = '프로필') as file_name,
 		(select min(price) from product p where p.trainer_id = tp.trainer_id) as min_price,
 		(select concat('[',group_concat(concat('"',t.tag_name,'"')),']')
 		from user_tag ut join tag t on ut.tag_idx=t.tag_idx where ut.user_id=tp.trainer_id) as tags

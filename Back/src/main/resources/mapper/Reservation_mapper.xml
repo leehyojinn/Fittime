@@ -196,7 +196,7 @@
 	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = c.center_id) AS rating_count
 	    FROM center_profile c
 	    LEFT JOIN profile_file pf
-	        ON c.center_id = pf.user_id
+	        ON c.center_id = pf.user_id and pf.category ='프로필'
 	    WHERE c.center_id = #{center_id}
 	</select>
 	
