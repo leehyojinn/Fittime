@@ -60,20 +60,20 @@
 	<select id="reviewByUser" parameterType="map" resultType="map">
 		select *,
 		(select u.user_level from `user` u where u.user_id=r.target_id) as level
-		 from review r where user_id = #{user_id}
+		 from review r where user_id = #{user_id} order by reg_date desc
 	</select>
 	
 
 	<select id="reviewByTrainer" parameterType="map" resultType="map">
 		select *,
 		(select u.name from user u where u.user_id = r.user_id) as user_name
-		 from review r where target_id = #{trainer_id}
+		 from review r where target_id = #{trainer_id} order by reg_date desc
 	</select>
 	
 	<select id="reviewByCenter" parameterType="map" resultType="map">
 		select *,
 		(select u.name from user u where u.user_id = r.user_id) as user_name
-		 from review r where target_id = #{center_id}
+		 from review r where target_id = #{center_id} order by reg_date desc
 	</select>
 	
 	<select id="getImg" resultType="map">
