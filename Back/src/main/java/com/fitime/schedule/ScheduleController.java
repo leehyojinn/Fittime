@@ -79,24 +79,34 @@ public class ScheduleController {
 	}
 	
 	// 회원용 클래스 일정
-	@PostMapping(value="/user_reservation_schedule/{user_id}")
-	public Map<String, Object> user_reservation_schedule(@PathVariable String user_id){
-		logger.info("회원용 클래스 일정 불러오기 : {}", user_id);
-		result = new HashMap<String, Object>();
-		List<Map<String, Object>> userList = service.user_reservation_schedule(user_id);
-		result.put("userList", userList);
-		return result;
-	}
-	
-	// 트레이너용 클래스 일정
-	@PostMapping(value="/trainer_reservation_schedule/{trainer_id}")
-	public Map<String, Object> trainer_reservation_schedule(@PathVariable String trainer_id){
-		logger.info("트레이너용 클래스 일정 불러오기 : {}",trainer_id);
-		result = new HashMap<String, Object>();
-		List<Map<String, Object>> trainerList = service.trainer_reservation_schedule(trainer_id);
-		result.put("trainerList", trainerList);
-		return result;
-	}
+		@PostMapping(value="/user_reservation_schedule/{user_id}")
+		public Map<String, Object> user_reservation_schedule(@PathVariable String user_id, @RequestBody Map<String, Object> param){
+			logger.info("회원용 클래스 일정 불러오기 : user_id={}, param={}", user_id, param);
+			Map<String, Object>copyParam = new HashMap<String, Object>(param);
+			copyParam.put("user_id", user_id);
+			String reservation_date = (String) param.get("reservation_date");
+			List<Map<String, Object>> userList = service.user_reservation_schedule(copyParam);
+			result = new HashMap<String, Object>();
+			result.put("user_id", user_id);
+			result.put("reservation_date", reservation_date);
+			result.put("userList", userList);
+			return result;
+		}
+		
+		// 트레이너용 클래스 일정
+		@PostMapping(value="/trainer_reservation_schedule/{trainer_id}")
+		public Map<String, Object> trainer_reservation_schedule(@PathVariable String trainer_id, @RequestBody Map<String, Object> param){
+			logger.info("트레이너용 클래스 일정 불러오기 : trainer_id={}, param={}", trainer_id, param);
+			Map<String, Object>copyParam = new HashMap<String, Object>(param);
+			copyParam.put("trainer_id", trainer_id);
+			String reservation_date = (String) param.get("reservation_date");
+			List<Map<String, Object>> trainerList = service.trainer_reservation_schedule(copyParam);
+			result = new HashMap<String, Object>();
+			result.put("trainer_id", trainer_id);
+			result.put("reservation_date",reservation_date);
+			result.put("trainerList", trainerList);
+			return result;
+		}
 	
 	// 트레이너 캘린더 센터 휴무 동기화
 	@PostMapping(value="/center_dayoff/{trainer_id}")
@@ -108,23 +118,17 @@ public class ScheduleController {
 		return result;
 	}
 	
-	// 회원용 클래스 날짜 뽑아내기
-	@PostMapping(value="/get_user_class_schedule")
-	public Map<String, Object> get_user_class_schedule(@RequestBody Map<String, Object> param){
-		logger.info("회원 반복 클래스 일정 : {}",param);
+	// 회원 잔여횟수 / 남은 기간 조회
+	@PostMapping(value="/user_remaining_count")
+	public Map<String, Object> user_remaining_count(@RequestBody Map<String, Object> param){
+		String user_id = (String) param.get("user_id");
+		int reservation_idx = (int) param.get("reservation_idx");
+		List<Map<String, Object>> remainList = service.user_remaining_count(user_id);
+		logger.info("잔여횟수/남은기간 : {}",user_id);
 		result = new HashMap<String, Object>();
-		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
-		result.put("scheduleList", scheduleList);
-		return result;
-	}
-	
-	// 트레이너용 클래스 날짜 뽑아내기
-	@PostMapping(value="/get_class_schedule")
-	public Map<String, Object> get_class_schedule(@RequestBody Map<String, Object> param){
-		logger.info("트레이너 반복 클래스 일정 : {}",param);
-		result = new HashMap<String, Object>();
-		List<Map<String, Object>> scheduleList = service.get_class_schedule(param);
-		result.put("scheduleList", scheduleList);
+		result.put("user_id", user_id);
+		result.put("reservation_idx", reservation_idx);
+		result.put("remainList", remainList);
 		return result;
 	}
 	
