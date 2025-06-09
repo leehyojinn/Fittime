@@ -19,14 +19,16 @@ public interface ScheduleDAO {
 
 	int schedule_del(String user_id, Integer schedule_idx);
 	
-	List<Map<String, Object>> user_reservation_schedule(String user_id);
+	List<Map<String, Object>> user_reservation_schedule(Map<String, Object> param);
 	
-	List<Map<String, Object>> trainer_reservation_schedule(String trainer_id);
+	List<Map<String, Object>> trainer_reservation_schedule(Map<String, Object> param);
 
 	List<ScheduleDTO> get_center_dayoff(String trainer_id);
 
 	List<Map<String, Object>> get_user_class_schedule(Map<String, Object> param);
 	
 	List<Map<String, Object>> get_class_schedule(Map<String, Object> param);
+
+	List<Map<String, Object>> user_remaining_count(String user_id);
 
 }

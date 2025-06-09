@@ -37,21 +37,16 @@
 		SELECT
 		    cp.center_name
 		    ,p.product_name
+			,r.date AS reservation_date
 		    ,(SELECT name FROM user u WHERE r.trainer_id=u.user_id) AS trainer_name
-		    ,CASE
-		    	WHEN r.class_idx IS NOT NULL
-		    		THEN (SELECT c.start_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
-		    	ELSE r.start_time
-		    	END AS start_time
-		    ,CASE
-		    	WHEN r.class_idx IS NOT NULL
-		    		THEN (SELECT c.end_time FROM class c WHERE r.class_idx=c.class_idx AND `delete`=0)
-		    	ELSE r.end_time
-		    	END AS end_time
+		    ,IF(r.class_idx IS NOT NULL, c.start_time, r.start_time) AS start_time
+		    ,IF(r.class_idx IS NOT NULL, c.end_time, r.end_time) AS end_time
 		FROM reservation r
 		JOIN product p ON r.product_idx = p.product_idx
 		JOIN center_profile cp ON r.center_id = cp.center_id
-		WHERE r.user_id=#{param1} AND r.status = '예약' AND r.trainer_id IS NOT NULL
+		LEFT JOIN class c ON r.class_idx = c.class_idx
+		WHERE r.user_id=#{user_id} AND r.status = '예약' AND r.trainer_id IS NOT NULL
+		AND (c.start_time IS NOT NULL OR r.start_time IS NOT NULL)
 		ORDER BY start_time
 	</select>
 	
@@ -60,6 +55,7 @@
 		SELECT
 		    cp.center_name
 		    ,p.product_name
+			,r.date AS reservation_date
 		    ,IF(r.class_idx IS NULL OR p.max_people = 1, u.name, NULL) AS user_name
 		    ,IF(r.class_idx IS NOT NULL, c.start_time, r.start_time) AS start_time
 		    ,IF(r.class_idx IS NOT NULL, c.end_time, r.end_time) AS end_time
@@ -69,7 +65,7 @@
 		JOIN center_profile cp ON r.center_id = cp.center_id
 		LEFT JOIN class c ON r.class_idx = c.class_idx
 		LEFT JOIN user u ON r.user_id = u.user_id
-		WHERE r.trainer_id=#{param1} AND r.status = '예약'
+		WHERE r.trainer_id=#{trainer_id} AND r.status = '예약'
 		AND (r.start_time IS NOT NULL OR c.start_time IS NOT NULL)
 		AND (r.end_time IS NOT NULL OR c.end_time IS NOT NULL)
 		GROUP BY
@@ -97,64 +93,20 @@
 			WHERE tp.trainer_id = #{param1})
 	</select>
 	
-	<!-- 회원용 클래스 날짜 출력 -->
-	<select id="get_user_class_schedule" resultType="map">
+	<!-- 회원 잔여횟수 / 남은 기간 조회 -->
+	<select id="user_remaining_count" resultType="map">
 		SELECT
-	        c.class_idx
-	        ,cp.center_name
-	        ,p.product_name
-	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
-	        ,c.start_time
-	        ,c.end_time
-	        ,c.week
-	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
-	        ,p.duration
-	    FROM reservation r
-	    JOIN class c ON r.class_idx = c.class_idx
-	    JOIN product p ON c.product_idx = p.product_idx
-	    JOIN center_profile cp ON p.center_id = cp.center_id
-	    WHERE r.user_id=#{user_id}
-	    GROUP BY
-		    c.class_idx
-		    ,cp.center_name
-		    ,p.product_name
-		    ,trainer_name
-		    ,c.start_time
-		    ,c.end_time
-		    ,c.week
-		    ,p.duration
-		ORDER BY c.start_time
+			p.product_name
+			,p.count AS total_cnt
+			,COUNT(r.reservation_idx) AS used_cnt
+			,(p.count - COUNT(r.reservation_idx)) AS remaining_cnt
+			,MIN(r.date) AS start_date
+			,DATE_ADD(r.date, INTERVAL p.duration MONTH) AS expire_date
+			,DATEDIFF(DATE_ADD(r.date, INTERVAL p.duration MONTH), CURDATE()) AS remaining_days
+		FROM reservation r
+		JOIN product p ON r.product_idx = p.product_idx
+		WHERE r.user_id = #{user_id}
+		AND r.status = '예약' AND r.reservation_idx=#{reservation_idx} GROUP BY p.product_idx
 	</select>
 	
-	<!-- 트레이너용 클래스 날짜 출력 -->
-	<select id="get_class_schedule" resultType="map">
-		SELECT
-	        c.class_idx
-	        ,cp.center_name
-	        ,p.product_name
-	        ,(SELECT name FROM user u WHERE r.user_id = u.user_id) AS user_name
-	        ,(SELECT name FROM user u WHERE c.trainer_id = u.user_id) AS trainer_name
-	        ,(SELECT name FROM user u WHERE r.user_id = u.user_id) AS user_name
-	        ,c.start_time
-	        ,c.end_time
-	        ,c.week
-	        ,MIN(r.date) AS reservation_date <!-- 중복 클래스 지우기 -->
-	        ,p.duration
-	    FROM reservation r
-	    JOIN class c ON r.class_idx = c.class_idx
-	    JOIN product p ON c.product_idx = p.product_idx
-	    JOIN center_profile cp ON p.center_id = cp.center_id
-	    WHERE r.trainer_id=#{trainer_id}
-	    GROUP BY
-		    c.class_idx
-		    ,cp.center_name
-		    ,p.product_name
-		    ,trainer_name
-		    ,c.start_time
-		    ,c.end_time
-		    ,c.week
-		    ,p.duration
-		ORDER BY c.start_time
-	</select>
-
 </mapper>
