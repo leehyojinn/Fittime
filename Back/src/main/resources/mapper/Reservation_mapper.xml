@@ -201,7 +201,7 @@
 	</select>
 	
 	<select id="reser_center_product" resultType="com.fitime.dto.ProductDTO" parameterType="String">
-		select * from product where center_id = #{center_id} and `delete` = false
+		select * from product where center_id = #{center_id} and `delete` = false and status = true
 	</select>
 	
 	<select id="reser_trainer_info" resultType="com.fitime.dto.TrainerRatingDTO" parameterType="String">
@@ -244,7 +244,8 @@
 	</select>
 	
 	<select id="reser_class_info" resultType="com.fitime.dto.ClassDTO" parameterType="map">
-		select * from class where center_id = #{center_id} and trainer_id = #{trainer_id} and product_idx = #{product_idx} 
+		select * from class where center_id = #{center_id} and product_idx = #{product_idx}
+		<!--  and trainer_id = #{trainer_id} -->
 	</select>
 	
 	<!-- 시간별 인원 카운트 -->

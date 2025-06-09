@@ -55,10 +55,10 @@
 	    product_name,
 	    price,
 	    discount_rate,
-	    max_people,
+	    max_people
 	    <choose>
-	      <when test="exercise_level == 1">duration</when>
-	      <when test="exercise_level == 3">count</when>
+	      <when test="exercise_level == 1">,duration</when>
+	      <when test="exercise_level == 3">,count</when>
 	    </choose>
 	  )
 	  values (
@@ -66,20 +66,20 @@
 	    #{product_name},
 	    #{price},
 	    #{discount_rate},
-	    #{max_people},
+	    #{max_people}
 	    <choose>
-	      <when test="exercise_level == 1">#{duration}</when>
-	      <when test="exercise_level == 3">#{count}</when>
+	      <when test="exercise_level == 1">,#{duration}</when>
+	      <when test="exercise_level == 3">,#{count}</when>
 	    </choose>
 	  )
 	</insert>
 
 	
 	<update id="productUpdate" parameterType="map">
-		update product set product_name = #{product_name}, price = #{price}, discount_rate = #{discount_rate}, max_people = #{max_people},
+		update product set product_name = #{product_name}, price = #{price}, discount_rate = #{discount_rate}, max_people = #{max_people}
 		<choose>
-			<when test="exercise_level==1">duration=#{duration}</when>
-			<when test="exercise_level==3">count=#{count}</when>
+			<when test="exercise_level==1">,duration=#{duration}</when>
+			<when test="exercise_level==3">,count=#{count}</when>
 		</choose>
 		where product_idx = #{product_idx}
 	</update>
