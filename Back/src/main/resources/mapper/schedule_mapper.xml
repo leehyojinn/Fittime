@@ -45,8 +45,7 @@
 		JOIN product p ON r.product_idx = p.product_idx
 		JOIN center_profile cp ON r.center_id = cp.center_id
 		LEFT JOIN class c ON r.class_idx = c.class_idx
-		WHERE r.user_id=#{user_id} AND r.status = '예약' AND r.trainer_id IS NOT NULL
-		AND (c.start_time IS NOT NULL OR r.start_time IS NOT NULL)
+		WHERE r.user_id=#{user_id} AND r.status = '예약'
 		ORDER BY start_time
 	</select>
 	
