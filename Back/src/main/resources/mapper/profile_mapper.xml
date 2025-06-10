@@ -73,7 +73,7 @@
 		introduction = #{introduction}, 
 		account_number = #{account_number},
 		operation_hours = #{operation_hours},
-		phone = #{phone},
+		phone = #{center_phone},
 		sido = #{sido},
 		gugun = #{gugun},
 		eupmyeondong = #{eupmyeondong},
@@ -106,7 +106,7 @@
 	</select>
 	
 	<select id="detailCenterProfile" resultType="map" parameterType="String">
-		select *,cp.address as center_address from user join center_profile cp ON user.user_id = cp.center_id 
+		select *,cp.address as center_address, cp.phone as center_phone from user join center_profile cp ON user.user_id = cp.center_id 
 		where center_id = #{param1}
 	</select>
 	

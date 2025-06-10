@@ -51,30 +51,22 @@
 	
 	<!-- 트레이너용 클래스 리스트 -->
 	<select id="trainer_reservation_schedule" resultType="map">
-		SELECT
+		SELECT DISTINCT
 		    cp.center_name
 		    ,p.product_name
 			,r.date AS reservation_date
-		    ,IF(r.class_idx IS NULL OR p.max_people = 1, u.name, NULL) AS user_name
-		    ,IF(r.class_idx IS NOT NULL, c.start_time, r.start_time) AS start_time
-		    ,IF(r.class_idx IS NOT NULL, c.end_time, r.end_time) AS end_time
-		    ,COUNT(*) AS reservation_cnt
+ 		    ,IF(r.class_idx IS NOT NULL, c.start_time, r.start_time) AS start_time
+ 		    ,IF(r.class_idx IS NOT NULL, c.end_time, r.end_time) AS end_time
+ 		    ,r.date
+ 		    ,c.class_idx
 		FROM reservation r
 		JOIN product p ON r.product_idx = p.product_idx
 		JOIN center_profile cp ON r.center_id = cp.center_id
 		LEFT JOIN class c ON r.class_idx = c.class_idx
-		LEFT JOIN user u ON r.user_id = u.user_id
 		WHERE r.trainer_id=#{trainer_id} AND r.status = '예약'
 		AND (r.start_time IS NOT NULL OR c.start_time IS NOT NULL)
 		AND (r.end_time IS NOT NULL OR c.end_time IS NOT NULL)
-		GROUP BY
-		    cp.center_name <!-- 동일한 센터 -->
-		    ,p.product_name
-		    ,user_name <!-- 1:1인 경우 -->
-		    ,start_time
-		    ,end_time
-		    ,r.class_idx <!-- 클래스별로 -->
-		ORDER BY start_time
+		ORDER BY date
 	</select>
 	
 	<!-- 트레이너 캘린더 센터 휴무 동기화 -->

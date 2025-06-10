@@ -25,7 +25,7 @@
 		from profile_file pf
 		where pf.user_id=cp.center_id and pf.category = '프로필') as file_name 
 		from center_profile cp
-		where cp.sido = #{sido}
+		where cp.sido = #{sido} and cp.center_idx not in (0)
 		<if test = "gugun != null and gugun !=''">
 		and cp.gugun = #{gugun}
 		</if>
