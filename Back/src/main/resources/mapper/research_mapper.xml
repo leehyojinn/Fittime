@@ -175,7 +175,7 @@
 	</select>
 	
 	<select id="neighborhoodList" resultType="String" parameterType="map">
-		select distinct eupmyeondong from center_profile where sido = #{sido} and gugun = #{gugun} and cp.center_idx not in (0)
+		select distinct eupmyeondong from center_profile cp where sido = #{sido} and gugun = #{gugun} and cp.center_idx not in (0)
 	</select>
 
 </mapper>
