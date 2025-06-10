@@ -11,7 +11,7 @@
 	
 	<!-- 등록된 상품 수 -->
 	<select id="productChart" resultType="map">
-		SELECT COUNT(product_idx) as product_cnt FROM product WHERE center_id=#{param1} AND status != 0
+		SELECT COUNT(product_idx) as product_cnt FROM product WHERE center_id=#{param1} AND status != 0 AND `delete` != 1
 	</select>
 	
 	<!-- 현재 트레이너 수 -->
