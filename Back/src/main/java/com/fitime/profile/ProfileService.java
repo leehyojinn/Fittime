@@ -181,6 +181,7 @@ public class ProfileService {
 //			dao.delTag((String)param.get("center_id"));
 //			row = dao.insertTag((String)param.get("center_id"),tags);
 //		}
+		int cnt = dao.centerPassword(param);
 		boolean image_save = true;
 		boolean profile_save = true;
 		boolean image_delete = true;
@@ -191,7 +192,7 @@ public class ProfileService {
 			image_delete = fileDel((String)param.get("center_id"));
 			image_save = fileSave((String)param.get("center_id"),files);
 		}
-		return row > 0 && image_save && profile_save && image_delete;
+		return row > 0 && image_save && profile_save && image_delete && cnt>0;
 	}
 	
 //	public boolean updateCenterProfile(Map<String, Object> param) {

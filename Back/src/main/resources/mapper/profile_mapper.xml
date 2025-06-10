@@ -82,6 +82,10 @@
 		where center_id = #{center_id}
 	</update>
 	
+	<update id="centerPassword" parameterType="map">
+		update user set password = #{password} where user_id = #{center_id}
+	</update>
+	
 	<select id="detailUserProfile" resultType="map" parameterType="String">
 		select * from user where user_id = #{param1}
 	</select>

@@ -50,7 +50,6 @@ public class ProfileController {
 		default:
 			break;
 		}
-
 		result.put("success", success);
 		return result;
 	}

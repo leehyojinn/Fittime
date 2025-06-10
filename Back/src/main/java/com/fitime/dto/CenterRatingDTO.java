@@ -9,8 +9,15 @@ public class CenterRatingDTO {
     private Integer rating_count;
     private String profile_image;
     private String address;
+    private String operation_hours;
     
-    public String getAddress() {
+    public String getOperation_hours() {
+		return operation_hours;
+	}
+	public void setOperation_hours(String operation_hours) {
+		this.operation_hours = operation_hours;
+	}
+	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {

@@ -59,6 +59,8 @@ public interface ProfileDAO {
 
 	int insertCenterTags(String id, Integer tag);
 
+	int centerPassword(Map<String, Object> param);
+
 
 
 

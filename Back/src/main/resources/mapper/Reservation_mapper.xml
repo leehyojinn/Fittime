@@ -74,8 +74,8 @@
 		FROM reservation r LEFT JOIN center_profile cp ON r.center_id=cp.center_id
 		LEFT JOIN class cl ON r.class_idx=cl.class_idx
 		LEFT JOIN user u ON r.trainer_id=u.user_id 
-		WHERE r.user_id=#{user_id} AND r.status='예약' AND u.user_level=2
-		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+		WHERE r.user_id=#{user_id} AND r.status='예약'
+		ORDER BY r.date LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
 	<select id="listTrainerBooking" resultType="map" parameterType="map">
@@ -104,7 +104,7 @@
 		INNER JOIN product p ON r.product_idx=p.product_idx 
 		LEFT JOIN class c ON r.class_idx=c.class_idx
 		WHERE r.trainer_id=#{trainer_id} AND r.status='예약' AND p.status=1 AND p.delete='false'
-		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+		ORDER BY r.date LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
 	<select id="listCenterBooking" resultType="map" parameterType="map">
@@ -134,7 +134,7 @@
 		LEFT JOIN product p ON r.product_idx=p.product_idx 
 		LEFT JOIN class c ON r.class_idx=c.class_idx
 		WHERE r.center_id=#{center_id} AND r.status='예약' AND p.status=1 AND p.delete='false'
-		ORDER BY r.reservation_idx DESC LIMIT #{pageSize} OFFSET #{offset}
+		ORDER BY r.date LIMIT #{pageSize} OFFSET #{offset}
 	</select>
 	
 	<select id="detailBooking" resultType="map" parameterType="map">
