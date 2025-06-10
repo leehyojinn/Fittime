@@ -117,7 +117,7 @@
 	
 	<!-- 블랙리스트 리스트 -->
 	<select id="blacklist_list" resultType="com.fitime.dto.ComplaintDTO">
-		select *,(select user_id from review r where r.review_idx = c.review_idx) as target_id from complaint c
+		select *,(select user_id from review r where r.review_idx = c.review_idx) as target_id from complaint c ORDER BY c.report_idx DESC
 	</select>
 	
 	<select id="selectFileNamesByReportIdx" resultType="String">
