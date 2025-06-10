@@ -162,20 +162,20 @@
 		from user u
 		join center_profile cp on u.user_id = cp.center_id
 		where u.user_level = 3
-		and binary cp.center_name like concat('%',#{param1},'%')
+		and binary cp.center_name like concat('%',#{param1},'%') and cp.center_idx not in (0)
 		limit 5 offset #{param2}
 	</select>
 	
 	<select id="cityList" resultType="String">
-		select distinct sido from center_profile
+		select distinct sido from center_profile cp where cp.center_idx not in (0)
 	</select>
 	
 	<select id="districtList" resultType="String" parameterType="map">
-		select distinct gugun from center_profile where sido = #{sido}
+		select distinct gugun from center_profile cp where sido = #{sido} and cp.center_idx not in (0)
 	</select>
 	
 	<select id="neighborhoodList" resultType="String" parameterType="map">
-		select distinct eupmyeondong from center_profile where sido = #{sido} and gugun = #{gugun}
+		select distinct eupmyeondong from center_profile where sido = #{sido} and gugun = #{gugun} and cp.center_idx not in (0)
 	</select>
 
 </mapper>
