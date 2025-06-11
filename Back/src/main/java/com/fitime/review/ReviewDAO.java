@@ -35,10 +35,10 @@ public interface ReviewDAO {
 
 	int fileDelReview(int idx);
 
-	List<Map<String, String>> reviewByUser(Map<String, String> param);
+	List<Map<String, Object>> reviewByUser(Map<String, Object> param);
 
 
-	List<Map<String, Object>> reviewByTrainer(Map<String, String> param);
+	List<Map<String, Object>> reviewByTrainer(Map<String, Object> param);
 
 	List<Map<String, Object>> reviewByCenter(Map<String, Object> param);
 
@@ -49,6 +49,12 @@ public interface ReviewDAO {
 	int findFiles(int review_idx);
 
 	List<Map<String, Object>> getPhotos(int review_idx);
+
+	int totalPageByUser(Map<String, Object> copyParam);
+
+	int totalPageByTrainer(Map<String, Object> copyParam);
+
+	int totalPageByCenter(Map<String, Object> copyParam);
 
 
 }

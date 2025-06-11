@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -123,31 +124,25 @@ public class ReviewController {
 	}
 
 	@PostMapping(value="/list/reviewByUser")
-	public Map<String, Object>reviewByUser(@RequestBody Map<String, String>param){
+	public Map<String, Object>reviewByUser(@RequestParam(defaultValue = "1") String page,
+			@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
-		result = new HashMap<String, Object>();
-		List<Map<String, String>>list = service.reviewByUser(param);
-		result.put("reviews", list);
-		return result;
+		return service.reviewByUser(page,param);
 	}
 	
 
 	@PostMapping(value="/list/reviewByTrainer")
-	public Map<String, Object>reviewByTrainer(@RequestBody Map<String, String>param){
+	public Map<String, Object>reviewByTrainer(@RequestParam(defaultValue = "1") String page,
+			@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
-		result = new HashMap<String, Object>();
-		List<Map<String, Object>>list = service.reviewByTrainer(param);
-		result.put("reviews", list);
-		return result;
+		return service.reviewByTrainer(page,param);
 	}
 	
 	@PostMapping(value="/list/reviewByCenter")
-	public Map<String, Object>reviewByCenter(@RequestBody Map<String, Object>param){
+	public Map<String, Object>reviewByCenter(@RequestParam(defaultValue = "1") String page,
+			@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);
-		result = new HashMap<String, Object>();
-		List<Map<String, Object>>list = service.reviewByCenter(param);
-		result.put("reviews", list);
-		return result;
+		return service.reviewByCenter(page,param);
 	}
 
 	// 사진 가져오기

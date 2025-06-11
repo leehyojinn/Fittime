@@ -160,17 +160,50 @@ public class ReviewService {
 		return dao.overayReview(dto);
 	}
 
-	public List<Map<String, String>> reviewByUser(Map<String, String> param) {
-		return dao.reviewByUser(param);
+	public Map<String, Object> reviewByUser(String page, Map<String, Object> param) {
+		int pageSize = 5;
+		int offset = (Integer.parseInt(page)-1)*pageSize;
+		Map<String, Object>copyParam = new HashMap<String, Object>(param);
+		copyParam.put("pageSize", pageSize);
+		copyParam.put("offset", offset);
+		int totalPage = dao.totalPageByUser(copyParam);
+		List<Map<String, Object>>list = dao.reviewByUser(copyParam);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("reviews", list);
+		result.put("totalPage", totalPage);
+		result.put("page", Integer.parseInt(page));
+		return result;
 	}
 
 
-	public List<Map<String, Object>> reviewByTrainer(Map<String, String> param) {
-		return dao.reviewByTrainer(param);
+	public Map<String, Object> reviewByTrainer(String page, Map<String, Object> param) {
+		int pageSize = 5;
+		int offset = (Integer.parseInt(page)-1)*pageSize;
+		Map<String, Object>copyParam = new HashMap<String, Object>(param);
+		copyParam.put("pageSize", pageSize);
+		copyParam.put("offset", offset);
+		int totalPage = dao.totalPageByTrainer(copyParam);
+		List<Map<String, Object>>list = dao.reviewByTrainer(copyParam);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("reviews", list);
+		result.put("totalPage", totalPage);
+		result.put("page", Integer.parseInt(page));
+		return result;
 	}
 
-	public List<Map<String, Object>> reviewByCenter(Map<String, Object> param) {
-		return dao.reviewByCenter(param);
+	public Map<String, Object> reviewByCenter(String page, Map<String, Object> param) {
+		int pageSize = 5;
+		int offset = (Integer.parseInt(page)-1)*pageSize;
+		Map<String, Object>copyParam = new HashMap<String, Object>(param);
+		copyParam.put("pageSize", pageSize);
+		copyParam.put("offset", offset);
+		int totalPage = dao.totalPageByCenter(copyParam);
+		List<Map<String, Object>>list = dao.reviewByCenter(copyParam);
+		Map<String, Object>result = new HashMap<String, Object>();
+		result.put("reviews", list);
+		result.put("totalPage", totalPage);
+		result.put("page", Integer.parseInt(page));
+		return result;
 	}
 	
 	public ResponseEntity<Resource> getImg(int file_idx) {
