@@ -29,6 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>11</java.version>
+		<start-class>com.fitime.Application</start-class>
 	</properties>
 	<dependencies>
 		<dependency>

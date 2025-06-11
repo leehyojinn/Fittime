@@ -23,7 +23,11 @@ import com.fitime.dto.ComplaintDTO;
 import com.fitime.dto.ProductDTO;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 public class CenterController {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());

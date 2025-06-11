@@ -28,7 +28,11 @@ import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 public class AdminController {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());

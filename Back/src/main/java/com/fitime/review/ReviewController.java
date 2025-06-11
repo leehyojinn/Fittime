@@ -23,7 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.ReviewDTO;
 
-@CrossOrigin
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 @RestController
 public class ReviewController {
 

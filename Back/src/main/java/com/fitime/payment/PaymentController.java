@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,11 @@ import com.fitime.dto.KakaoDTO;
 import com.fitime.dto.PaymentDTO;
 
 @RestController
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 public class PaymentController {
 
 	@Autowired PaymentService service;

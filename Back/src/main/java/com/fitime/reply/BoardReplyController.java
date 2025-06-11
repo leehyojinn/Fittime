@@ -8,7 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/board/reply")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 public class BoardReplyController {
 
     @Autowired

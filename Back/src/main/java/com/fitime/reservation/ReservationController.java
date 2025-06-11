@@ -22,7 +22,11 @@ import com.fitime.dto.ReservationDTO;
 import com.fitime.dto.ScheduleDTO;
 import com.fitime.dto.TrainerRatingDTO;
 
-@CrossOrigin
+@CrossOrigin(
+	    origins = "http://192.168.0.114:3000",
+	    allowedHeaders = "*",
+	    allowCredentials = "true"
+	)
 @RestController
 public class ReservationController {
 
