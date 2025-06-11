@@ -111,7 +111,7 @@ public class ReservationService {
 			params.put("pageSize", pageSize);
 			params.put("offset", offset);
 			
-			ArrayList<ReservationDTO> bookingList = dao.listUserBooking(params);
+			List<ReservationDTO> bookingList = dao.listUserBooking(params);
 			list.put("bookingList", bookingList);
 			list.put("totalPage", totalPage);
 			list.put("page", paging);
@@ -132,7 +132,7 @@ public class ReservationService {
 			params.put("pageSize", pageSize);
 			params.put("offset", offset);
 			
-			ArrayList<ReservationDTO> bookingList = dao.listTrainerBooking(params);
+			List<ReservationDTO> bookingList = dao.listTrainerBooking(params);
 			list.put("bookingList", bookingList);
 			list.put("totalPage", totalPage);
 			list.put("page", paging);
@@ -153,7 +153,7 @@ public class ReservationService {
 			params.put("pageSize", pageSize);
 			params.put("offset", offset);
 			
-			ArrayList<ReservationDTO> bookingList = dao.listCenterBooking(params);
+			List<ReservationDTO> bookingList = dao.listCenterBooking(params);
 			list.put("bookingList", bookingList);
 			list.put("totalPage", totalPage);
 			list.put("page", paging);
