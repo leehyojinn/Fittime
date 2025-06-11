@@ -252,11 +252,14 @@
 	<select id="countReservationByTime" resultType="int">
 	    SELECT COUNT(*)
 	    FROM reservation
-	    WHERE class_idx = #{class_idx}
-	      AND date = #{date}
+	    WHERE date = #{date}
 	      AND start_time = #{start_time}
 	      AND end_time = #{end_time}
 	      AND status = '예약'
+	      <if test="class_idx != null and class_idx != ''">
+	      	AND class_idx = #{class_idx}
+	      </if>
+	      
 	</select>
 	
 	<!-- 날짜별 인원 카운트 (시간 없는 상품) -->

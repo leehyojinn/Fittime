@@ -37,6 +37,12 @@ public class ReservationService {
 	    String start_time = (String) param.get("start_time");
 	    String end_time = (String) param.get("end_time");
 	    int row = 0;
+	    
+	    String trainer_id = null;
+	    Object trainer_id_Obj = param.get("trainer_id");
+	    if(trainer_id_Obj instanceof String) {
+	    	trainer_id = (String)trainer_id_Obj;
+	    }
 
 	    Integer class_idx = null;
 	    Object classIdxObj = param.get("class_idx");
@@ -56,8 +62,31 @@ public class ReservationService {
 
 	    Integer max_people = dao.maxPeople(product_idx);
 
-	    if (class_idx != null && max_people != null) {
-	        // 시간 있는 상품
+//	    if (class_idx != null && max_people != null) {
+//	        // 시간 있는 상품
+//	        if (start_time != null && end_time != null && !start_time.isEmpty() && !end_time.isEmpty()) {
+//	            int reservation_cnt = dao.countReservationByTime(class_idx, date, start_time, end_time);
+//	            if (reservation_cnt < max_people) {
+//	                row = dao.booking(param);
+//	            } else {
+//	                return false;
+//	            }
+//	        } else {
+//	            // 시간 없는 상품: 날짜별로만 인원 체크 (혹은 전체 상품별)
+//	            int reservation_cnt = dao.countReservationByDate(product_idx, date);
+//	            if (reservation_cnt < max_people) {
+//	                row = dao.booking(param);
+//	            } else {
+//	                return false;
+//	            }
+//	        }
+//	    } else {
+//	        // class_idx가 없으면 인원 체크 없이 예약
+//	        row = dao.booking(param);
+//	    }
+	    
+	    if (trainer_id != null && max_people != null) {
+	        // 트레이너 있는 상품
 	        if (start_time != null && end_time != null && !start_time.isEmpty() && !end_time.isEmpty()) {
 	            int reservation_cnt = dao.countReservationByTime(class_idx, date, start_time, end_time);
 	            if (reservation_cnt < max_people) {
@@ -65,17 +94,9 @@ public class ReservationService {
 	            } else {
 	                return false;
 	            }
-	        } else {
-	            // 시간 없는 상품: 날짜별로만 인원 체크 (혹은 전체 상품별)
-	            int reservation_cnt = dao.countReservationByDate(product_idx, date);
-	            if (reservation_cnt < max_people) {
-	                row = dao.booking(param);
-	            } else {
-	                return false;
-	            }
-	        }
+	        } 
 	    } else {
-	        // class_idx가 없으면 인원 체크 없이 예약
+	        // 트레이너가 없는 상품 = 기간 상품 => 인원 체크 없이 예약
 	        row = dao.booking(param);
 	    }
 	    

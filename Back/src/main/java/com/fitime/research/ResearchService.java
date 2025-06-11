@@ -24,6 +24,7 @@ public class ResearchService {
 	}
 
 	public Map<String, Object> searchName(Map<String, Object> param) {
+		int pageSize = 5;
 		Map<String, Object>map = new HashMap<String, Object>();
 		int page = ((Integer)param.get("page")-1)*5;
 		String name = (String)param.get("name");
@@ -31,6 +32,10 @@ public class ResearchService {
 		map.put("trainer_list", result);
 		result = dao.centerName(name,page);
 		map.put("center_list", result);
+		int totalpage = dao.trainerTotalPage(name,pageSize);
+		map.put("trainerTotalPage", totalpage);
+		totalpage = dao.centerTotalPage(name,pageSize);
+		map.put("centerTotalPage", totalpage);
 		logger.info("map : {}",map);
 		return map;
 	}

@@ -7,23 +7,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fitime.dto.BuyListDTO;
 import com.fitime.dto.KakaoDTO;
 import com.fitime.dto.PaymentDTO;
+import com.fitime.reservation.ReservationService;
 
 @Service
 public class PaymentService {
 
+	@Autowired ReservationService reservationService;
 	@Autowired PaymentDAO dao;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public boolean paymentInsert(PaymentDTO dto) {
-		int row = dao.paymentInsert(dto);
-		if(row>0 && dto.getStatus() == null) {
-			row = dao.buyListInsert(dto);
+	@Transactional
+	public boolean paymentInsert(Map<String, Object> param) {
+		boolean booked = reservationService.booking(param);
+		int row = dao.paymentInsert(param);
+		if(row>0) {
+			row = dao.buyListInsert(param);
 		}
-		return row>0;
+		return row>0&&booked;
 	}
 	
 	public boolean paymentCancel(int idx) {

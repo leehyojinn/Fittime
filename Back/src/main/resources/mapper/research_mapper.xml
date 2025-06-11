@@ -126,7 +126,7 @@
 		</choose>
 	</select>
 
-	<select id="trainerName" parameterType="map" resultType="map">
+	<select id="trainerName" resultType="map">
 		select 
 		u.user_id,
 		u.name,
@@ -146,7 +146,13 @@
 		limit 5 offset #{param2}
 	</select>
 
-	<select id="centerName" parameterType="map" resultType="map">
+	<select id="trainerTotalPage">
+		select ceil(count(u.user_id)/#{param2}) from user u
+	 join trainer_profile tp on u.user_id = tp.trainer_id 
+	 where u.name like concat('%',#{param1},'%')
+	</select>
+
+	<select id="centerName" resultType="map">
 		select 
 		cp.center_id,
 		cp.center_idx,
@@ -164,6 +170,12 @@
 		where u.user_level = 3
 		and binary cp.center_name like concat('%',#{param1},'%') and cp.center_idx not in (0)
 		limit 5 offset #{param2}
+	</select>
+	
+	<select id="centerTotalPage">
+		select ceil(count(u.user_id)/#{param2}) from user u
+	 join center_profile cp on u.user_id = cp.center_id 
+	 where cp.center_name like concat('%',#{param1},'%')
 	</select>
 	
 	<select id="cityList" resultType="String">

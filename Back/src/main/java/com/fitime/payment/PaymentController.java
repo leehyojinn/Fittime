@@ -30,10 +30,10 @@ public class PaymentController {
 	Map<String, Object>result = null;
 	
 	@PostMapping(value="/insert/payment")
-	public Map<String, Object>paymentInsert(@RequestBody PaymentDTO dto){
-		logger.info("dto : {}",dto.toString());
+	public Map<String, Object>paymentInsert(@RequestBody Map<String, Object>param){
+		logger.info("param : {}",param);
 		result = new HashMap<String, Object>();
-		boolean success = service.paymentInsert(dto);
+		boolean success = service.paymentInsert(param);
 		result.put("success", success);
 		return result;
 	}

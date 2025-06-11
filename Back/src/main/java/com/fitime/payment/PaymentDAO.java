@@ -12,9 +12,9 @@ import com.fitime.dto.PaymentDTO;
 @Mapper
 public interface PaymentDAO {
 
-	int paymentInsert(PaymentDTO dto);
+	int paymentInsert(Map<String, Object> param);
 
-	int buyListInsert(PaymentDTO dto);
+	int buyListInsert(Map<String, Object> param);
 
 	int paymentCancel(int idx);
 

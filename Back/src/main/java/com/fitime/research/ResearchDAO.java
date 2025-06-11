@@ -22,5 +22,9 @@ public interface ResearchDAO {
 
 	List<String> neighborhoodList(Map<String, Object> param);
 
+	int trainerTotalPage(String name, int page);
+
+	int centerTotalPage(String name, int page);
+
 
 }

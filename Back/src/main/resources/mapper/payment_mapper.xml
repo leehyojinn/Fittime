@@ -3,14 +3,18 @@
 
 <mapper namespace="com.fitime.payment.PaymentDAO">
 
-	<insert id="paymentInsert" parameterType="com.fitime.dto.PaymentDTO">
+	<insert id="paymentInsert" parameterType="map"
+	 useGeneratedKeys="true"
+	 keyColumn="payment_idx"
+	 keyProperty="payment_idx"
+	 >
 		insert into payment (user_id, product_idx, payment_price, payment_method)
-		values (#{user_id},#{product_idx},#{payment_price},#{payment_method})
+		values (#{user_id},#{product_idx},#{payment_price},"카드")
 	</insert>
 
-	<insert id="buyListInsert" parameterType="com.fitime.dto.PaymentDTO">
-		insert into buy_List(user_id, product_idx, payment_idx)
-		values (#{user_id},#{product_idx},#{payment_idx})
+	<insert id="buyListInsert" parameterType="map">
+		insert into buy_list(user_id, product_idx, payment_idx,count,rest_period)
+		values (#{user_id},#{product_idx},#{payment_idx},#{count},#{rest_period})
 	</insert>
 
 	<update id="paymentCancel">
