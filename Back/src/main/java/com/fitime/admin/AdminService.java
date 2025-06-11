@@ -113,6 +113,7 @@ public class AdminService {
 	    }
 
 	    // 파일 저장 메서드 (기존 코드 재사용)
+	    @Transactional
 	    private String fileSave(MultipartFile file) throws IOException {
 	        String originalFileName = file.getOriginalFilename();
 	        String ext = originalFileName.substring(originalFileName.lastIndexOf('.'));

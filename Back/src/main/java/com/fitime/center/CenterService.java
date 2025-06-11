@@ -58,6 +58,7 @@ public class CenterService {
 	}
 
 	// 파일 저장 메서드
+	@Transactional
 	private String fileSave(MultipartFile file) throws Exception {
 	    String originalFileName = file.getOriginalFilename();
 	    String ext = originalFileName.substring(originalFileName.lastIndexOf('.'));

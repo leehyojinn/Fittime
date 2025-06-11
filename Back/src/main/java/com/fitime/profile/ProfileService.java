@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.Profile_fileDTO;
@@ -30,6 +31,7 @@ public class ProfileService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	String root = "C:/img/profile/";
 	
+	@Transactional
 	private boolean fileSave(String id, MultipartFile file) {
 		boolean success = true;
 		String ext = (file.getOriginalFilename()).substring((file.getOriginalFilename()).lastIndexOf("."));
@@ -60,6 +62,7 @@ public class ProfileService {
 	}
 	
 	// 사진 여러장 저장(센터 이미지)
+	@Transactional
 	private boolean fileSave(String user_id, MultipartFile[] files) {
 		boolean success = true;
 		String filename = "";
@@ -82,6 +85,7 @@ public class ProfileService {
 		return success;
 	}
 	
+	@Transactional
 	private boolean fileDel(String id) {
 		boolean success = true;
 		List<String> filenames = dao.ImgSearch(id);
@@ -129,7 +133,7 @@ public class ProfileService {
 //		return new ResponseEntity<Resource>(res,headers,HttpStatus.OK);
 //	}
 	
-	
+	@Transactional
 	public boolean updateUserProfile(MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateUserProfile(param);
 		boolean save_success = true;
@@ -144,7 +148,7 @@ public class ProfileService {
 //		int row = dao.updateUserProfile(param);
 //		return row>0;
 //	}
-	
+	@Transactional
 	public boolean updateTrainerProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateTrainerProfile(param);
 		logger.info("row : " + row);
@@ -172,7 +176,7 @@ public class ProfileService {
 //		int row = dao.updateTrainerProfile(param);
 //		return row>0;
 //	}
-
+	@Transactional
 	public boolean updateCenterProfile(MultipartFile[] files, MultipartFile file, Map<String, Object> param) {
 		int row = dao.updateCenterProfile(param);
 		logger.info("tags : "+ param.get("tags"));

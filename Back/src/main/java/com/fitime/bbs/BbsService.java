@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.BbsDTO;
@@ -28,6 +29,7 @@ public class BbsService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired BbsDAO dao;
 	
+	@Transactional
 	private boolean fileSave(BbsDTO dto) {
 		boolean success = true;
 		MultipartFile[] files = dto.getFiles();
@@ -51,7 +53,7 @@ public class BbsService {
 		}
 		return success;
 	}
-	
+	@Transactional
 	private boolean fileDel(int idx) {
 		boolean success = true;
 		List<String> filenames = dao.ImgSearch(idx);
@@ -70,7 +72,7 @@ public class BbsService {
 		}
 		return success;
 	}
-	
+	@Transactional
 	public boolean writeBbs(BbsDTO dto) {
 		int row = dao.writeBbs(dto);
 		boolean success = true;
@@ -79,7 +81,7 @@ public class BbsService {
 		}
 		return row > 0 && success ;
 	}
-
+	@Transactional
 	public boolean updateBbs(BbsDTO dto) {
 		int row = dao.updateBbs(dto);
 		boolean success = true;
@@ -89,7 +91,7 @@ public class BbsService {
 		}
 		return row > 0 && success;
 	}
-
+	@Transactional
 	public boolean delBbs(int board_idx) {
 		boolean success = true;
 		int cnt = dao.findFiles(board_idx);

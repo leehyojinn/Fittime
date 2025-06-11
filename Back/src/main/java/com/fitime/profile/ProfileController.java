@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class ProfileController {
 	Logger logger = LoggerFactory.getLogger(getClass()); 
 	Map<String, Object>result = null;
 	
+	@Transactional
 	@PostMapping (value="/update/Profile")
 	public Map<String, Object>updateProfile(@RequestPart(value = "files", required = false) MultipartFile[] files,@RequestPart(value = "file", required = false) MultipartFile file ,@RequestPart(value="param") Map<String, Object>param){
 		logger.info("param : {}",param);
@@ -110,6 +112,7 @@ public class ProfileController {
 	} 
 	
 	// 프로필 이미지 삭제 (기본 이미지로 변경)
+	@Transactional
 	@DeleteMapping(value="/del/profileImg")
 	public Map<String, Object> delProfileImg(@RequestBody Map<String, Object>param){
 		logger.info("param : {}",param);

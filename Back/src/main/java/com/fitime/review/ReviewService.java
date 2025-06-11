@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fitime.dto.ReviewDTO;
@@ -34,6 +35,7 @@ public class ReviewService {
 	String root = "C:/img/review/";
 	
 	// 리뷰 이미지 파일 저장
+	@Transactional
 	private boolean fileSaveReview(MultipartFile[] files, int idx) {
 		
 		boolean success = true;
@@ -63,6 +65,7 @@ public class ReviewService {
 	    return success ;
 	}
 	    
+	@Transactional
 	private boolean fileDelReview(int idx) {
 		 
 		boolean success = true;
@@ -112,6 +115,7 @@ public class ReviewService {
 		return map;
 	}
 
+	@Transactional
 	public boolean insertReview(MultipartFile[] files, ReviewDTO dto) {
 		int row = dao.insertReview(dto);
 		boolean success = true;
@@ -125,6 +129,7 @@ public class ReviewService {
 		return row > 0 && success ;
 	}
 
+	@Transactional
 	public boolean delReview(int review_idx) {
 		boolean success = true;
 		int cnt = dao.findFiles(review_idx);
@@ -139,6 +144,7 @@ public class ReviewService {
 		return dao.detailReview(dto);
 	}
 
+	@Transactional
 	public boolean updateReview(ReviewDTO dto) {
 		int row = dao.updateReview(dto);
 		if(dto.getFiles() != null) // 이미지가 들어왔을 때
