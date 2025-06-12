@@ -168,15 +168,17 @@ public class ReservationController {
 	
 	@PostMapping("/reservation/booked_count")
     public Map<String, Object> bookedCount(@RequestBody Map<String, Object> param) {
+		logger.info("param : {}",param);
         List<Map<String, Object>> times = (List<Map<String, Object>>) param.get("times");
         Integer class_idx = (Integer) param.get("class_idx");
+        Integer product_idx = (Integer) param.get("product_idx");
         String date = (String) param.get("date");
 
         Map<String, Integer> counts = new HashMap<>();
         for (Map<String, Object> t : times) {
             String start_time = (String) t.get("start_time");
             String end_time = (String) t.get("end_time");
-            int cnt = service.countReservationByTime(class_idx, date, start_time, end_time);
+            int cnt = service.countReservationByTime(class_idx, date, start_time, end_time,product_idx);
             counts.put(start_time + "-" + end_time, cnt);
         }
         Map<String, Object> result = new HashMap<>();
@@ -213,5 +215,13 @@ public class ReservationController {
         return result;
     }
 
+    @PostMapping("/maxpeople/{product_idx}")
+    public Map<String, Object> maxPeople(@PathVariable String product_idx){
+    	int idx = Integer.parseInt(product_idx);
+    	int max_people = service.maxPeople(idx);
+    	result = new HashMap<String, Object>();
+    	result.put("max_people", max_people);
+    	return result;
+    }
     
 }

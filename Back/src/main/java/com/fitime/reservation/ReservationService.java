@@ -88,7 +88,7 @@ public class ReservationService {
 	    if (trainer_id != null && max_people != null) {
 	        // 트레이너 있는 상품
 	        if (start_time != null && end_time != null && !start_time.isEmpty() && !end_time.isEmpty()) {
-	            int reservation_cnt = dao.countReservationByTime(class_idx, date, start_time, end_time);
+	            int reservation_cnt = dao.countReservationByTime(class_idx, date, start_time, end_time,null);
 	            if (reservation_cnt < max_people) {
 	                row = dao.booking(param);
 	            } else {
@@ -225,8 +225,8 @@ public class ReservationService {
 		return dao.reser_class_info(param);
 	}
 
-    public int countReservationByTime(Integer class_idx, String date, String start_time, String end_time) {
-        return dao.countReservationByTime(class_idx, date, start_time, end_time);
+    public int countReservationByTime(Integer class_idx, String date, String start_time, String end_time, Integer product_idx) {
+        return dao.countReservationByTime(class_idx, date, start_time, end_time,product_idx);
     }
 
     // 날짜별 예약 인원 (시간 없는 상품)
@@ -254,6 +254,12 @@ public class ReservationService {
 	@Scheduled(cron = "0 0 0 * * *")
 	    public void decrementDailyCount() {
 	        dao.decrementDailyCount();
+	}
+
+
+
+	public int maxPeople(int idx) {
+		return dao.maxPeople(idx);
 	}
 
 }

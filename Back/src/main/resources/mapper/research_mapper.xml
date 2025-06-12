@@ -97,7 +97,7 @@
 			and u.gender = #{gender}
 		</if>
 		<if test = "minRating != null and minRating !=''">
-			and (select avg(r.rating) from review r where r.target_id = tp.trainer_id) >= #{minRating}
+			and (select avg(r.rating,1) from review r where r.target_id = tp.trainer_id) >= #{minRating}
 		</if>
 		<if test = "tags != null and tags.size() > 0">
 			and exists(

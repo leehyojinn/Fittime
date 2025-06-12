@@ -145,7 +145,7 @@
 		  tp.trainer_id,
 		  u.name,
 		  u.phone,
-		  AVG(r.rating) as rating,
+		  round(AVG(r.rating),1) as rating,
 		  GROUP_CONCAT(pf.file_name) as file_names
 		FROM center_profile cp
 		JOIN trainer_profile tp ON cp.center_idx = tp.center_idx

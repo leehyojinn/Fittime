@@ -192,7 +192,7 @@
 	    SELECT
 	    	c.*,
 	        pf.file_name AS profile_image,
-	        (SELECT AVG(r.rating) FROM Review r WHERE r.target_id = c.center_id) AS avg_rating,
+	        (SELECT round(AVG(r.rating),1) FROM Review r WHERE r.target_id = c.center_id) AS avg_rating,
 	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = c.center_id) AS rating_count
 	    FROM center_profile c
 	    LEFT JOIN profile_file pf
@@ -209,7 +209,7 @@
 	        t.*,
 	        u.*,
 	        pf.file_name AS profile_image,
-	        (SELECT AVG(r.rating) FROM Review r WHERE r.target_id = t.trainer_id) AS avg_rating,
+	        (SELECT round(AVG(r.rating),1) FROM Review r WHERE r.target_id = t.trainer_id) AS avg_rating,
 	        (SELECT COUNT(r.review_idx) FROM Review r WHERE r.target_id = t.trainer_id) AS rating_count
 	    FROM trainer_profile t
 	    LEFT JOIN profile_file pf
@@ -259,6 +259,9 @@
 	      <if test="class_idx != null and class_idx != ''">
 	      	AND class_idx = #{class_idx}
 	      </if>
+	      <if test="product_idx != null and product_idx !=''">
+	      	AND product_idx = #{product_idx}
+	      </if>
 	      
 	</select>
 	
@@ -307,5 +310,7 @@
 	<update id="decrementDailyCount">
 		UPDATE buy_list SET rest_period = rest_period - 1 WHERE rest_period > 0;
 	</update>
+	
+	
 
 </mapper>

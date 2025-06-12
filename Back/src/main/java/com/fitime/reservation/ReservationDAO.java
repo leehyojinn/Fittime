@@ -58,7 +58,8 @@ public interface ReservationDAO {
 		    @Param("class_idx") Integer class_idx,
 		    @Param("date") String date,
 		    @Param("start_time") String start_time,
-		    @Param("end_time") String end_time
+		    @Param("end_time") String end_time,
+		    @Param("product_idx") Integer product_idx
 		);
 
 	int countReservationByDate(
