@@ -10,8 +10,15 @@ public class CenterRatingDTO {
     private String profile_image;
     private String address;
     private String operation_hours;
+    private Integer exercise_level;
     
-    public String getOperation_hours() {
+    public Integer getExercise_level() {
+		return exercise_level;
+	}
+	public void setExercise_level(Integer exercise_level) {
+		this.exercise_level = exercise_level;
+	}
+	public String getOperation_hours() {
 		return operation_hours;
 	}
 	public void setOperation_hours(String operation_hours) {
