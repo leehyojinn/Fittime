@@ -35,9 +35,9 @@ public class KakaoPayService {
         params.add("quantity", "1");
         params.add("total_amount", String.valueOf(price));
         params.add("tax_free_amount", "0");
-        params.add("approval_url", "http://localhost:3000/component/kakaopay/success");
-        params.add("cancel_url", "http://localhost:3000/component/kakaopay/cancel");
-        params.add("fail_url", "http://localhost:3000/component/kakaopay/fail");
+        params.add("approval_url", "http://192.168.0.114:3000/component/kakaopay/success");
+        params.add("cancel_url", "http://192.168.0.114:3000/component/kakaopay/cancel");
+        params.add("fail_url", "http://192.168.0.114:3000/component/kakaopay/fail");
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
         RestTemplate restTemplate = new RestTemplate();
