@@ -3,7 +3,7 @@
 
 <mapper namespace="com.fitime.member.MemberMapper">
 	<insert id="join" parameterType="map">
-		INSERT INTO User(
+		INSERT INTO user(
 			user_id
 			,password
 			,name
@@ -26,23 +26,23 @@
 	</insert>
 	
 	<select id="login" resultType="int" parameterType="map">
-		SELECT COUNT(user_id) FROM User WHERE user_id=#{user_id} AND password=#{password}
+		SELECT COUNT(user_id) FROM user WHERE user_id=#{user_id} AND password=#{password}
 	</select>
 	
 	<select id="get_level" resultType="Integer" parameterType="map">
-		SELECT user_level FROM User WHERE user_id=#{user_id}
+		SELECT user_level FROM user WHERE user_id=#{user_id}
 	</select>
 	
 	<select id="overlayId" resultType="int">
-		SELECT COUNT(user_id) FROM User WHERE user_id=#{user_id}
+		SELECT COUNT(user_id) FROM user WHERE user_id=#{user_id}
 	</select>
 	
 	<select id="overlayEmail" resultType="int">
-		SELECT COUNT(email) FROM User WHERE email=#{email}
+		SELECT COUNT(email) FROM user WHERE email=#{email}
 	</select>
 	
 	<update id="unregiste" parameterType="map">
-		UPDATE User SET
+		UPDATE user SET
 			password=''
 			,name=''
 			,email=''
@@ -56,11 +56,11 @@
 	</update>
 	
 	<select id="findId" resultType="String">
-		SELECT user_id FROM User WHERE email=#{param1} AND status='활동'
+		SELECT user_id FROM user WHERE email=#{param1} AND status='활동'
 	</select>
 	
 	<select id="findPw" resultType="String" parameterType="map">
-		SELECT password FROM User WHERE user_id=#{user_id} AND name=#{name} AND email=#{email} AND status='활동'
+		SELECT password FROM user WHERE user_id=#{user_id} AND name=#{name} AND email=#{email} AND status='활동'
 	</select>
 	
 	<insert id="makeTrainer">
@@ -91,7 +91,7 @@
 	</select>
 	
     <update id="updateUserPassword" parameterType="map">
-        UPDATE User
+        UPDATE user
         SET password = #{password}
         WHERE user_id = #{user_id}
     </update>
