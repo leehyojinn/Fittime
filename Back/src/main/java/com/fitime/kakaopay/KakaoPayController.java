@@ -14,11 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/kakaopay")
-@CrossOrigin(
-	    origins = {"http://192.168.0.114:3000", "https://t1.kakaocdn.net"},
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class KakaoPayController {
 
     @Autowired

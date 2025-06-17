@@ -63,7 +63,7 @@ public class CenterService {
 	    String originalFileName = file.getOriginalFilename();
 	    String ext = originalFileName.substring(originalFileName.lastIndexOf('.'));
 	    String saveFileName = UUID.randomUUID() + ext;
-	    Path path = Paths.get("C:/img/complaint/" + saveFileName);
+	    Path path = Paths.get("/usr/local/tomcat/webapps/img/complaint/" + saveFileName);
 	    Files.write(path, file.getBytes());
 	    return saveFileName;
 	}

@@ -11,18 +11,18 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	//신고이미지
     	registry.addResourceHandler("/complaint/**")
-                .addResourceLocations("file:///C:/img/complaint/");
+                .addResourceLocations("file:////usr/local/tomcat/webapps/img/complaint/");
         //팝업이미지
         registry.addResourceHandler("/popup/**")
-                .addResourceLocations("file:///C:/img/popup/");
+                .addResourceLocations("file:////usr/local/tomcat/webapps/img/popup/");
         //센터이미지
         registry.addResourceHandler("/center_profile_img/**")
-                .addResourceLocations("file:///C:/img/profile/");
+                .addResourceLocations("file:////usr/local/tomcat/webapps/img/profile/");
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000")
+            .allowedOriginPatterns("*")
             .allowedMethods("*")
             .allowedHeaders("*")
             .allowCredentials(true);

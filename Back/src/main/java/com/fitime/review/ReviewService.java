@@ -32,7 +32,7 @@ public class ReviewService {
 	@Autowired ReviewDAO dao;
 	
 	// 리뷰 이미지 파일 저장 링크
-	String root = "C:/img/review/";
+	String root = "/usr/local/tomcat/webapps/img/review/";
 	
 	// 리뷰 이미지 파일 저장
 	@Transactional
@@ -52,7 +52,7 @@ public class ReviewService {
 	    try {
 	    
 	    	byte[] arr = file.getBytes();
-	    	Path path = Paths.get("C:/img/review/" + filename);
+	    	Path path = Paths.get("/usr/local/tomcat/webapps/img/review/" + filename);
 	    	Files.write(path, arr);
 	    	dao.reviewImgSave(idx, filename);
 		
@@ -79,7 +79,7 @@ public class ReviewService {
 			for  ( String Delfilename : Delfilenames ) {
 				
 				try {
-			    	Path path = Paths.get("C:/img/review/" + Delfilename);
+			    	Path path = Paths.get("/usr/local/tomcat/webapps/img/review/" + Delfilename);
 			    	Files.deleteIfExists(path);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -212,11 +212,11 @@ public class ReviewService {
 		
 		Map<String, String> fileMap = dao.getImg(file_idx);
 		logger.info("fileMap : {}",fileMap);
-		res = new FileSystemResource("C:/img/review/"+fileMap.get("file_name"));
+		res = new FileSystemResource("/usr/local/tomcat/webapps/img/review/"+fileMap.get("file_name"));
 		logger.info("res : "+res);
 		
 		try {
-			String content_type = Files.probeContentType(Paths.get("C:/img/review"+fileMap.get("file_name")));
+			String content_type = Files.probeContentType(Paths.get("/usr/local/tomcat/webapps/img/review"+fileMap.get("file_name")));
 			headers.add("Content-Type", content_type);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

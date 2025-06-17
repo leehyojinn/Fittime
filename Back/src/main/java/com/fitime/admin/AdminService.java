@@ -39,7 +39,7 @@ public class AdminService {
                 String saveFileName = UUID.randomUUID() + ext;
 
                 // 파일 저장
-                Path path = Paths.get("C:/img/popup/" + saveFileName);
+                Path path = Paths.get("/usr/local/tomcat/webapps/img/popup/" + saveFileName);
                 Files.write(path, popupDTO.getPopup_image().getBytes());
 
                 // DTO에 파일명 세팅
@@ -79,7 +79,7 @@ public class AdminService {
 	                
 	                // 기존 파일 삭제
 	                if (oldFileName != null) {
-	                    Path oldPath = Paths.get("C:/img/popup/" + oldFileName);
+	                    Path oldPath = Paths.get("/usr/local/tomcat/webapps/img/popup/" + oldFileName);
 	                    Files.deleteIfExists(oldPath);
 	                }
 	            }
@@ -99,7 +99,7 @@ public class AdminService {
 	            // 1. 파일명 조회 후 삭제
 	            String fileName = dao.getFileNameById(popup_idx);
 	            if (fileName != null) {
-	                Path path = Paths.get("C:/img/popup/" + fileName);
+	                Path path = Paths.get("/usr/local/tomcat/webapps/img/popup/" + fileName);
 	                Files.deleteIfExists(path);
 	            }
 	            
@@ -119,7 +119,7 @@ public class AdminService {
 	        String ext = originalFileName.substring(originalFileName.lastIndexOf('.'));
 	        String saveFileName = UUID.randomUUID() + ext;
 	        
-	        Path path = Paths.get("C:/img/popup/" + saveFileName);
+	        Path path = Paths.get("/usr/local/tomcat/webapps/img/popup/" + saveFileName);
 	        Files.write(path, file.getBytes());
 	        
 	        return saveFileName;

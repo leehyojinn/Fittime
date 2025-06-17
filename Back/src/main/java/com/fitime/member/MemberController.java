@@ -29,11 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.util.Jwt;
-@CrossOrigin(
-	    origins = "http://192.168.0.114:3000",
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RestController
 public class MemberController {
 	

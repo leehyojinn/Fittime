@@ -19,11 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fitime.dto.BbsDTO;
 
-@CrossOrigin(
-	    origins = "http://192.168.0.114:3000",
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 @RestController
 public class BbsController {
 

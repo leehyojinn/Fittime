@@ -29,7 +29,7 @@ public class ProfileService {
 
 	@Autowired ProfileDAO dao;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	String root = "C:/img/profile/";
+	String root = "/usr/local/tomcat/webapps/img/profile/";
 	
 	@Transactional
 	private boolean fileSave(String id, MultipartFile file) {
@@ -41,7 +41,7 @@ public class ProfileService {
 		
 		try {
 			byte[] arr = file.getBytes();
-			Path path = Paths.get("C:/img/profile/"+filename);
+			Path path = Paths.get("/usr/local/tomcat/webapps/img/profile/"+filename);
 			Files.write(path, arr);
 			switch (row) {
 			case 0: 
@@ -74,7 +74,7 @@ public class ProfileService {
 			
 			try {
 				byte[] arr = file.getBytes();
-				Path path = Paths.get("C:/img/img/"+filename);
+				Path path = Paths.get("/usr/local/tomcat/webapps/img/img/"+filename);
 				Files.write(path, arr);
 				dao.ImgSave(user_id, filename);
 			} catch (IOException e) {
@@ -92,7 +92,7 @@ public class ProfileService {
 		if(filenames != null) {
 			for (String filename : filenames) {
 				try {
-					Path path = Paths.get("C:/img/img/"+filename);
+					Path path = Paths.get("/usr/local/tomcat/webapps/img/img/"+filename);
 					Files.deleteIfExists(path);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -113,17 +113,17 @@ public class ProfileService {
 //		String fileName = dao.getFileName(id);
 //			
 //		if(fileName != null) {
-//			res = new FileSystemResource("C:/img/profile/"+fileName);
+//			res = new FileSystemResource("/usr/local/tomcat/webapps/img/profile/"+fileName);
 //			try {
-//				String content_type = Files.probeContentType(Paths.get("C:/img/profile/"+fileName));
+//				String content_type = Files.probeContentType(Paths.get("/usr/local/tomcat/webapps/img/profile/"+fileName));
 //				headers.add("Content-Type", content_type);
 //			} catch (IOException e) {
 //				e.printStackTrace();
 //			}
 //		} else {
-//			res = new FileSystemResource("C:/img/profile/basic");
+//			res = new FileSystemResource("/usr/local/tomcat/webapps/img/profile/basic");
 //			try {
-//				String content_type = Files.probeContentType(Paths.get("C:/img/profile/basic"));
+//				String content_type = Files.probeContentType(Paths.get("/usr/local/tomcat/webapps/img/profile/basic"));
 //				headers.add("Content-Type", content_type);
 //			} catch (IOException e) {
 //				e.printStackTrace();
@@ -260,7 +260,7 @@ public class ProfileService {
 			filename = "basic.png";
 		}
 		logger.info("filename = "+filename);
-		String path = "C:/img/profile/"+filename;
+		String path = "/usr/local/tomcat/webapps/img/profile/"+filename;
 		
 		res = new FileSystemResource(path);
 		
@@ -286,11 +286,11 @@ public class ProfileService {
 		
 		Map<String, String> fileMap = dao.getImg(profile_file_idx);
 		logger.info("fileMap : {}",fileMap);
-		res = new FileSystemResource("C:/img/img/"+fileMap.get("file_name"));
+		res = new FileSystemResource("/usr/local/tomcat/webapps/img/img/"+fileMap.get("file_name"));
 		logger.info("res : "+res);
 		
 		try {
-			String content_type = Files.probeContentType(Paths.get("C:/img/img"+fileMap.get("file_name")));
+			String content_type = Files.probeContentType(Paths.get("/usr/local/tomcat/webapps/img/img"+fileMap.get("file_name")));
 			headers.add("Content-Type", content_type);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

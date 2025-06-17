@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileSave {
-	String root = "C:/img/profile/"; // 변경해서 사용하세요
+	String root = "/usr/local/tomcat/webapps/img/"; // 변경해서 사용하세요
 	
 	// 사진 여러장 저장(센터 이미지)
 		public boolean fileSave(String user_id, MultipartFile[] files) {
@@ -23,7 +23,7 @@ public class FileSave {
 				
 				try {
 					byte[] arr = file.getBytes();
-					Path path = Paths.get(root+filename); // root (파일 저장 경로 : "C:/img/패키지명/")
+					Path path = Paths.get(root+filename); // root (파일 저장 경로 : "/usr/local/tomcat/webapps/img/패키지명/")
 					Files.write(path, arr);
 					//dao.profileSave(user_id, filename); // 쿼리문 변경해서 사용하세요
 				} catch (IOException e) {

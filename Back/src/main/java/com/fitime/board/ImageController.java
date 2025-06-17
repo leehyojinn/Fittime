@@ -10,11 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/image")
-@CrossOrigin(
-	    origins = "http://192.168.0.114:3000",
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class ImageController {
 
 	@Autowired ImageService imgeService;

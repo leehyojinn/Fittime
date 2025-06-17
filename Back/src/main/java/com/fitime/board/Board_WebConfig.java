@@ -9,8 +9,8 @@ public class Board_WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // C:/upload/ 폴더에 저장된 파일을 /upload/** URL로 접근할 수 있게 설정
+        // ./upload/ 폴더에 저장된 파일을 /upload/** URL로 접근할 수 있게 설정
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:///C:/upload/");
+                .addResourceLocations("file:///./upload/");
     }
 }

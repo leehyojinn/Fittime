@@ -28,11 +28,7 @@ import com.fitime.dto.TagDTO;
 import com.fitime.dto.UserDTO;
 
 @RestController
-@CrossOrigin(
-	    origins = "http://192.168.0.114:3000",
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class AdminController {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -76,7 +72,7 @@ public class AdminController {
     // 이미지
     @GetMapping("/image/{fileName}")
     public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
-        Path path = Paths.get("C:/img/popup/" + fileName);
+        Path path = Paths.get("/usr/local/tomcat/webapps/img/popup/" + fileName);
         Resource resource = new FileSystemResource(path);
         return ResponseEntity.ok()
             .contentType(MediaType.IMAGE_JPEG) // 필요에 따라 타입 변경

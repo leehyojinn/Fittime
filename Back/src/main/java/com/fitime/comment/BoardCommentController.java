@@ -10,7 +10,7 @@ import java.util.List;
 @Qualifier("boardCommentService")
 @RestController
 @RequestMapping("/BoardComment")
-@CrossOrigin(origins = "*")
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class BoardCommentController {
 
     @Autowired

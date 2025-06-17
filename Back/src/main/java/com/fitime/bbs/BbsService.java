@@ -43,7 +43,7 @@ public class BbsService {
 			
 			try {
 				byte[] arr = file.getBytes();
-				Path path = Paths.get("C:/img/board/"+filename);
+				Path path = Paths.get("/usr/local/tomcat/webapps/img/board/"+filename);
 				Files.write(path, arr);
 				dao.ImgSave(filename,dto.getBoard_idx());
 			} catch (IOException e) {
@@ -60,7 +60,7 @@ public class BbsService {
 		if(filenames != null) {
 			for (String filename : filenames) {
 				try {
-					Path path = Paths.get("C:/img/board/"+filename);
+					Path path = Paths.get("/usr/local/tomcat/webapps/img/board/"+filename);
 					Files.delete(path);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -130,11 +130,11 @@ public class BbsService {
 		
 		Map<String, String> fileMap = dao.getImg(file_idx);
 		logger.info("fileMap : {}",fileMap);
-		res = new FileSystemResource("C:/img/board/"+fileMap.get("file_name"));
+		res = new FileSystemResource("/usr/local/tomcat/webapps/img/board/"+fileMap.get("file_name"));
 		logger.info("res : "+res);
 		
 		try {
-			String content_type = Files.probeContentType(Paths.get("C:/img/board"+fileMap.get("file_name")));
+			String content_type = Files.probeContentType(Paths.get("/usr/local/tomcat/webapps/img/board"+fileMap.get("file_name")));
 			headers.add("Content-Type", content_type);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

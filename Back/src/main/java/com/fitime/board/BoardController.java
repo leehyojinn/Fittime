@@ -21,11 +21,7 @@ import com.fitime.dto.PageResponseDTO;
 
 @RestController
 @RequestMapping("/board")
-@CrossOrigin(
-	    origins = "http://192.168.0.114:3000",
-	    allowedHeaders = "*",
-	    allowCredentials = "true"
-	)
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class BoardController {
 
     @Autowired
@@ -100,7 +96,7 @@ public class BoardController {
                         String uuid = UUID.randomUUID().toString();
                         String fileName = uuid + "_" + originalName;
 
-                        File saveFile = new File("C:/upload/", fileName);
+                        File saveFile = new File("./upload/", fileName);
                         file.transferTo(saveFile);
 
                         savedFileNames.add(fileName);
